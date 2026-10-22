@@ -100,27 +100,26 @@ export function corridorDemo(): Mission {
 
 /** Entirely synthetic winding corridor; elevations are illustrative datum meters. */
 export function complexCorridorDemo(): Mission {
+  // Repeated junctions join three loops; equal elevations keep junctions continuous.
   const coordinates = [
-    [-2700, -2300, 45],
-    [-1900, -2300, 60],
-    [-1200, -1900, 85],
-    [-900, -1200, 110],
-    [-1200, -500, 135],
-    [-1900, -100, 155],
-    [-2300, 500, 175],
-    [-2100, 1200, 190],
-    [-1500, 1700, 165],
-    [-700, 1800, 140],
-    [0, 1400, 115],
-    [300, 700, 95],
-    [1000, 400, 80],
-    [1700, 600, 105],
-    [2100, 1200, 145],
-    [1900, 1900, 180],
-    [2200, 2400, 205],
-    [2800, 2300, 190],
-    [3000, 1600, 160],
-    [2800, 900, 130],
+    [-2400, -1000, 60],
+    [-2400, 600, 80],
+    [-1600, 1200, 100],
+    [-800, 600, 80],
+    [-800, -1000, 60],
+    [-2400, -1000, 60],
+    [-800, -1000, 60],
+    [800, -1000, 60],
+    [800, 600, 80],
+    [-800, 600, 80],
+    [-800, -1000, 60],
+    [800, -1000, 60],
+    [2400, -1000, 60],
+    [2600, 0, 75],
+    [2200, 1000, 100],
+    [1400, 1200, 100],
+    [800, 600, 80],
+    [800, -1000, 60],
   ];
   const vertices = coordinates.map(([x, y, elevation]) => ({
     x,
@@ -136,20 +135,22 @@ export function complexCorridorDemo(): Mission {
       {
         id: "s-bend-exclusion",
         vertices: [
-          { x: -1900, y: 300 },
-          { x: -1450, y: 350 },
-          { x: -1150, y: 850 },
-          { x: -1400, y: 1250 },
-          { x: -1850, y: 1000 },
+          { x: -1950, y: -200 },
+          { x: -1450, y: -200 },
+          { x: -1300, y: 200 },
+          { x: -1500, y: 550 },
+          { x: -1950, y: 350 },
         ],
       },
     ],
-    waypoints: vertices.slice(1).map((p, i) => ({
-      id: `complex-${i + 1}`,
-      x: p.x,
-      y: p.y,
-      kind: i % 3 === 0 ? "nav" : "photo",
-      altitude: 120 * FEET,
-    })),
+    waypoints: [1, 2, 3, 8, 15, 14, 13, 12]
+      .map((index) => vertices[index])
+      .map((p, i) => ({
+        id: `complex-${i + 1}`,
+        x: p.x,
+        y: p.y,
+        kind: i % 3 === 0 ? "nav" : "photo",
+        altitude: 120 * FEET,
+      })),
   };
 }

@@ -14,3 +14,5 @@ Regression fix: a skew exclusion between home and waypoint 1 previously trapped 
 Transmission corridor update (2026-10-14): eighteen automated tests cover distinct 200/700 ft lateral limits, conductor-relative heights, RTH from turns, a blocked corridor, conductor elevation interpolation, bent-line following and distinct home/waypoint heights. Browser preview verified corridor bands, edit handles, and a 150 ft home-height update. Direct file-URL browser testing remains unavailable.
 
 Complex corridor update: all 19 automated tests pass, including the winding outbound mission and return paths at 20%, 40%, 60%, 80%, and 100% of its sampled path. Tests verify lateral/vertical envelopes and exclusion clearance. These sampled checks are not flight-safety certification or exhaustive return feasibility proof.
+
+Recovery update: 25 tests pass, including normal retrace, tight-turn escalation, blocked direct return and fallback ordering. HTTP browser drill visibly progressed from the 8-second search to checked retrace and reached home. Standalone generated from production build; file-URL UI automation remains unavailable.

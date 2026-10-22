@@ -150,3 +150,18 @@ test("complex synthetic corridor mission and distributed returns remain feasible
     if (home.ok) verify(home.points, m);
   }
 });
+
+test("connected loops provide a return shorter than retracing the outbound mission", () => {
+  const m = complexCorridorDemo();
+  const outbound = planner.mission(m);
+  assert.ok(outbound.ok);
+  if (!outbound.ok) return;
+  const home = planner.returnHome(outbound.points.at(-1)!, m);
+  assert.ok(home.ok, home.ok ? "" : home.reason);
+  if (!home.ok) return;
+  verify(home.points, m);
+  assert.ok(
+    home.length < outbound.length * 0.75,
+    `Return ${home.length}, outbound ${outbound.length}`,
+  );
+});

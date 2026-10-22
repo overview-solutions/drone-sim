@@ -17,9 +17,14 @@ import {
   type Pose,
   type Route,
 } from "./types";
-import { validate } from "./planning/planner";
+import { planner, validate } from "./planning/planner";
 import { inside, validPolygon } from "./planning/geometry";
 import { nearestLine } from "./planning/corridor";
+import {
+  fallback,
+  RECOVERY_SECONDS,
+  type RecoveryStage,
+} from "./planning/recovery";
 import { Simulator } from "./simulator";
 import { LocalPlanner } from "./planning/local";
 import embeddedTiles from "./basemap.json";
@@ -38,10 +43,88 @@ let planned: Route | undefined,
   pendingMission = 0,
   pendingRth = 0,
   rthAt = 0,
+  movingSinceRth = 0,
   returning = false,
+  returnRequest = 0,
   loaded = false,
   notice = "";
 let rthPose: Pose | undefined;
+let recoveryStage: RecoveryStage = "normal";
+let recoveryStarted = 0;
+let recoveryLog: string[] = [];
+let flown: Pose[] = [];
+let forceRecovery = false;
+const stageNames: Record<RecoveryStage, string> = {
+  normal: "1 · Normal return",
+  search: "2 · Recovery search",
+  retrace: "3 · Retracing flown path",
+  "tight-turn": "4 · Emergency tight turn",
+  direct: "5 · Emergency direct home",
+  unresolved: "Unresolved emergency",
+};
+function startRecovery(reason: string) {
+  if (recoveryStage !== "normal") return;
+  recoveryStage = "search";
+  recoveryStarted = performance.now();
+  recoveryLog = [reason, "Recovery search started; continuing checked route."];
+  returning = true;
+  renderRecovery();
+}
+function adoptReturn(route: Extract<Route, { ok: true }>) {
+  pendingRth = 0;
+  returnRequest = 0;
+  rth = route;
+  rthPose = { ...sim.pose };
+  rthAt = performance.now();
+  movingSinceRth = 0;
+  sim.setRoute(route);
+  returning = true;
+  sim.running = route.points.length > 1;
+  renderGeometry();
+  renderUI();
+}
+function escalate() {
+  const result = fallback(sim.pose, flown, mission);
+  recoveryStage = result.stage;
+  recoveryLog.push(
+    ...result.attempts.map(
+      (stage) =>
+        `${stageNames[stage]}: ${stage === result.stage ? "selected" : "no checked candidate"}`,
+    ),
+  );
+  if (result.route) adoptReturn(result.route);
+  else {
+    pendingRth = 0;
+    rth = undefined;
+    renderGeometry();
+    sim.running = false;
+    notice =
+      "Unresolved emergency: no exclusion-free continuation found. Simulation frozen; this is not a hover or a successful return.";
+    renderUI();
+  }
+  renderRecovery();
+}
+function renderRecovery() {
+  const el = document.getElementById("recovery-panel");
+  if (!el) return;
+  const elapsed =
+    recoveryStage === "search"
+      ? Math.min(RECOVERY_SECONDS, (performance.now() - recoveryStarted) / 1000)
+      : 0;
+  const relaxed = recoveryStage === "tight-turn" || recoveryStage === "direct";
+  el.innerHTML = `<strong>${stageNames[recoveryStage]}</strong>
+ <p>${recoveryStage === "search" ? `${elapsed.toFixed(1)} / 8.0 seconds · flying checked continuation` : recoveryStage === "unresolved" ? "No feasible continuation · simulation frozen" : relaxed ? "SIMULATED OVERRIDE — aircraft capability not established" : "Checked geometry only"}</p>
+ <div>Exclusions + clearance: <b>ENFORCED</b></div>
+ <div>Turn radius: <b>${relaxed ? "OVERRIDDEN — capability exceeded" : "ENFORCED"}</b></div>
+ <div>Line corridor: <b>${recoveryStage === "direct" ? "OVERRIDDEN" : mission.transmission?.enabled ? "ENFORCED" : "OFF"}</b></div>
+ <ol style="padding-left:18px;line-height:1.7">${(["normal", "search", "retrace", "tight-turn", "direct"] as RecoveryStage[]).map((stage) => `<li style="color:${stage === recoveryStage ? "#ffcf82" : "#9eb4bf"}">${stageNames[stage].slice(4)}${stage === recoveryStage ? " ← ACTIVE" : ""}</li>`).join("")}</ol>
+ <small>${recoveryLog.join("<br>")}</small>`;
+  el.style.borderColor = relaxed
+    ? "#ffbd66"
+    : recoveryStage === "unresolved"
+      ? "#ff6680"
+      : "#385767";
+}
 let renderedWaypoints = "";
 let renderedLine = "";
 const sim = new Simulator(mission.home),
@@ -52,13 +135,13 @@ const sim = new Simulator(mission.home),
           type: "module",
         });
 document.querySelector("#app")!.innerHTML = `
- <header><div class="brand"><span class="brand-icon">↗</span><div>FLIGHTLINE<small>MISSION SANDBOX</small></div></div><span class="simulation">SIMULATION ONLY</span><div class="header-note">Fixed-wing planning · Austin test area</div><button id="export">Export mission</button><label class="file-button">Import<input id="import" type="file" accept="application/json"></label></header>
- <main><aside><section><div class="eyebrow">01 / MISSION DESIGN</div><h1>A route with room<br>to return.</h1><p class="intro">Plan inspection passes, draw exclusions, and explore return paths in a simulated airspace.</p><div class="tools" role="group" aria-label="Map tools"><button data-mode="select" class="active">↖ Select / drag</button><button data-mode="nav">＋ Nav point</button><button data-mode="photo">◎ Photo point</button><button data-mode="zone">⬡ Exclusion</button><button data-mode="home">⌂ Set home</button></div><p id="tool-hint" class="hint">Drag home or numbered points. Click an exclusion to edit its vertices.</p><div id="draw-actions" hidden><button id="finish">Finish polygon</button><button id="undo">Undo vertex</button><button id="cancel">Cancel</button></div><div id="zone-actions" hidden><button id="delete-zone" class="danger">Delete selected exclusion</button><p class="hint">Drag vertex handles. Click an edge’s + handle to insert a vertex. Right-click a vertex to remove it.</p></div><div id="notice" role="status"></div></section>
+ <header><div class="brand"><span class="brand-icon">↗</span><div>FLIGHTLINE<small>MISSION SANDBOX</small></div></div><span class="simulation">SIMULATION ONLY</span><div class="header-note">Fixed-wing planning · Austin test area</div><a class="file-button" href="OhioFleet.html#3d">Open 3D missions + structures ↗</a><button id="export">Export mission</button><label class="file-button">Import<input id="import" type="file" accept="application/json"></label></header>
+ <main><aside><section><div class="eyebrow">01 / MISSION DESIGN</div><h1>A route with room<br>to return.</h1><p class="intro">Plan inspection passes, draw exclusions, and explore return paths in a simulated airspace.</p><div class="tools" role="group" aria-label="Map tools"><button data-mode="select" class="active">↖ Select / drag</button><button data-mode="nav">＋ Nav point</button><button data-mode="photo">◎ Photo point</button><button data-mode="zone">⬡ Exclusion</button><button data-mode="home">⌂ Set home</button></div><p id="tool-hint" class="hint">Drag home or numbered points. Click an exclusion to edit its vertices.</p><div id="draw-actions" hidden><button id="finish">Finish polygon</button><button id="undo">Undo vertex</button><button id="cancel">Cancel</button></div><div id="zone-actions" hidden><button id="delete-zone" class="danger">Delete selected exclusion</button><p class="hint">Drag vertex handles. Click an edge’s + handle to insert a vertex. Right-click a vertex to remove it.</p></div><div id="notice" role="status"></div><div id="recovery-panel" aria-live="polite" style="border:1px solid #385767;padding:12px;margin-top:16px;font-size:12px"></div><button id="recovery-test">Test return recovery</button></section>
  <section><div class="section-title"><h2>Mission waypoints</h2><span id="point-count" class="tag"></span></div><div id="waypoints"></div><p class="hint">Drag markers to move. With corridor enforcement, heights are feet above the conductor; otherwise altitude is metadata in meters AGL.</p></section>
  <section><div class="eyebrow">02 / TRANSMISSION CORRIDOR</div><h2>Stay with the line</h2><label class="corridor-toggle"><input id="corridor-enabled" type="checkbox"> Enforce corridor (mission + RTH)</label><p class="hint">200 ft lateral on straights · 700 ft on all turns · 0–200 ft above conductor. This is a proximity envelope, not wire-collision protection.</p><div class="tools"><button data-mode="line">Draw line</button><button data-mode="line-edit">Edit line vertices</button></div><div class="settings"><label>Home above line <span>ft</span><input id="home-height" type="number" min="0" max="200" step="1"></label><label>New line elevation <span>ft datum</span><input id="line-elevation" type="number" min="-30000" max="30000" value="100"></label></div><div id="line-vertices"></div><p id="corridor-telemetry" class="hint"></p><p class="hint">Synthetic conductor profile. Vertex elevations share an arbitrary local datum. Aircraft altitude follows the interpolated conductor elevation plus the selected height; climb performance is not modeled.</p><button id="corridor-example">Load corridor example</button><button id="free-example">Load free-planning example</button></section>
  <section><div class="eyebrow">03 / AIRCRAFT MODEL</div><h2>Simulated fixed wing</h2><div class="settings"><label>Airspeed <span>m/s</span><input id="speed" type="number" min="12" max="45" step="1"></label><label>Bank limit <span>°</span><input id="bank" type="number" min="15" max="45" step="1"></label><label>Zone clearance <span>m</span><input id="clearance" type="number" min="10" max="300" step="5"></label><label>Departure heading <span>° true</span><input id="heading" type="number" min="0" max="359" step="5"></label></div><div class="radius">Minimum turn radius <strong id="radius"></strong></div><p class="hint">R = v² / (g · tan bank). Constant speed, level turns, zero wind. Exclusions apply at every altitude.</p></section>
  <section class="limits"><h2>A planning experiment</h2><p>No terrain, wind, battery, airspace rules, communications, takeoff or landing model. A green route only passes this prototype’s geometry checks. Never use it to command an aircraft.</p><button id="demo">Restore example</button><button id="blocked">Try blocked-home example</button></section></aside>
- <div class="map-shell"><div id="map"></div><div class="map-top"><div class="map-pill"><span class="live-dot"></span> DARK TOPO MAP <span>Austin · USGS</span></div><button id="fit">Fit mission</button></div><div id="map-error" hidden>Map rendering error. Reload the page to restart the map.</div><div class="legend"><span><i class="cyan"></i>Planned route</span><span><i class="green"></i>Return candidate</span><span><i class="red"></i>Exclusion</span><span><i class="orange"></i>Clearance</span><span><i style="background:#cda6ff"></i>Transmission line</span></div><div class="status-stack"><div class="status-card"><span class="eyebrow">PLANNED ROUTE</span><strong id="route-state">Calculating…</strong><p id="route-detail"></p></div><div class="status-card"><span class="eyebrow">RETURN TO HOME · RECHECKED ~1 Hz</span><strong id="rth-state">Calculating…</strong><p id="rth-detail"></p></div></div><div class="playback"><div class="play-buttons"><button id="play" class="primary">▶ Play</button><button id="reset">↺ Reset</button><button id="return">⌂ Return home</button></div><div class="metric"><small>GROUND SPEED</small><strong id="speed-value">24 <em>m/s</em></strong></div><div class="metric"><small>PHOTOS SIMULATED</small><strong id="photos">0 / 2</strong></div><label class="time-scale">Playback<select id="scale"><option value="1">1×</option><option value="4" selected>4×</option><option value="10">10×</option></select></label><div id="flight-state" class="flight-state">Ready at home</div></div></div></main>`;
+ <div class="map-shell"><div id="map"></div><div class="map-top"><div class="map-pill"><span class="live-dot"></span> DARK TOPO MAP <span>Austin · USGS</span></div><button id="fit">Fit mission</button></div><div id="map-error" hidden>Map rendering error. Reload the page to restart the map.</div><div class="legend"><span><i class="cyan"></i>Planned route</span><span><i class="green"></i>Return candidate</span><span><i class="red"></i>Exclusion</span><span><i class="orange"></i>Clearance</span><span><i style="background:#cda6ff"></i>Transmission line</span></div><div class="status-stack"><div class="status-card"><span class="eyebrow">PLANNED ROUTE</span><strong id="route-state">Calculating…</strong><p id="route-detail"></p></div><div class="status-card"><span class="eyebrow">RETURN TO HOME · ~1 Hz WHILE MOVING</span><strong id="rth-state">Calculating…</strong><p id="rth-detail"></p></div></div><div class="playback"><div class="play-buttons"><button id="play" class="primary">▶ Play</button><button id="reset">↺ Reset</button><button id="return">⌂ Return home</button></div><div class="metric"><small>GROUND SPEED</small><strong id="speed-value">24 <em>m/s</em></strong></div><div class="metric"><small>PHOTOS SIMULATED</small><strong id="photos">0 / 2</strong></div><label class="time-scale">Playback<select id="scale"><option value="1">1×</option><option value="4">4×</option><option value="10" selected>10×</option></select></label><div id="flight-state" class="flight-state">Ready at home</div></div></div></main>`;
 maplibregl.setWorkerUrl(mapWorkerUrl);
 // Geometry is rendered by our canvas; the empty map style needs no workers.
 maplibregl.setWorkerCount(0);
@@ -252,7 +335,15 @@ function drawGeometry() {
     zones: ["#ff7181", 2, [], "#ef647338"],
     clearance: ["#b28b55", 1, []],
     route: ["#61d6fb", 4, []],
-    rth: ["#b2ed84", 3, [9, 6]],
+    rth: [
+      recoveryStage === "direct"
+        ? "#ff6680"
+        : recoveryStage === "tight-turn"
+          ? "#ffbd66"
+          : "#b2ed84",
+      3,
+      [9, 6],
+    ],
     trail: ["#ffffff", 2, []],
     draft: ["#ffd68a", 2, []],
   };
@@ -450,13 +541,19 @@ function requestRth() {
 }
 function changed(clearNotice = true) {
   revision++;
+  recoveryStage = "normal";
+  recoveryLog = [];
+  forceRecovery = false;
+  flown = [{ ...mission.home }];
   if (clearNotice) notice = "";
   sim.reset(mission.home);
   returning = false;
+  returnRequest = 0;
   planned = undefined;
   rth = undefined;
   pendingRth = 0;
   rthAt = 0;
+  movingSinceRth = 0;
   setSource("trail", fc([]));
   requestMission();
   requestRth();
@@ -478,9 +575,25 @@ worker.onmessage = (e: MessageEvent) => {
   } else {
     if (id !== pendingRth) return;
     pendingRth = 0;
+    if (!route.ok || forceRecovery) {
+      if (sim.running || returning)
+        startRecovery("Normal return search failed.");
+      else rth = route;
+      renderUI();
+      return;
+    }
+    if (recoveryStage === "search") {
+      const current = planner.returnHome(sim.pose, mission);
+      if (current.ok) {
+        recoveryStage = "normal";
+        recoveryLog.push("Recovery search found a checked return.");
+        adoptReturn(current);
+        return;
+      }
+    }
     rth = route;
     rthAt = performance.now();
-    if (!route.ok) sim.running = false;
+    movingSinceRth = 0;
   }
   renderGeometry();
   renderUI();
@@ -497,6 +610,7 @@ worker.onerror = () => {
   renderUI();
 };
 function renderUI() {
+  renderRecovery();
   $("radius").textContent = `${radius(mission.settings).toFixed(0)} m`;
   $("point-count").textContent = `${mission.waypoints.length} / 20`;
   $("notice").textContent = notice;
@@ -526,7 +640,7 @@ function renderUI() {
   $("rth-state").textContent = rth
     ? rth.ok
       ? "Return candidate available"
-      : "NO RETURN PATH FOUND"
+      : "Return search failed"
     : "Calculating…";
   $("rth-state").className = rth?.ok ? "ok" : rth ? "bad" : "";
   $("rth-detail").textContent = rth
@@ -571,18 +685,21 @@ function updateTelemetry() {
   if (transmission?.enabled) {
     const nearest = nearestLine(sim.pose, transmission),
       height = sim.pose.heightAboveLine ?? mission.home.heightAboveLine ?? NaN;
-    sim.pose.altitude = nearest.elevation + height;
+    if (recoveryStage !== "direct")
+      sim.pose.altitude = nearest.elevation + height;
     $("corridor-telemetry").textContent =
-      `${sim.pose.turning ? "TURN · 700 ft limit" : "STRAIGHT · 200 ft limit"} | lateral ${(nearest.distance / FEET).toFixed(0)} ft | above line ${(height / FEET).toFixed(0)} ft | elevation ${(sim.pose.altitude / FEET).toFixed(0)} ft datum`;
+      `${sim.pose.turning ? "TURN · 700 ft limit" : "STRAIGHT · 200 ft limit"} | lateral ${(nearest.distance / FEET).toFixed(0)} ft | above line ${(height / FEET).toFixed(0)} ft | elevation ${((sim.pose.altitude ?? nearest.elevation + height) / FEET).toFixed(0)} ft datum`;
   } else $("corridor-telemetry").textContent = "Corridor enforcement is off.";
 
   $("play").textContent = sim.running ? "Ⅱ Pause" : "▶ Play";
   ($("play") as HTMLButtonElement).disabled =
+    recoveryStage === "unresolved" ||
     !planned?.ok ||
-    !rth?.ok ||
+    (!rth?.ok && recoveryStage === "normal") ||
     !!pendingMission ||
     sim.index >= (sim.route?.points.length ?? 1) - 1;
-  ($("return") as HTMLButtonElement).disabled = !rth?.ok || !!pendingRth;
+  ($("return") as HTMLButtonElement).disabled =
+    !planned?.ok || recoveryStage !== "normal";
   $("speed-value").innerHTML =
     `${sim.running ? mission.settings.speed : 0} <em>m/s</em>`;
   $("photos").textContent =
@@ -598,6 +715,11 @@ function updateTelemetry() {
       : sim.traveled
         ? "Paused"
         : "Ready at home";
+  if (recoveryStage === "search")
+    $("flight-state").textContent =
+      "Recovery search · continuing checked route";
+  if (recoveryStage === "unresolved")
+    $("flight-state").textContent = "Unresolved emergency · simulation frozen";
   aircraft
     .setLngLat(toLngLat(sim.pose))
     .setRotation((-sim.pose.heading * 180) / Math.PI);
@@ -838,29 +960,19 @@ $("play").onclick = () => {
 };
 $("reset").onclick = () => changed();
 $("return").onclick = () => {
-  if (!rth?.ok) return;
-  sim.running = false;
-  const expected = revision,
-    pose = { ...sim.pose };
-  const id = ++sequence;
-  pendingRth = id;
-  rth = undefined;
-  renderGeometry();
-  renderUI();
-  worker.postMessage({ id, type: "rth", mission, pose });
-  const receive = (e: MessageEvent) => {
-    if (e.data.id !== id) return;
-    worker.removeEventListener("message", receive as EventListener);
-    if (revision !== expected) return;
-    const route = e.data.route as Route;
-    if (route.ok) {
-      sim.setRoute(route);
-      returning = true;
-      sim.running = route.points.length > 1;
-      updateTelemetry();
-    }
-  };
-  worker.addEventListener("message", receive as EventListener);
+  if (!planned?.ok || recoveryStage !== "normal") return;
+  const route = planner.returnHome(sim.pose, mission);
+  if (route.ok && !forceRecovery) adoptReturn(route);
+  else {
+    startRecovery("Requested return search failed.");
+    sim.running = !!sim.route;
+  }
+};
+$("recovery-test").onclick = () => {
+  if (!planned?.ok || recoveryStage !== "normal") return;
+  forceRecovery = true;
+  startRecovery("Test drill: normal search deliberately suppressed.");
+  sim.running = true;
 };
 $("demo").onclick = () => {
   mission = demo();
@@ -937,24 +1049,55 @@ let last = performance.now(),
 function tick(now: number) {
   const dt = (now - last) / 1000;
   last = now;
-  if (sim.running && now - rthAt > 4000) {
-    sim.running = false;
-    notice =
-      "Return calculation is stale (>4 seconds). Playback paused until a fresh check arrives.";
-    renderUI();
-  }
+  if (sim.running && movingSinceRth > 4 && recoveryStage === "normal")
+    startRecovery("Return result stale during movement.");
+  if (recoveryStage === "search" && !sim.running) recoveryStarted += dt * 1000;
+  if (
+    recoveryStage === "search" &&
+    sim.running &&
+    now - recoveryStarted >= RECOVERY_SECONDS * 1000
+  )
+    escalate();
+  const beforeIndex = sim.index;
+  const beforeStep = { ...sim.pose };
   sim.step(
     dt,
     mission.settings.speed * Number(($("scale") as HTMLSelectElement).value),
     returning ? [] : mission.waypoints,
   );
-  if (now - lastRequest > 1000 && !pendingRth) {
+  const moved =
+    sim.pose.x !== beforeStep.x ||
+    sim.pose.y !== beforeStep.y ||
+    sim.pose.heading !== beforeStep.heading;
+  if (moved) {
+    movingSinceRth += dt;
+    if (sim.route)
+      flown.push(
+        ...sim.route.points
+          .slice(beforeIndex + 1, sim.index + 1)
+          .map((p) => ({ ...p })),
+        { ...sim.pose },
+      );
+  }
+  if (
+    recoveryStage === "search" &&
+    sim.route &&
+    sim.index >= sim.route.points.length - 1
+  )
+    escalate();
+  if (
+    moved &&
+    (recoveryStage === "normal" || recoveryStage === "search") &&
+    now - lastRequest > 1000 &&
+    !pendingRth
+  ) {
     lastRequest = now;
     requestRth();
   }
   if (now - lastPaint > 100) {
     lastPaint = now;
     updateTelemetry();
+    renderRecovery();
     if (sim.route)
       setSource(
         "trail",

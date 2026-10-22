@@ -1,0 +1,27 @@
+import {objectCard} from './object-card';
+import {generateUN} from './un';
+import type {PowerLine} from './model';
+export function inspectionMission(line:PowerLine){
+ const network=generateUN(line),origin=network.origin,cos=Math.cos(origin[1]*Math.PI/180);
+ const items=network.towers.map((t,seq)=>{
+ const east=t.position[0]-Math.sin(t.heading)*60,south=t.position[2]+Math.cos(t.heading)*60;
+ const lon=origin[0]+east/(111320*cos),lat=origin[1]-south/111320;
+ return {seq,frame:6,command:16,current:seq===0?1:0,autocontinue:1,param1:0,param2:0,param3:0,param4:0,x:Math.round(lat*1e7),y:Math.round(lon*1e7),z:85,mission_type:0};
+ });
+ return {network,document:{format:'flightline-mission-preview/1',simulationOnly:true,transport:'MAVLink 2 MISSION_ITEM_INT field preview; JSON is not a MAVLink packet',altitude:'85 m relative to hypothetical home at local ground zero; not surveyed AMSL',path:'Control points of the displayed inspection spline; autopilot waypoint interpolation would differ',omitted:'Takeoff, landing, speed commands and camera/gimbal commands are not executable mission items in this preview',sourceOsmWay:line.id,items,inspectionTargets:network.towers.map((t,i)=>({missionSeq:i,structureId:t.id,phaseAttachmentIds:t.attachments.map(a=>a.id)}))},wpl:'QGC WPL 110\n'+items.map(i=>[i.seq,i.current,3,i.command,i.param1,i.param2,i.param3,i.param4,(i.x/1e7).toFixed(7),(i.y/1e7).toFixed(7),i.z,i.autocontinue].join('\t')).join('\n')+'\n'};
+}
+export function dataPanel(host:HTMLElement,line:PowerLine){
+ const data=inspectionMission(line);let seq=0,mode='json';
+ host.innerHTML=`<div class="data-toolbar"><strong>Linked data objects</strong><label>Structure <select id="data-item">${data.network.towers.map((_,i)=>`<option value="${i}">Tower ${i+1} / NAV ${i}</option>`).join('')}</select></label><label><input id="data-follow" type="checkbox" checked> Follow aircraft</label><select id="data-format" aria-label="Mission data format"><option value="json">MISSION_ITEM_INT JSON</option><option value="wpl">QGC WPL 110 text</option></select><button id="download-mission">Export mission</button><button id="download-network">Export network</button></div><p class="data-note">MAVLink 2 is a wire protocol, not a mission file type. These are simulated inspection control points, not flight-ready commands. MAVLink x/y = latitude/longitude × 10⁷; GeoJSON = [longitude, latitude, local height meters].</p><div class="object-deck"><div id="mission-object"></div><div id="network-object"></div></div><details class="raw-data"><summary>Raw formats & coordinates</summary><div class="data-stack"><article><b>TOP · Mission item + inspection target references</b><pre id="mission-code"></pre></article><article><b>BOTTOM · Esri UN-style GeoJSON · structure → phase junctions → 3D conductors</b><pre id="network-code"></pre></article></div></details>`;
+ const get=(id:string)=>host.querySelector('#'+id)!;
+ function render(){const t=data.network.towers[seq],pack=data.network.pack;
+ get('mission-object').replaceChildren(objectCard('Mission · NAV '+seq,{navigation:data.document.items[seq],inspectionTarget:data.document.inspectionTargets[seq]}));
+ get('network-object').replaceChildren(objectCard('Transmission structure · '+(seq+1),{structure:pack.structure.features[seq],phaseAttachments:pack.electricJunctions.features.filter(f=>f.properties.structureId===t.id),conductors:pack.electricLines.features.filter(f=>String(f.properties.fromAttachment).startsWith(t.id+'-')),attachmentAssociations:pack.associations.attachment.filter(a=>a.fromId===t.id)}));
+ get('mission-code').textContent=mode==='wpl'?'QGC WPL 110\n# seq current frame command p1 p2 p3 p4 latitude longitude altitude autocontinue\n'+data.wpl.split('\n')[seq+1]:JSON.stringify({message:'MISSION_ITEM_INT',...data.document.items[seq]})+'\n'+JSON.stringify({simulationOnly:true,inspectionTarget:data.document.inspectionTargets[seq]},null,2);get('network-code').textContent=JSON.stringify({type:'FeatureCollection',features:[pack.structure.features[seq],...pack.electricJunctions.features.filter(f=>f.properties.structureId===t.id),...pack.electricLines.features.filter(f=>String(f.properties.fromAttachment).startsWith(t.id+'-'))],associations:{attachment:pack.associations.attachment.filter(a=>a.fromId===t.id),connectivity:pack.associations.connectivity.filter(a=>t.attachments.some(p=>p.id===a.fromId||p.id===a.toId))}}).replace('\"features\":[','\"features\":[\n').replaceAll('},{\"type\":\"Feature\"','},\n{\"type\":\"Feature\"');}
+ (get('data-item') as HTMLSelectElement).onchange=e=>{seq=Number((e.target as HTMLSelectElement).value);(get('data-follow') as HTMLInputElement).checked=false;render();};
+ (get('data-format') as HTMLSelectElement).onchange=e=>{mode=(e.target as HTMLSelectElement).value;render();};
+ function download(name:string,value:string){const url=URL.createObjectURL(new Blob([value],{type:'text/plain'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ (get('download-mission') as HTMLButtonElement).onclick=()=>download(`SIMULATION-osm-${line.id}.${mode==='wpl'?'waypoints':'mission.json'}`,mode==='wpl'?data.wpl:JSON.stringify(data.document,null,2));
+ (get('download-network') as HTMLButtonElement).onclick=()=>download(`osm-${line.id}-synthetic-un.json`,JSON.stringify(data.network.pack,null,2));
+ render();return {follow(index:number){if(seq!==index&&(get('data-follow') as HTMLInputElement).checked){seq=index;(get('data-item') as HTMLSelectElement).value=String(seq);render();}}};
+}
