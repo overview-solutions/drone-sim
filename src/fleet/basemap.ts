@@ -2,10 +2,10 @@ import * as THREE from 'three';
 /** Raster tiles draped in the same local geographic frame as the synthetic scene. */
 export function basemap(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  const ui=document.createElement('div');ui.className='basemap-control';
- ui.innerHTML='<label>Basemap <select aria-label="Basemap"><option value="offline">Offline grid</option><option value="dark">Dark topo</option><option value="topo">Topographic</option><option value="imagery">Aerial imagery</option></select></label><small aria-live="polite">Offline · no tile requests</small>';host.append(ui);
+ ui.innerHTML='<label>Basemap <select aria-label="Basemap"><option value="offline">Offline grid</option><option value="dark">Dark topo</option><option value="topo">Topographic</option><option value="imagery" selected>Aerial imagery</option></select></label><small aria-live="polite">Loading dark aerial imagery…</small>';host.append(ui);
  const select=ui.querySelector('select')!,status=ui.querySelector('small')!;
  const group=new THREE.Group();scene.add(group);
- let mode='offline',generation=0,signature='',disposed=false;
+ let mode='imagery',generation=0,signature='',disposed=false;
  const tiles=new Map<string,THREE.Mesh<THREE.PlaneGeometry,THREE.MeshBasicMaterial>>();
  const cos=Math.cos(origin[1]*Math.PI/180),lat=(y:number,n:number)=>Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI;
  function clear(){generation++;for(const mesh of tiles.values()){mesh.material.map?.dispose();mesh.material.dispose();mesh.geometry.dispose();}tiles.clear();group.clear();signature='';}
@@ -24,6 +24,7 @@ export function basemap(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  const north=-(lat(ty,n)-origin[1])*111320,south=-(lat(ty+1,n)-origin[1])*111320;
  const geometry=new THREE.PlaneGeometry(east-west,south-north);geometry.rotateX(-Math.PI/2);
  const material=new THREE.MeshBasicMaterial({color:0xffffff,depthTest:false,depthWrite:false});
+ if(mode==='imagery'){material.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <colorspace_fragment>','#include <colorspace_fragment>\ngl_FragColor.rgb=mix(gl_FragColor.rgb,vec3(.018,.035,.05),.55);');};}
  if(mode==='dark'){material.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\nfloat gray=dot(diffuseColor.rgb,vec3(.299,.587,.114)); diffuseColor.rgb=mix(vec3(.035,.075,.10),vec3(.26,.38,.43),1.0-gray);');};}
  const mesh=new THREE.Mesh(geometry,material);mesh.position.set((west+east)/2,-.1,(north+south)/2);mesh.renderOrder=-10;mesh.visible=false;tiles.set(key,mesh);group.add(mesh);
  const service=mode==='imagery'?'USGSImageryOnly':'USGSTopo';

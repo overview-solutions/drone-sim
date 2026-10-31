@@ -37,15 +37,20 @@ export function generateUN(line:PowerLine){
    attachment.push({fromId:id,toId:aid,subnetworkId});return {id:aid,phase,position:pos};
   });return {id,position:p,height,heading,attachments};
  });
+ const splices:{id:string;phase:string;position:V3;fromTower:number;toTower:number}[]=[];
  const spans:{id:string;phase:string;points:V3[]}[]=[];
  for(let i=1;i<towers.length;i++)for(let j=0;j<3;j++){
   const a=towers[i-1].attachments[j],b=towers[i].attachments[j],id=`${subnetworkId}-S${i}-${a.phase}`;
   const d=Math.hypot(b.position[0]-a.position[0],b.position[2]-a.position[2]),sag=Math.min(7,d*.025);
   const points=Array.from({length:21},(_,k):V3=>{const t=k/20;return [a.position[0]+(b.position[0]-a.position[0])*t,a.position[1]+(b.position[1]-a.position[1])*t-4*sag*t*(1-t),a.position[2]+(b.position[2]-a.position[2])*t];});
   spans.push({id,phase:a.phase,points});
-  lines.push({type:'Feature',id,geometry:{type:'LineString',coordinates:points.map(geographic)},properties:{...props(id,'overhead_conductor','electric_line','ElectricTransmissionLine',a.phase),fromAttachment:a.id,toAttachment:b.id,syntheticSagMeters:sag,spanLengthMeters:d}});
-  connectivity.push({fromId:a.id,toId:id,phase:a.phase,subnetworkId},{fromId:id,toId:b.id,phase:a.phase,subnetworkId});
+  const splice=i%4===1&&j===1?{id:`${id}-splice`,phase:a.phase,position:points[10],fromTower:i-1,toTower:i}:undefined;
+  if(splice){splices.push(splice);junctions.push(point(splice.id,splice.position,{...props(splice.id,'conductor_splice','electric_junction','ElectricTransmissionJunction',a.phase),assetType:'Hypothetical compression splice',fromStructure:towers[i-1].id,toStructure:towers[i].id,parentSpanId:id}));}
+  const pieces=splice?[{id:id+'-1',points:points.slice(0,11),from:a.id,to:splice.id},{id:id+'-2',points:points.slice(10),from:splice.id,to:b.id}]:[{id,points,from:a.id,to:b.id}];
+  for(const piece of pieces){lines.push({type:'Feature',id:piece.id,geometry:{type:'LineString',coordinates:piece.points.map(geographic)},properties:{...props(piece.id,'overhead_conductor','electric_line','ElectricTransmissionLine',a.phase),fromAttachment:piece.from,toAttachment:piece.to,parentSpanId:id,syntheticSagMeters:sag,spanLengthMeters:splice?d/2:d}});
+  connectivity.push({fromId:piece.from,toId:piece.id,phase:a.phase,subnetworkId},{fromId:piece.id,toId:piece.to,phase:a.phase,subnetworkId});}
+
  }
  const fc=(features:UNFeature[])=>({type:'FeatureCollection',features});
- return {origin,towers,spans,locations,pack:{schemaVersion:'flightline-un-convention/1.0',description:'ISV-inspired GeoJSON + JSON convention, not an Esri geodatabase or validated UN topology. OSM alignment only; supports, phases, heights, sag and circuit membership are synthetic.',structure:fc(structure),electricJunctions:fc(junctions),electricLines:fc(lines),subnetworks:{id:subnetworkId,synthetic:true,controller:null},associations:{attachment,connectivity},provenance:{osmWay:line.id,license:'ODbL 1.0',origin,supportPlacement:{nominalSpanMeters:450,alignmentSimplificationMeters:25,description:'Synthetic supports; short spans may remain at major bends and endpoints'},verticalDatum:'arbitrary flat local ground, not orthometric/ellipsoidal elevations',sources:['https://isv.wiki/meter-village-geojson-un.html','https://github.com/overview-solutions/smart-village-simulator/tree/main/villages','https://doc.arcgis.com/en/arcgis-solutions/11.5/reference/other/ElectricTransmissionEssentials_UtilityNetwork.html']}}};
+ return {origin,towers,spans,splices,locations,pack:{schemaVersion:'flightline-un-convention/1.0',description:'ISV-inspired GeoJSON + JSON convention, not an Esri geodatabase or validated UN topology. OSM alignment only; supports, phases, heights, sag and circuit membership are synthetic.',structure:fc(structure),electricJunctions:fc(junctions),electricLines:fc(lines),subnetworks:{id:subnetworkId,synthetic:true,controller:null},associations:{attachment,connectivity},provenance:{osmWay:line.id,license:'ODbL 1.0',origin,supportPlacement:{nominalSpanMeters:450,alignmentSimplificationMeters:25,description:'Synthetic supports; short spans may remain at major bends and endpoints'},verticalDatum:'arbitrary flat local ground, not orthometric/ellipsoidal elevations',sources:['https://isv.wiki/meter-village-geojson-un.html','https://github.com/overview-solutions/smart-village-simulator/tree/main/villages','https://doc.arcgis.com/en/arcgis-solutions/11.5/reference/other/ElectricTransmissionEssentials_UtilityNetwork.html']}}};
 }

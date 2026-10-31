@@ -13,3 +13,5 @@ html=html.replace('</body>','<script type="module">'+js.replace('</script','<\\/
 out=root/'OhioFleet.html'
 out.write_text(html)
 print(out)
+
+(root/'documentation.html').write_text((root/'public/documentation.html').read_text())

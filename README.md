@@ -101,3 +101,28 @@ The sidebar shows the active stage, countdown, enforced/overridden rules and an 
 ## Ohio fleet and 3D inspection
 
 Open `OhioFleet.html` without a server. See [OHIO_SHOWCASE.md](OHIO_SHOWCASE.md) for FAA/OSM provenance, fleet comparison, synthetic Utility Network geometry, gimbal controls and build instructions.
+
+## Published entry points
+
+GitHub Pages `/` redirects to `OhioFleet.html`, the current Ohio fleet dashboard. `Flightline.html` remains the original mission-planning sandbox. Both are generated standalone files; commit rebuilt HTML when publishing changes. For source development, use `/ohio.html` for Ohio or `/sandbox.html` for the original planner. The original build uses `sandbox.html`; its packaging script still outputs `Flightline.html`.
+
+### Airspace awareness
+
+Ohio Fleet includes simulated aircraft/helicopters, Remote ID detections and NOTAM/TFR examples. Expand **Airspace awareness** to switch to the local Rust ingestion service. See [ingestion/README.md](ingestion/README.md) for the OpenSky connection, receiver/notice import formats and source limitations. No Node runtime is needed for the standalone page or Rust service.
+
+## Project layout
+
+- Root HTML files are ready-to-open deliveries: `OhioFleet.html` is the Ohio fleet demo, `Flightline.html` is the earlier mission planner. They are generated bundles, not the preferred editing location.
+- `src/fleet/` holds Ohio simulation, 3D rendering, camera, asset, traffic and operator-interface modules. `operations.ts` owns flight state; `contingency.ts` contains pure escape geometry checks; `contingency-panel.ts` connects those checks to the demo.
+- Other `src/` modules provide the original planner and shared geometry.
+- `ingestion/` is the separate Rust airspace ingestion service. It is optional for simulated encounters; real sources need their own access/configuration.
+- `tests/` holds automated geometry and state regression tests.
+- `scripts/` contains packaging and data-preparation tools; `dist-fleet/` is generated build output.
+- `docs/screenshots/` contains captured UI previews. Keep future screenshots here, not in the root.
+- `OHIO_SHOWCASE.md` and `CORRIDOR_DATA.md` explain scenario assumptions and data provenance.
+
+### Return and encounter demonstrations
+
+Select a live aircraft, then use the controls above the timeline. **Return home** evaluates curved connections to the flown route. The encounter selector and **Test avoidance** offer a crossing airplane, oncoming helicopter, and deliberately blocked escape case. It evaluates forward refuges and backtrack/return candidates, applies a passing connection to the selected flight, and displays why other candidates failed. A no-route result leaves the aircraft moving on its current route and requests operator intervention; this is not a safe fallback guarantee.
+
+Connection checks use a 700 ft turn radius, 700 ft lateral envelope, 20 m modeled-conductor clearance, 20 m synthetic flat-ground floor, 2 m/s descent limit, and illustrative 120 m horizontal / 35 m vertical traffic proximity. These are demonstration parameters, not certified DAA thresholds. Traffic prediction assumes constant velocity. The checks cover the connection, not the subsequent mission or airport approach. No actual terrain, buildings, vegetation, exclusion volumes, wind, aircraft performance or live surveillance are validated. Live service observations do not trigger automatic maneuvers. The demonstration's on-demand traffic and response are synthetic.

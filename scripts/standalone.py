@@ -4,7 +4,7 @@ import json
 import re
 root = Path(__file__).resolve().parents[1]
 dist = root / 'dist'
-html = (dist / 'index.html').read_text()
+html = (dist / 'sandbox.html').read_text()
 main = next((dist / 'assets').glob('index-*.js')).read_text()
 css = next((dist / 'assets').glob('index-*.css')).read_text()
 for pattern in ['worker-*.js', 'maplibre-gl-worker-*.js']:

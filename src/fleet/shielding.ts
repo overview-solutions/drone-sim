@@ -1,0 +1,18 @@
+import * as THREE from 'three';
+export type ShieldAsset={id:string;kind:string;points:THREE.Vector3[];heightKnown:boolean;area?:boolean};
+export function nearestShieldAsset(position:THREE.Vector3,assets:ShieldAsset[]){let best:{asset:ShieldAsset;point:THREE.Vector3;lateral:number;vertical:number|null}|undefined;
+ for(const asset of assets){for(let i=0;i<Math.max(1,asset.points.length-1);i++){const a=asset.points[i],b=asset.points[Math.min(i+1,asset.points.length-1)];if(!a||!b)continue;const dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((position.x-a.x)*dx+(position.z-a.z)*dz)/(dx*dx+dz*dz||1))),point=a.clone().lerp(b,t),lateral=Math.hypot(position.x-point.x,position.z-point.z);if(!best||lateral<best.lateral)best={asset,point,lateral,vertical:asset.heightKnown?position.y-point.y:null};}
+ if(asset.area&&asset.points.length>2){let inside=false;for(let i=0,j=asset.points.length-1;i<asset.points.length;j=i++){const a=asset.points[i],b=asset.points[j];if((a.z>position.z)!==(b.z>position.z)&&position.x<(b.x-a.x)*(position.z-a.z)/(b.z-a.z)+a.x)inside=!inside;}if(inside)best={asset,point:new THREE.Vector3(position.x,0,position.z),lateral:0,vertical:null};}
+ }return best;
+}
+export function shielding(scene:THREE.Scene,host:HTMLElement,assets:ShieldAsset[],extras:()=>ShieldAsset[]){
+ const material=new THREE.LineDashedMaterial({color:0x8de4cb,dashSize:3,gapSize:3,depthTest:false,transparent:true,opacity:.8}),graphic=new THREE.LineSegments(new THREE.BufferGeometry(),material);graphic.layers.set(1);graphic.userData.sensorIgnore=true;scene.add(graphic);
+ const ui=document.createElement('div');ui.className='shielding-readout';host.append(ui);let last=-Infinity;
+ return {update(position:THREE.Vector3,turning:boolean,active:boolean,now:number){ui.hidden=!active;graphic.visible=active;if(!active||now-last<250)return;last=now;const near=nearestShieldAsset(position,[...assets,...extras()]);if(!near){ui.textContent='Shielding · no mapped reference';graphic.visible=false;return;}
+ const limit=turning?700:200,lat=near.lateral/.3048,vert=near.vertical===null?null:near.vertical/.3048,within=lat<=limit&&vert!==null&&vert>=0&&vert<=200;const color=lat>limit||vert!==null&&(vert<0||vert>200)?0xffb66b:vert===null?0xa9b6c0:0x8de4cb;material.color.setHex(color);
+ const elbow=new THREE.Vector3(near.point.x,position.y,near.point.z),points=[position.clone(),elbow];if(near.vertical!==null)points.push(elbow.clone(),near.point.clone());const ringHeight=near.vertical===null?position.y:near.point.y;
+ // Sparse horizontal limit ring and vertical bracket: no filled volume.
+ for(let i=0;i<48;i++){const a=i/48*Math.PI*2,b=(i+1)/48*Math.PI*2;points.push(new THREE.Vector3(near.point.x+Math.cos(a)*limit*.3048,ringHeight,near.point.z+Math.sin(a)*limit*.3048),new THREE.Vector3(near.point.x+Math.cos(b)*limit*.3048,ringHeight,near.point.z+Math.sin(b)*limit*.3048));}
+ graphic.geometry.dispose();graphic.geometry=new THREE.BufferGeometry().setFromPoints(points);graphic.computeLineDistances();ui.style.color=`#${color.toString(16)}`;ui.title=`Shielding · ${turning?'turn':'straight'} · ${within?'within modeled bounds':lat>limit?'outside lateral bound':vert===null?'height unverified':'outside modeled bounds'}\nLateral ${lat.toFixed(0)} / ${limit} ft · Above asset ${vert===null?'unknown':vert.toFixed(0)+' / 200 ft'}\n${near.asset.kind} · ${near.asset.id} · simulation, not waiver validation`;ui.textContent=`${within?'✓':'△'} Shielding · ${lat.toFixed(0)}/${limit} ft ↔ · ${vert===null?'?':vert.toFixed(0)}/200 ft ↕`;
+ },dispose(){graphic.geometry.dispose();material.dispose();scene.remove(graphic);ui.remove();}};
+}

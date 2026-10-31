@@ -8,12 +8,12 @@ test('45-mile radius shares one 90-mile total budget with alternate landing',()=
 test('FAA rural candidate screening and source snapshot are explicit',()=>{assert.equal(data.meta.faaCycle,'2026-10-01');assert.equal(data.airports.length,128);assert.equal(candidates(data.airports).length,89);assert.ok(candidates(data.airports).every(a=>a.rural&&a.runways.some(r=>r.lengthFt>=2500)));});
 test('UN-like model has three attached junctions per structure and phase-preserving edges',()=>{
  const n=generateUN(line),p=n.pack;
- assert.equal(p.electricJunctions.features.length,n.towers.length*3);
- assert.equal(p.electricLines.features.length,(n.towers.length-1)*3);
+ assert.equal(p.electricJunctions.features.length,n.towers.length*3+n.splices.length);
+ assert.equal(p.electricLines.features.length,(n.towers.length-1)*3+n.splices.length);
  const ids=new Set([...p.structure.features,...p.electricJunctions.features,...p.electricLines.features].map(f=>f.id));
  for(const e of [...p.associations.attachment,...p.associations.connectivity]){assert.ok(ids.has(e.fromId));assert.ok(ids.has(e.toId));}
  for(const e of p.associations.attachment){assert.ok(p.structure.features.some(f=>f.id===e.fromId));assert.ok(p.electricJunctions.features.some(f=>f.id===e.toId));}
- for(const f of p.electricLines.features){const ps=f.geometry.coordinates as number[][];const from=p.electricJunctions.features.find(j=>j.id===f.properties.fromAttachment)!;const to=p.electricJunctions.features.find(j=>j.id===f.properties.toAttachment)!;assert.deepEqual(ps[0],from.geometry.coordinates);assert.deepEqual(ps.at(-1),to.geometry.coordinates);assert.equal(from.properties.phase,to.properties.phase);assert.ok(ps[10][2]<Math.max(ps[0][2],ps.at(-1)![2]));}
+ for(const f of p.electricLines.features){const ps=f.geometry.coordinates as number[][];const from=p.electricJunctions.features.find(j=>j.id===f.properties.fromAttachment)!;const to=p.electricJunctions.features.find(j=>j.id===f.properties.toAttachment)!;assert.deepEqual(ps[0],from.geometry.coordinates);assert.deepEqual(ps.at(-1),to.geometry.coordinates);assert.equal(from.properties.phase,to.properties.phase);assert.ok(Math.min(...ps.map(p=>p[2]))<Math.max(ps[0][2],ps.at(-1)![2]));}
  assert.deepEqual(generateUN(line).pack,p);
 });
 test('great-circle distances are km and symmetric',()=>{assert.ok(Math.abs(distance([0,0],[1,0])-111.195)<.01);assert.equal(distance(a.coord,b.coord),distance(b.coord,a.coord));});

@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {screenTree,crownClearance,treeCandidates,type DemoTree} from '../src/fleet/vegetation-model';
+import type {V3} from '../src/fleet/un';
+const wire:V3[][]=[[[0,25,-100],[0,25,100]]];
+const tree:DemoTree={id:'T',x:8,z:0,height:30,radius:7,form:'rounded',zone:false,kind:'unknown'};
+test('screening uses the conductor segment and crown envelope, not just tree center',()=>{assert.ok(Math.abs(crownClearance(tree,wire)-1)<.01);assert.equal(screenTree(tree,wire).risk,'high');assert.equal(screenTree({...tree,x:40},wire).risk,'low');});
+test('growth scenario distinguishes approaching-clearance trees and species assumptions',()=>{const t={...tree,x:14.5};const now=crownClearance(t,wire);assert.ok(now>6);assert.equal(screenTree({...t,kind:'cottonwood'},wire).risk,'growing');assert.equal(screenTree({...t,kind:'oak'},wire).risk,'low');});
+test('short vegetation below the conductor does not imply contact from XY overlap',()=>{assert.ok(crownClearance({...tree,x:0,height:8},wire)>16);assert.equal(screenTree({...tree,x:0,height:8},wire).risk,'low');});
+test('morphology offers groups rather than claiming a confirmed species',()=>{assert.match(treeCandidates(tree).join(' '),/verify/);assert.match(treeCandidates({...tree,form:'conical'}).join(' '),/Pine \/ spruce/);});
