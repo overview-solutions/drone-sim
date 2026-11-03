@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {curvedRoute,curvedSortie,downtownBase,downtownLine,TURN_RADIUS_M} from '../src/fleet/flight-path';
 import {sortie} from '../src/fleet/model';
 import {createFlight,flightSnapshot} from '../src/fleet/operations';
-test('downtown has eight long inspection passes and more inspection than transit',()=>{
+test('downtown inspection dominates outbound leg before corridor return',()=>{
  const s=curvedSortie(sortie(downtownBase,downtownBase,downtownLine,144.8));
  const inspection=s.inspectionEndKm!-s.inspectionStartKm!;
- assert.ok(s.inspectionKm>25);assert.ok(inspection/s.length>.7);assert.ok(s.length<144.8);
+ assert.ok(s.inspectionKm>25);assert.ok(inspection/s.inspectionEndKm!>.7);assert.ok(s.length<144.8);
  console.log(`Downtown: ${s.inspectionKm.toFixed(1)} km infrastructure, ${inspection.toFixed(1)} km inspection flight, ${(s.length-inspection).toFixed(1)} km transit`);
 });
 test('curved connections maintain at least approximately 700 ft radius including joins',()=>{

@@ -20,9 +20,9 @@ export function validateEscape(points:Vector3[],wires:Vector3[][],intruder?:Intr
  }
  return '';
 }
-export function planEscape(start:Vector3,heading:number,targets:{point:Vector3;heading:number;label:string}[],wires:Vector3[][],intruder?:Intruder){
+export function planEscape(start:Vector3,heading:number,targets:{point:Vector3;heading:number;label:string}[],wires:Vector3[][],intruder?:Intruder,radius=TURN_RADIUS_M){
  const accepted:Escape[]=[];const rejected=new Set<string>();
- for(const target of targets)for(const path of dubins({x:start.x,y:start.z,heading},{x:target.point.x,y:target.point.z,heading:target.heading},TURN_RADIUS_M)){
+ for(const target of targets)for(const path of dubins({x:start.x,y:start.z,heading},{x:target.point.x,y:target.point.z,heading:target.heading},radius)){
   // Limit vertical rate to 2 m/s at the scenario's 40 mph.
   if(Math.abs(target.point.y-start.y)>path.length/17.88*2){rejected.add('Descent rate exceeds 2 m/s');continue;}
   const points=path.points.map((p,i)=>new Vector3(p.x,start.y+(target.point.y-start.y)*i/(path.points.length-1),p.y));

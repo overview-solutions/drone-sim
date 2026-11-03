@@ -1,3 +1,4 @@
+import {inspectionIndex,extraCapturePriority} from './inspection-index';
 import {assetPassages} from './history-backfill';
 import {SpanCoverage} from './span-coverage';
 import {reviewNavigation} from './review-navigation';
@@ -11,7 +12,7 @@ import {missionTimeline} from './timeline';
 import {taxiLayout} from './turnaround';
 import {sensorOverlay} from './sensor-overlay';
 import * as THREE from 'three';
-import {cameraProfile,optics,approachZoom,canPreposition} from './camera-model';
+import {cameraProfile,optics,approachZoom,canPreposition,canSupplementalShot} from './camera-model';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {addWorld,type WorldData} from './world';
 import {osmContext} from './osm-context';
@@ -114,6 +115,7 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  host.querySelector('#inspect-play')!.textContent='Pause return';
  }; 
  if(!worldData)for(const [a,b] of [[launch,first.clone().addScaledVector(outbound,-650).setY(1.5)],[last.clone().addScaledVector(inbound,650).setY(1.5),land]]){const runway=new THREE.Mesh(new THREE.BoxGeometry(a.distanceTo(b)+80,.3,25),new THREE.MeshStandardMaterial({color:0x626c70}));runway.position.copy(a).add(b).multiplyScalar(.5).setY(.1);runway.rotation.y=-Math.atan2(b.z-a.z,b.x-a.x);scene.add(runway);}
+ const extraCounts=new Map<string,number>();let lastExtra=-Infinity;let coverageSignature='';
  let shotCount=0,lastShot=-Infinity,settled=0,activeKey='',locked=false,acquiredAt=0;
  const transitionStart=new THREE.Quaternion();
  let cameraStage='SCANNING',lastCapture='None',zoom=1,slewSpeed=0,slewTime=0,zoomTime=0,focusTime=0,reacquiring=false,wideSettled=0,lastTower=-1;
@@ -127,11 +129,11 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  transition={target,position:target.clone().addScaledVector(side,distance)};return;
  }
  const aspect=Math.max(.1,canvasHost.clientWidth/Math.max(1,canvasHost.clientHeight)),half=THREE.MathUtils.degToRad(camera.fov/2),angle=Math.min(half,Math.atan(Math.tan(half)*aspect)),distance=Math.max(180,size.length()/2/Math.sin(angle)*1.1);transition={target,position:target.clone().add(new THREE.Vector3(0,1,.45).normalize().multiplyScalar(distance))};}
- review=reviewNavigation(scene,canvasHost,droneBar,network,frameReview,()=>[...(canopy?.events()??[]),...(faults?.events()??[])],i=>[-1,0,1,2].every(j=>captured.has(`${i}:${j}`))&&(!network.splices.some(s=>s.fromTower===i)||captured.has(`${i}:3`)),id=>id.startsWith('EQUIP-')?faults?.select(id):canopy?.select(id),worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle)?.route??[],i=>scannedSpans.has(i));
+ review=reviewNavigation(scene,canvasHost,droneBar,network,frameReview,()=>[...(canopy?.events()??[]),...(faults?.events()??[])],i=>[-1,0,1,2].every(j=>captured.has(`${i}:${j}`))&&(!network.splices.some(s=>s.fromTower===i)||captured.has(`${i}:3`)),id=>id.startsWith('EQUIP-')?faults?.select(id):canopy?.select(id),worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle)?.route??[],i=>scannedSpans.has(i),()=>[...osmLayer.crossings(),...(worldData?.lines.filter(l=>l.id!==line.id).map(l=>({id:'OSM way/'+l.id,kind:'power',points:l.coords.map(p=>world!.project(p,0))}))??[])]);
  if(timeline){const rating=droneBar.querySelector('.line-rating');if(rating)timeline.ratingHost.append(rating);const navigation=droneBar.querySelector('.review-navigation') as HTMLElement|null;if(navigation)navigation.style.display='none';}
 
  const desiredGimbal=new THREE.PerspectiveCamera();
- function resetCapture(){shotCount=0;lastShot=-Infinity;settled=0;activeKey='';locked=false;acquiredAt=0;cameraStage='SCANNING';lastCapture='None';shotLog.length=0;lastTower=-1;reacquiring=false;wideSettled=0;slewTime=0;zoomTime=0;focusTime=0;captured.clear();scannedSpans.clear();spanCoverage.clear();capturePass=1;}
+ function resetCapture(){extraCounts.clear();lastExtra=-Infinity;shotCount=0;lastShot=-Infinity;settled=0;activeKey='';locked=false;acquiredAt=0;cameraStage='SCANNING';lastCapture='None';shotLog.length=0;lastTower=-1;reacquiring=false;wideSettled=0;slewTime=0;zoomTime=0;focusTime=0;captured.clear();scannedSpans.clear();spanCoverage.clear();capturePass=1;}
 
  if(!worldData)scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(path.getPoints(600)),new THREE.LineBasicMaterial({color:0x68d5ed,transparent:true,opacity:.45})));
  const plane=new THREE.Group();const body=new THREE.Mesh(new THREE.ConeGeometry(1,8,8),new THREE.MeshStandardMaterial({color:0xf3f2df}));body.rotation.z=-Math.PI/2;plane.add(body);const wings=new THREE.Mesh(new THREE.BoxGeometry(1,.18,14),new THREE.MeshStandardMaterial({color:0xe7e8d2}));plane.add(wings);const tail=new THREE.Mesh(new THREE.BoxGeometry(1,.18,5),steel);tail.position.x=-3;plane.add(tail);scene.add(plane);
@@ -147,7 +149,7 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
 
  if(worldData?.activeVehicle&&world){const v=worldData.fleet?.().find(v=>v.id===worldData.activeVehicle);if(v){for(const end of [0,v.route.length-1]){const a=world.project(v.route[end]),b=world.project(v.route[end===0?1:end-1]);const strip=new THREE.Mesh(new THREE.BoxGeometry(400,.2,25),new THREE.MeshStandardMaterial({color:0x535e63}));strip.position.copy(a).setY(.1);strip.rotation.y=-Math.atan2(b.z-a.z,b.x-a.x);scene.add(strip);}}}
  faults=equipment(scene,canvasHost,network);
- canopy=vegetation(scene,canvasHost,mapSurface,camera,network);
+ canopy=vegetation(scene,canvasHost,mapSurface,camera,network,id=>review?.openAsset(id));
  const initialVehicle=worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle);
  if(initialVehicle&&!initialVehicle.returning&&initialVehicle.distanceKm>0){
  capturePass=initialVehicle.inspectionPass;
@@ -219,6 +221,15 @@ p.y=Math.max(1.5,p.y);plane.position.copy(p);const bank=THREE.MathUtils.lerp(pla
  }
  });
  if(aimingAllowed&&phase==='auto')for(const splice of network.splices){const i=splice.fromTower,key=`${i}:3`;if(captured.has(key))continue;const delta=new THREE.Vector3(...splice.position).sub(p),distance=delta.length();if(canPreposition(delta.dot(tangent),distance,acquisitionMode)&&(key===activeKey||distance<best)&&`${idx}:${attachmentIndex}`!==activeKey){idx=i;attachmentIndex=3;best=distance;}}
+ let supplemental=false;
+ const requiredSlack=idx>=0?Math.max(0,(best-650)/Math.max(1,mph*.44704)):60;
+ if(running&&flightStage==='INSPECTING'&&requiredSlack>14&&elapsed-lastExtra>=10){
+  const direction=gimbal.getWorldDirection(new THREE.Vector3()),flagged=new Set((faults?.events()??[]).map(e=>Number(e.id.slice(6))));let score=-Infinity;
+  network.towers.forEach((tower,i)=>{for(const j of [-1,0,1,2]){const key=`${i}:${j}`,at=j<0?new THREE.Vector3(tower.position[0],tower.height/2,tower.position[2]):new THREE.Vector3(...tower.attachments[j].position),delta=at.sub(p),range=delta.length(),angle=THREE.MathUtils.radToDeg(direction.angleTo(delta));
+   const priority=extraCapturePriority({requiredCaptured:captured.has(key),extras:extraCounts.get(key)??0,flagged:flagged.has(i),forward:delta.dot(tangent),angle,range,slack:requiredSlack});
+   const stablePriority=priority+(key===activeKey?20:0);if(stablePriority>score){score=stablePriority;idx=i;attachmentIndex=j;best=range;supplemental=true;}
+  }});
+ }
  const spliceTarget=attachmentIndex===3?network.splices.find(s=>s.fromTower===idx):undefined;
  const hasTarget=idx>=0,key=hasTarget?`${idx}:${attachmentIndex}`:'';
  if(key!==activeKey){if(activeKey&&!captured.has(activeKey))shotLog.unshift('Skipped '+activeKey+' · passed before ready');activeKey=key;settled=0;locked=false;acquiredAt=elapsed;slewSpeed=0;transitionStart.copy(gimbal.quaternion);slewTime=0;zoomTime=0;focusTime=0;}
@@ -256,18 +267,24 @@ p.y=Math.max(1.5,p.y);plane.position.copy(p);const bank=THREE.MathUtils.lerp(pla
  settled=hasTarget&&aligned&&repositioned?settled+simDt:0;focusTime=settled;locked=hasTarget&&settled>=cameraProfile.focusSeconds;
  const detailOK=profile||sampling.pixels>=cameraProfile.minTargetPixels;
  const exposureAllowed=flightStage==='INSPECTING'&&range<650;
- if(vehicle&&running&&flightStage==='INSPECTING'){
+ if(vehicle&&running&&flightStage==='INSPECTING'&&!supplemental){
  const remainingShots=profile?4:attachmentIndex>=0&&attachmentIndex<3?3-attachmentIndex:1;
  const secondsNeeded=Math.max(0,cameraProfile.retargetSeconds-(elapsed-acquiredAt))+Math.max(0,cameraProfile.focusSeconds-settled)+(remainingShots-1)*(cameraProfile.retargetSeconds+cameraProfile.focusSeconds+2)+2;
  worldData?.capturePace?.(vehicle.id,hasTarget?catchupSpeed(vehicle.plannedMph,target.clone().sub(p).dot(tangent),secondsNeeded):40);
  }
 
  cameraStage=hasTarget&&!exposureAllowed?'PREPOSITION · NEXT ASSET':!hasTarget?(acquisitionMode==='known'?'HOLD ZOOM · AWAIT NEXT COORDINATE':'WIDE SCAN'):reacquiring?'WIDE REACQUISITION':!repositioned||!aligned?'SLEW / ZOOM':!locked?'FOCUS / SETTLE':!detailOK?'INSUFFICIENT PIXELS':'EXPOSURE READY';
- if(running&&exposureAllowed&&locked&&detailOK&&elapsed-lastShot>=4){captured.add(activeKey);if(vehicle)faults?.capture(idx,attachmentIndex,vehicle.timeline.seconds);shotCount++;lastShot=elapsed;lastCapture=`Tower ${idx+1} · ${shotLabel} · ${(elapsed-acquiredAt).toFixed(1)}s acquisition`;shotLog.unshift(`${lastCapture} (slew ${slewTime.toFixed(1)}s / zoom ${zoomTime.toFixed(1)}s / focus ${focusTime.toFixed(1)}s)`);settled=0;cameraStage='CAPTURED';}
+ if(running&&!supplemental&&exposureAllowed&&locked&&detailOK&&elapsed-lastShot>=4){captured.add(activeKey);if(vehicle)faults?.capture(idx,attachmentIndex,vehicle.timeline.seconds);shotCount++;lastShot=elapsed;lastCapture=`Tower ${idx+1} · ${shotLabel} · ${(elapsed-acquiredAt).toFixed(1)}s acquisition`;shotLog.unshift(`${lastCapture} (slew ${slewTime.toFixed(1)}s / zoom ${zoomTime.toFixed(1)}s / focus ${focusTime.toFixed(1)}s)`);settled=0;cameraStage='CAPTURED';}
+ const opportunistic=supplemental&&requiredSlack>6&&elapsed-lastExtra>=10&&elapsed-lastShot>=4;
+ const distant=canSupplementalShot({locked,inspecting:flightStage==='INSPECTING',range,forwardMeters:target.clone().sub(p).dot(tangent),speedMps:mph*.44704,secondsSinceShot:elapsed-lastShot,secondsSinceExtra:elapsed-lastExtra});
+ if(running&&hasTarget&&locked&&(opportunistic||distant)&&(extraCounts.get(activeKey)??0)<2){extraCounts.set(activeKey,(extraCounts.get(activeKey)??0)+1);shotCount++;lastExtra=lastShot=elapsed;cameraStage='EXTRA CAPTURE';lastCapture=`Extra · T${idx+1} ${shotLabel} · ${Math.round(range)} m · ${Math.round(sampling.pixels)} px/detail · supplemental`;shotLog.unshift(lastCapture);}
+ const nextCoverage=`${capturePass}:${captured.size}:${shotCount}`;
+ if(nextCoverage!==coverageSignature){coverageSignature=nextCoverage;scene.traverse(o=>{const tower=o.userData.equipmentTower,phase=o.userData.equipmentPhase;if(!Number.isInteger(tower)||!Number.isInteger(phase))return;const key=`${tower}:${phase}`,extras=extraCounts.get(key)??0;o.userData.inspectionSummary=`Inspection index ${inspectionIndex(captured.has(key),extras)}/100 · required ${captured.has(key)?'captured':'pending'} · ${extras} supplemental frames · simulated coverage only`;});}
  host.querySelector('.gimbal-caption')!.textContent=`${acquisitionMode==='known'?'KNOWN COORDINATES':'WIDE ACQUISITION'} · ${shotLabel} · ${cameraStage} · ${(hasTarget?elapsed-acquiredAt:0).toFixed(1)}s elapsed
 Slew ${slewTime.toFixed(1)}s · Zoom ${zoomTime.toFixed(1)}s · Focus ${focusTime.toFixed(1)} / ${cameraProfile.focusSeconds}s
 ${zoom.toFixed(1)}× optical · ${sampling.hfov.toFixed(1)}° HFOV · ${Math.round(range)} m · ${sampling.cmPerPixel.toFixed(1)} cm/px · 0.5 m detail ≈ ${Math.round(sampling.pixels)} px
 ${shotLog[0]||'Awaiting capture'}
+Asset inspection index ${hasTarget?inspectionIndex(captured.has(activeKey),extraCounts.get(activeKey)??0):0}/100 · simulated coverage
 Speed ${vehicle?.speedMph.toFixed(0)??mph} mph · planned ${vehicle?.plannedMph.toFixed(0)??mph} mph · ${vehicle?.captureLimited?'camera catch-up':'spacing-based pace'}
 EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
  shotLog.splice(20);

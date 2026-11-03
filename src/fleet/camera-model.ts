@@ -7,3 +7,9 @@ export function approachZoom(current:number,target:number,seconds:number){const 
 export function canPreposition(forwardM:number,rangeM:number,mode:string){
  return forwardM>20&&Number.isFinite(rangeM)&&(mode==='known'||rangeM<650);
 }
+
+/** Supplemental frames must leave the required exposure window undisturbed. */
+export function canSupplementalShot(input:{locked:boolean;inspecting:boolean;range:number;forwardMeters:number;speedMps:number;secondsSinceShot:number;secondsSinceExtra:number}){
+ return input.locked&&input.inspecting&&input.forwardMeters>0&&input.range>650&&
+ (input.range-650)/Math.max(1,input.speedMps)>6&&input.secondsSinceShot>=4&&input.secondsSinceExtra>=10;
+}

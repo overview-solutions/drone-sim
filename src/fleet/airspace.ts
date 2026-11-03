@@ -12,16 +12,21 @@ export function airspace(scene:THREE.Scene,host:HTMLElement,origin:number[],miss
  const trails=new Map<string,{time:number;point:THREE.Vector3}[]>();
  let snapshot:Snapshot={tracks:[],notices:[],sources:[]};let last=0;let pending=false;let disposed=false;let error='';let generation=0;
  const project=(lon:number,lat:number,y:number)=>new THREE.Vector3((lon-origin[0])*111320*Math.cos(origin[1]*Math.PI/180),y,-(lat-origin[1])*111320);
+ const missionBounds=mission.length?new THREE.Box3().setFromPoints(mission.map(p=>project(p[0],p[1],0))).expandByScalar(100):undefined;
+ const inMission=(p:THREE.Vector3)=>!!missionBounds&&p.x>=missionBounds.min.x&&p.x<=missionBounds.max.x&&p.z>=missionBounds.min.z&&p.z<=missionBounds.max.z;
  function clear(){for(const child of [...group.children]){group.remove(child);const mesh=child as THREE.Mesh;mesh.geometry?.dispose();if((mesh.material as THREE.SpriteMaterial)?.map)(mesh.material as THREE.SpriteMaterial).map?.dispose();const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];materials.forEach(m=>m?.dispose());}}
  function render(t:number){clear();list.replaceChildren();
  for(const [id,history] of trails)if(!history.length||t-history.at(-1)!.time>60)trails.delete(id);
  for(const track of snapshot.tracks){if(!Number.isFinite(track.longitude)||!Number.isFinite(track.latitude)||!Number.isFinite(track.observedAt))continue;const age=Math.max(0,t-track.observedAt);if(age>60)continue;
- if(mission.length&&(Math.abs(track.longitude-center[0])>radius[0]*2.5||Math.abs(track.latitude-center[1])>radius[1]*2.5))continue;
- const history=trails.get(track.id)||[];
- if(!history.length||track.observedAt>history.at(-1)!.time)history.push({time:track.observedAt,point:project(track.longitude,track.latitude,380)});
+ const history=trails.get(track.id)||[],height=track.kind==='remote-id'?160:380;
+ const position=project(track.longitude,track.latitude,height);
+ // Demo-only prehistory follows the same synthetic trajectory; live tracks use observations only.
+ if(!history.length&&track.source==='Simulation'){const i=track.id==='DEMO-2'?1:0;for(let seconds=30;seconds>=1;seconds--){const a=(last-seconds*1000)/180000+i*Math.PI;history.push({time:t-seconds,point:project(center[0]+Math.sin(a)*radius[0],center[1]+Math.cos(a)*radius[1],height)});}}
+ if(!history.length||track.observedAt>history.at(-1)!.time)history.push({time:track.observedAt,point:position.clone()});
  while(history.length&&(t-history[0].time>30||history.length>120))history.shift();trails.set(track.id,history);
+ if(mission.length&&(Math.abs(track.longitude-center[0])>radius[0]*2.5||Math.abs(track.latitude-center[1])>radius[1]*2.5))continue;
  const color=age>60?0x81939e:track.kind==='remote-id'?0xee87ff:track.kind==='helicopter'?0xffbb55:0x62dfff;
- if(history.length>1){const trail=new THREE.Line(new THREE.BufferGeometry().setFromPoints(history.map(p=>p.point)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.6,depthTest:false}));trail.layers.set(1);trail.userData.sensorIgnore=true;group.add(trail);}
+ if(history.length>1&&inMission(position)){const trail=new THREE.Line(new THREE.BufferGeometry().setFromPoints(history.map(p=>p.point)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.9,depthTest:false,depthWrite:false}));trail.renderOrder=15;trail.layers.set(1);trail.userData.sensorIgnore=true;group.add(trail);}
  const telemetry=`${track.altitudeM===undefined?'ALT ?':Math.round(track.altitudeM*3.28084)+' ft'} · ${track.speedMps===undefined?'SPD ?':Math.round(track.speedMps*1.94384)+' kt'} · ${track.heading===undefined?'HDG ?':Math.round(track.heading)+'°'} · ${Math.round(age)}s`;
  const marker=new THREE.Mesh(new THREE.ConeGeometry(track.kind==='remote-id'?25:45,90,4),new THREE.MeshBasicMaterial({color,wireframe:true}));marker.position.copy(project(track.longitude,track.latitude,track.kind==='remote-id'?160:380));marker.userData.sensorIgnore=true;marker.layers.set(1);group.add(marker);
  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=112;const ctx=canvas.getContext('2d')!;ctx.fillStyle='#102631b8';ctx.fillRect(0,0,512,112);ctx.fillStyle='#'+color.toString(16).padStart(6,'0');ctx.font='bold 27px sans-serif';ctx.textAlign='center';ctx.fillText((track.kind==='helicopter'?'H ':track.kind==='remote-id'?'RID ':'✈ ')+(track.label||track.id),256,34);ctx.font='20px sans-serif';ctx.fillText(telemetry,256,66);ctx.font='18px sans-serif';ctx.fillText((track.source==='Simulation'?'SIMULATED · ':track.source+' · ')+(track.altitudeDatum??'datum unknown'),256,96);

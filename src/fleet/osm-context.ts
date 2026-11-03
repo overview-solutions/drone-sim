@@ -1,3 +1,4 @@
+import type {CrossingSource} from './review-crossings';
 import type {ShieldAsset} from './shielding';
 import * as THREE from 'three';
 import urbanBuildings from './urban-buildings.json';
@@ -6,7 +7,7 @@ import {buildingPolygons} from './osm-buildings';
 export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  const ui=document.createElement('div');ui.className='osm-context';ui.innerHTML='<button>Load nearby 3D OSM</button><label><input type="checkbox" checked> Show</label><label>Area <select aria-label="OSM area"><option value="250">500 m</option><option value="1000">2 km</option></select></label><label>Import OSM JSON <input type="file" accept=".json,application/json" style="max-width:180px"></label><small>Buildings · power · trees · water · roads · paths · 500 m around view</small>';host.append(ui);
  const button=ui.querySelector('button')!,status=ui.querySelector('small')!,toggle=ui.querySelector('input[type=checkbox]') as HTMLInputElement;
- let shieldingAssets:ShieldAsset[]=[];
+ let shieldingAssets:ShieldAsset[]=[];let crossings:CrossingSource[]=[];
  let imported:any;const file=ui.querySelector('input[type=file]') as HTMLInputElement;file.onchange=async()=>{try{const parsed=JSON.parse(await file.files![0].text());if(!Array.isArray(parsed.elements))throw Error();imported=parsed;button.click();}catch{status.textContent='Choose an Overpass JSON file containing elements.';}};
  const group=new THREE.Group();scene.add(group);let center=new THREE.Vector3(),disposed=false,controller:AbortController|undefined;
  const cos=Math.cos(origin[1]*Math.PI/180),project=(lon:number,lat:number)=>new THREE.Vector3((lon-origin[0])*111320*cos,0,-(lat-origin[1])*111320);
@@ -17,7 +18,7 @@ export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  const bbox=`${lat-dy},${lon-dx},${lat+dy},${lon+dx}`;
  button.disabled=true;status.textContent='Loading OSM context…';controller=new AbortController();const timeout=setTimeout(()=>controller?.abort(),60000);
  try{
- const query=`[out:json][timeout:20];(way[building](${bbox});relation[building][type=multipolygon](${bbox});way[power~"^(line|minor_line|substation|plant)$"](${bbox});node[power~"^(tower|pole|substation|transformer)$"](${bbox});way[highway](${bbox});way[waterway](${bbox});way[natural~"^(water|wood|scrub|grassland)$"](${bbox});way[landuse~"^(forest|grass|meadow|recreation_ground)$"](${bbox});way[leisure=park](${bbox});node[natural=tree](${bbox}););out geom;`;
+ const query=`[out:json][timeout:20];(way[building](${bbox});relation[building][type=multipolygon](${bbox});way[power~"^(line|minor_line|substation|plant)$"](${bbox});node[power~"^(tower|pole|substation|transformer)$"](${bbox});way[highway](${bbox});way[waterway](${bbox});way[railway](${bbox});way[natural~"^(water|wood|scrub|grassland)$"](${bbox});way[landuse~"^(forest|grass|meadow|recreation_ground)$"](${bbox});way[leisure=park](${bbox});node[natural=tree](${bbox}););out geom;`;
  let data:any=imported;imported=undefined;
  const cacheKey=`flightline-osm-v3:${bbox}`;if(!data)try{data=JSON.parse(localStorage.getItem(cacheKey)||'null');}catch{}
  const fromCache=!!data;
@@ -26,7 +27,7 @@ export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  }
  if(!data||!Array.isArray(data.elements)||data.remark)throw Error('OSM service unavailable');if(disposed)return;
  if(!fromCache)try{localStorage.setItem(cacheKey,JSON.stringify(data));}catch{}
- clear();let buildings=0,power=0,estimated=0,trees=0,water=0,roads=0,paths=0,green=0;
+ crossings=data.elements.filter((e:any)=>e.type==='way'&&e.geometry?.length>1&&(e.tags?.highway||e.tags?.waterway||e.tags?.railway||['line','minor_line'].includes(e.tags?.power))).map((e:any)=>({id:'OSM way/'+e.id,kind:e.tags.power?'power':e.tags.waterway?'water':e.tags.railway?'rail':'road',points:e.geometry.map((p:any)=>project(p.lon,p.lat))}));clear();let buildings=0,power=0,estimated=0,trees=0,water=0,roads=0,paths=0,green=0;
  for(const building of buildingPolygons(data.elements)){
  const tags=building.tags,tagged=parseFloat(tags.height),levels=parseFloat(tags['building:levels']);const inferred=!(Number.isFinite(tagged)&&tagged>0);
  const height=inferred?(levels>0?Math.min(400,levels*3):9):Math.min(400,tagged*(tags.height.includes('ft')?.3048:1));
@@ -73,5 +74,5 @@ export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  status.textContent=`${buildings} buildings · ${power} power · ${trees} trees · ${water} water · ${roads} roads · ${paths} paths · ${green} green areas · ${estimated} estimated heights · © OpenStreetMap contributors${fromCache?' · cached / imported':''}`;
  }catch{if(!disposed)status.textContent='OSM unavailable. Existing context retained; try again.';}finally{clearTimeout(timeout);if(!disposed)button.disabled=false;}
  };
- return {shieldingAssets:()=>shieldingAssets,loadUrban(){imported=urbanBuildings;button.click();},update(target:THREE.Vector3){center.copy(target);},dispose(){disposed=true;controller?.abort();clear();scene.remove(group);ui.remove();}};
+ return {crossings:()=>crossings,shieldingAssets:()=>shieldingAssets,loadUrban(){imported=urbanBuildings;button.click();},update(target:THREE.Vector3){center.copy(target);},dispose(){disposed=true;controller?.abort();clear();scene.remove(group);ui.remove();}};
 }

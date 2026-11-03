@@ -2,6 +2,25 @@
 
 **Simulation only. Not flight-ready, not a safety system, and not an aircraft controller.** A route marked “Geometry checks passed” passed only the planar checks described below.
 
+## Where the displayed data comes from
+
+**The supplied Ohio and Austin demos combine public maps with simulated operations. They include no internal AEP GIS export, inspection imagery, LiDAR survey, maintenance history, work orders, or live fleet telemetry.** On the Ohio map, an “AEP” label comes from a contributor-entered operator tag in OpenStreetMap. Selecting that line opens a simulated inspection. A red insulator, for example, is a generated finding at a modeled component, not a reported defect on that circuit.
+
+| Displayed layer | Source and interpretation |
+| --- | --- |
+| Ohio transmission routes, operator names and nominal voltages | Public [OpenStreetMap](https://www.openstreetmap.org/copyright) power-line geometry and tags, downloaded via Overpass on October 16, 2026. The snapshot includes 681 ways tagged as AEP and at least 69 kV. Ways with unknown operators stay unassigned. This is a mapped subset, not an authoritative asset inventory. |
+| Buildings and nearby features | Embedded downtown Columbus building footprints come from the OSM map API on October 25, 2026. The optional nearby OSM loader fetches mapped buildings, power infrastructure, vegetation, waterways, roads, paths and rail features through Overpass. Missing heights are approximated for display. Review views can also include explicitly marked demo crossings. **© OpenStreetMap contributors. OSM-derived data is licensed under [ODbL 1.0](https://www.openstreetmap.org/copyright).** |
+| Ohio airports and runways | Airport locations, identifiers, tower status and runway attributes come from the [FAA NASR airport and runway files, October 1, 2026 cycle](https://nfdc.faa.gov/webContent/28DaySub/extra/01_Oct_2026_APT_CSV.zip). Suggested drone stations, taxi operations, parking, charging and airport arrangements are hypothetical. |
+| State boundary and rural airport filter | The Ohio outline comes from [U.S. Census Bureau TIGERweb state boundaries](https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer). The rural filter compares each airport location with [2020 Census urban-area polygons](https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Urban/MapServer). |
+| Map background | Ohio streams historical aerial imagery from [USGS The National Map imagery service](https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer) (display credit USGS / USDA) and topography from [USGS Topo](https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer). Austin embeds 20 tiles from that topo service. The offline grid and dark styling are drawn by the application. |
+| Air traffic, Remote ID and airspace notices | The default examples are simulated. If explicitly configured, the optional Rust service displays aircraft observations from [OpenSky Network](https://openskynetwork.github.io/opensky-api/rest.html), Remote ID observations from a user-supplied receiver file, and notices from a user-supplied NOTAM/TFR file. Those inputs are separate from the distributed demo. See the [feed configuration and limits](ingestion/README.md). |
+
+**What the simulator generates.** The Austin transmission loops and OH-08 downtown inspection corridor are fictional. For Ohio missions based on OSM lines, the simulator builds its own towers, spans, conductors, phase attachments, insulators, splices and SOCC boundaries. The Utility Network-style GeoJSON describes those modeled objects. The [schema references and aircraft and camera specifications](OHIO_SHOWCASE.md) inform the model.
+
+Aircraft positions, mission timelines, communications, camera views, LiDAR points, trees and obstacles in the detailed scan, and derived geometry are simulated. Inspection recency, asset service dates, condition trends, storm and maintenance events, faults, risk colors, clearance and rating scenarios, and initial follow-up tasks are generated examples. Operator-entered task notes, comments, assignees and imported missions are user inputs and can appear in the corresponding exports.
+
+For the original download links, query filters and steps to reproduce the Ohio snapshot, see [Ohio data sources](OHIO_DATA_SOURCES.md). The repository also carries source metadata in the [fleet snapshot](src/fleet/ohio-data.json) and [Columbus building extract](src/fleet/urban-buildings.json).
+
 ## Open on Mac without installing anything
 
 Open the supplied `Flightline.html` file in your browser by double-clicking it in Finder. The app, styles, map library, and planning workers are embedded in this one file; Node and a local server are not required. No internet connection is needed: the background contains embedded USGS topographic tiles for the 7 × 7 km Austin demo area. This standalone file was packaged from the verified production build; direct file opening was not browser-tested because the automated browser disallows file URLs.

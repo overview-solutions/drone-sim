@@ -27,3 +27,15 @@ test('SOCC boundary annotations share identity and distinguish geometry from see
  const angle=n.towers.map((_,i)=>boundaryFeature(n,i)).find(f=>f.kind==='ANGLE');assert.ok(angle);assert.ok(angle.turnDegrees>=15);
  assert.ok(s.every(g=>g.boundaryFeatures.every(f=>f.simulationOnly&&g.coreStructureIds.includes(f.structureId))));
 });
+
+import {curvedSortie} from '../src/fleet/flight-path';
+import {sortie} from '../src/fleet/model';
+test('same-base arrival retraces the corridor after inspection instead of cutting direct to airport',()=>{
+ const airport={id:'TEST',name:'Test',city:'',county:'',coord:[-83.01,40],rural:true,runways:[],certificated:false};
+ const line={id:1,operator:'Test',voltage:138000,aep:false,coords:[[-83,40],[-82.99,40],[-82.99,40.02]]};
+ const flight=curvedSortie(sortie(airport,airport,line,200));
+ const visits=flight.points.filter(p=>Math.abs(p[0]+83)<1e-9&&Math.abs(p[1]-40)<1e-9);
+ assert.ok(visits.length>=2,'return must revisit corridor entrance');
+ assert.ok(flight.inspectionEndKm!<flight.length);
+ assert.deepEqual(flight.points.at(-1),airport.coord);
+});

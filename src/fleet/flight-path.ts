@@ -46,14 +46,18 @@ function simplify(coords:number[][]):number[][]{
  return far>25?[...simplify(coords.slice(0,index+1)).slice(0,-1),...simplify(coords.slice(index))]:[a,b];
 }
 export function curvedSortie(s:Sortie):Sortie{
- const controls=[s.points[0],...simplify(s.points.slice(1,-1)),s.points.at(-1)!];
+ const corridor=simplify(s.points.slice(1,-1));
+ // Returning to the launch base follows the inspected alignment before retracing
+ // the airport connector, rather than cutting directly across open countryside.
+ const backtrack=s.from.id===s.to.id?corridor.slice(0,-1).reverse():[];
+ const controls=[s.points[0],...corridor,...backtrack,s.points.at(-1)!];
  const route=curvedRoute(controls);
- return {...s,feasible:route.length<=(s.maxKm??Infinity),points:route.points,length:route.length,inspectionStartKm:route.at[1],inspectionEndKm:route.at.at(-2)!};
+ return {...s,feasible:route.length<=(s.maxKm??Infinity),points:route.points,length:route.length,inspectionStartKm:route.at[1],inspectionEndKm:route.at[corridor.length]};
 }
 // Demonstration infrastructure, deliberately separate from observed OSM power lines.
 export const downtownLine:PowerLine={id:-1001,operator:'Hypothetical downtown Columbus inspection network',voltage:138000,aep:false,
- coords:Array.from({length:8},(_,i)=>{const lat=39.945+i*.0054;return i%2?[[-82.982,lat],[-83.018,lat]]:[[-83.018,lat],[-82.982,lat]];}).flat()};
-export const downtownBase:Airport={id:'SIM-CMH',name:'Hypothetical Columbus staging strip',city:'Columbus',county:'Franklin',coord:[-83.035,39.936],rural:false,runways:[{id:'SIM',lengthFt:2500,surface:'Hypothetical'}],certificated:false};
+ coords:[[-83.035,39.936],[-83.028,39.944],[-83.023,39.953],[-83.020,39.963],[-83.014,39.974],[-83.008,39.986],[-82.995,39.993],[-82.978,39.995],[-82.962,39.989],[-82.952,39.978],[-82.950,39.965],[-82.955,39.951],[-82.967,39.941],[-82.984,39.934],[-83.003,39.929],[-83.021,39.921],[-83.039,39.918],[-83.052,39.926],[-83.058,39.940],[-83.056,39.956],[-83.047,39.970],[-83.032,39.978],[-83.014,39.974]]};
+export const downtownBase:Airport={id:'SIM-CMH',name:'Hypothetical Columbus staging strip',city:'Columbus',county:'Franklin',coord:[-83.043,39.931],rural:false,runways:[{id:'SIM',lengthFt:2500,surface:'Hypothetical'}],certificated:false};
 
 /** A second inspection direction, with a Dubins turnaround; distance budget still applies. */
 export function doublePassSortie(s:Sortie):Sortie{

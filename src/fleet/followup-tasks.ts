@@ -14,8 +14,8 @@ export function followupTasks(host:HTMLElement,select:(id:string)=>void,scope:st
  function filter(){const q=search.value.toLowerCase();for(const card of Array.from(list.children) as HTMLElement[])card.hidden=!(card.dataset.search??'').includes(q);}
  search.oninput=filter;
  function add(t:Task){
-  const card=document.createElement('details');card.className='task-card';card.dataset.search=[t.title,t.id,...t.spanIds,t.assignee].join(' ').toLowerCase();
-  const summary=document.createElement('summary'),title=document.createElement('strong'),meta=document.createElement('small');title.textContent=t.title;meta.textContent=t.kind+' · '+t.priority+' · '+t.status;summary.append(title,meta);
+  const card=document.createElement('details');card.className='task-card';card.dataset.taskId=t.id;card.dataset.priority=t.priority==='High'?'high':'review';card.dataset.search=[t.title,t.id,...t.spanIds,t.assignee].join(' ').toLowerCase();
+  const summary=document.createElement('summary'),title=document.createElement('strong'),meta=document.createElement('small');title.textContent=t.title;meta.textContent=t.kind+' · '+t.priority+' · '+t.status;summary.append(title,meta);summary.title='Focus this task in Asset view';summary.onclick=()=>{list.querySelectorAll('.task-selected').forEach(el=>el.classList.remove('task-selected'));card.classList.add('task-selected');select(t.id);};
   const span=document.createElement('div');span.className='task-span';span.textContent=t.spanIds.join(' · ');summary.append(span);card.append(summary);
   const details=document.createElement('div');details.className='task-fields';card.append(details);
   const date=document.createElement('small');date.textContent='Flagged '+new Date(t.flaggedAt).toLocaleString()+' · mission '+Math.round(t.missionSeconds/60)+' min';date.title='Date this simulated finding was first added to the task list';details.append(date);
@@ -32,6 +32,10 @@ export function followupTasks(host:HTMLElement,select:(id:string)=>void,scope:st
   list.prepend(card);
  }
  for(const t of tasks.values())add(t);
+ let currentSpan='',pendingScroll=false;
+ function focusSpan(id:string){if(id===currentSpan)return;currentSpan=id;pendingScroll=!!id;if(id){search.value='';filter();}alignSpan();}
+ function alignSpan(){let first:HTMLElement|undefined;for(const card of Array.from(list.children) as HTMLElement[]){const matches=!!currentSpan&&!!tasks.get(card.dataset.taskId??'')?.spanIds.includes(currentSpan);card.classList.toggle('task-current-span',matches);if(matches&&!card.hidden&&!first)first=card;}
+ if(pendingScroll&&first&&list.clientHeight){list.scrollTo({top:list.scrollTop+first.getBoundingClientRect().top-list.getBoundingClientRect().top-4,behavior:'smooth'});pendingScroll=false;}}
  function count(){panel.querySelector('.task-count span')!.textContent=String(tasks.size);}count();saved();
- return {update(events:VegetationEvent[]){let changed=false;for(const e of events)if(!tasks.has(e.id)){const t:Task={...taskFor(e),status:'Draft',spanIds:spanIds(e),flaggedAt:new Date().toISOString(),missionSeconds:e.seconds,assignee:'',notes:'',comments:[]};tasks.set(e.id,t);add(t);changed=true;}if(changed){save();count();filter();}},dispose(){panel.remove();}};
+ return {focusSpan,update(events:VegetationEvent[]){let changed=false;for(const e of events)if(!tasks.has(e.id)){const t:Task={...taskFor(e),status:'Draft',spanIds:spanIds(e),flaggedAt:new Date().toISOString(),missionSeconds:e.seconds,assignee:'',notes:'',comments:[]};tasks.set(e.id,t);add(t);changed=true;}if(changed){save();count();filter();}if(changed||pendingScroll)alignSpan();},dispose(){panel.remove();}};
 }

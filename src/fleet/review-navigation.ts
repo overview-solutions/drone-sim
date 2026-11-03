@@ -1,3 +1,5 @@
+import {spanCrossings,type CrossingSource} from './review-crossings';
+import {assetTarget,assetEvidence} from './asset-view';
 import {followupTasks} from './followup-tasks';
 import {spanDetail} from './span-detail';
 import {ratingGraphic} from './line-rating';
@@ -15,7 +17,7 @@ export function eventStructures(e:VegetationEvent,n:number):number[]{
 }
 export type ProfileScope={edges:{id:string;label:string;at:number;description:string}[];level:string;label:string;start:number;end:number;items:{id:string;label:string;start:number;end:number;color:string}[]};
 export type ReviewTimeline={eventPosition?:(e:VegetationEvent)=>{at:number;span:number};scope?:()=>ProfileScope|undefined;level?:(level:string)=>void;open?:(id:string)=>void;sectors:()=>{id:string;color:string;start:number;end:number;label:string}[];select:(id:string)=>void};
-export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTMLElement,network:ReturnType<typeof generateUN>,frame:(points:THREE.Vector3[],side?:THREE.Vector3)=>void,events:()=>VegetationEvent[],complete:(i:number)=>boolean,showFinding:(id:string)=>void,route:number[][]=[],scanned:(i:number)=>boolean=complete){
+export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTMLElement,network:ReturnType<typeof generateUN>,frame:(points:THREE.Vector3[],side?:THREE.Vector3)=>void,events:()=>VegetationEvent[],complete:(i:number)=>boolean,showFinding:(id:string)=>void,route:number[][]=[],scanned:(i:number)=>boolean=complete,crossingSources:()=>CrossingSource[]=()=>[]){
  const workspace=document.createElement('div');workspace.className='inspection-workspace';
  host.before(workspace);workspace.append(host);
  const dock=document.createElement('section');dock.className='review-dock';dock.hidden=true;dock.setAttribute('aria-label','Inspection side panel');
@@ -23,8 +25,8 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
  workspace.append(dock);
  const body=dock.querySelector<HTMLElement>('.review-dock-body')!;
  const taskHost=document.createElement('div'),spanHost=document.createElement('div');body.append(taskHost);spanHost.className='span-toolbar-layers';spanHost.hidden=true;const modeTools=document.createElement('div');modeTools.className='scene-mode-tools';toolbar.append(modeTools);modeTools.append(spanHost);const overviewTools=document.createElement('div');overviewTools.className='review-mode-actions';modeTools.append(overviewTools);
- const tasks=followupTasks(taskHost,showFinding,String(network.pack.provenance.osmWay),e=>{const ids=eventStructures(e,network.towers.length);const spans=new Set<number>();if(ids.length===2)spans.add(ids[0]);else for(const i of ids){if(i>0)spans.add(i-1);if(i<network.towers.length-1)spans.add(i);}return [...spans].map(i=>network.spans[i*3]?.id.replace(/-[ABC]$/,'')??`T${i+1}–T${i+2}`);});
- const detail=spanDetail(scene,host,network);
+ const tasks=followupTasks(taskHost,id=>selectAsset(id),String(network.pack.provenance.osmWay),e=>{const ids=eventStructures(e,network.towers.length);const spans=new Set<number>();if(ids.length===2)spans.add(ids[0]);else for(const i of ids){if(i>0)spans.add(i-1);if(i<network.towers.length-1)spans.add(i);}return [...spans].map(i=>network.spans[i*3]?.id.replace(/-[ABC]$/,'')??`T${i+1}–T${i+2}`);});
+ const detail=spanDetail(scene,host,network);const profilePanel=toolbar.parentElement?.querySelector<HTMLElement>('.mission-timeline');const evidence=assetEvidence(profilePanel??modeTools,scene);let assetId='';
  spanHost.append(host.querySelector('.span-detail')!);
  const taskToggle=document.createElement('button');taskToggle.textContent='Tasks';taskToggle.setAttribute('aria-expanded','false');
  const spanToggle=document.createElement('button');spanToggle.textContent='Span view';spanToggle.hidden=true;
@@ -42,7 +44,7 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
  const cumulative=[0];for(let i=1;i<routePoints.length;i++)cumulative.push(cumulative[i-1]+routePoints[i].distanceTo(routePoints[i-1]));
  const fraction=(index:number)=>{const target=new THREE.Vector3(...network.towers[index].position);let best=Infinity,at=0;routePoints.forEach((p,i)=>{const d=p.distanceToSquared(target);if(d<best){best=d;at=i;}});return routePoints.length?(cumulative[at]/(cumulative.at(-1)||1)):index/Math.max(1,network.towers.length-1);};
  const sectorTimes=groups.map(g=>{const times=g.core.map(fraction);return {start:Math.min(...times),end:Math.max(...times)};});
- let mode:'mission'|'socc'|'span'|'hidden'='mission',selected=0,span=0,last=-Infinity,signature='';
+ let mode:'mission'|'socc'|'span'|'asset'|'hidden'='mission',selected=0,span=0,last=-Infinity,signature='';let crossingCount=-1;
  const overlay=document.createElement('div');overlay.className='review-labels';host.append(overlay);
  const rating=document.createElement('section');rating.className='line-rating';toolbar.append(rating);rating.onclick=e=>{const b=(e.target as Element).closest<HTMLElement>('[data-rating-span]');if(b){const i=Number(b.dataset.ratingSpan);selected=Math.max(0,groups.findIndex(g=>g.core.includes(i)));selectSpan(i);}};
  const nav=document.createElement('div');nav.className='review-navigation';toolbar.append(nav);
@@ -88,7 +90,9 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
   });
  }
  function render(){
-  modeTools.hidden=mode==='hidden';overviewTools.hidden=mode==='span';overviewTools.replaceChildren();
+  tasks.focusSpan(mode==='span'||mode==='asset'?(network.spans[span*3]?.id.replace(/-[ABC]$/,'')??`T${span+1}–T${span+2}`):'');
+  if(mode!=='asset')evidence.hide();profilePanel?.classList.toggle('asset-profile-mode',mode==='asset');
+  modeTools.hidden=mode==='hidden';overviewTools.hidden=mode==='span'||mode==='asset';overviewTools.replaceChildren();
   if(mode==='mission'||mode==='socc'){
    const label=document.createElement('strong');label.textContent=mode==='mission'?'Mission':groups[selected].id;overviewTools.append(label);
    const fit=document.createElement('button');fit.textContent=mode==='mission'?'Fit mission':'Fit SOCC';fit.onclick=()=>mode==='mission'?mission(true):select(groups[selected].id);overviewTools.append(fit);
@@ -96,7 +100,7 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
    else{const back=document.createElement('button');back.textContent='Mission';back.onclick=()=>mission(true);const spans=document.createElement('select');spans.setAttribute('aria-label','Review span');spans.add(new Option('Review span…',''));groups[selected].indices.slice(0,-1).forEach(i=>spans.add(new Option(`T${i+1}–T${i+2}`,String(i))));spans.onchange=()=>{if(spans.value!=='')selectSpan(Number(spans.value));};overviewTools.append(back,spans);}
   }
   spanToggle.hidden=true;spanHost.hidden=mode!=='span';toolbar.classList.toggle('span-toolbar-mode',mode==='span');workspace.classList.toggle('span-view-mode',mode==='span');
-  if(mode==='span'){void detail.show(span);}else{detail.hide();if(dockMode==='span')openDock('tasks');}
+  if(mode==='span'||mode==='asset'){void detail.show(span);}else{detail.hide();if(dockMode==='span')openDock('tasks');}
   last=-Infinity;clear();host.classList.toggle('asset-review',mode==='socc'||mode==='span');nav.replaceChildren();nav.hidden=mode==='hidden';rating.hidden=mode==='hidden';
   if(mode==='hidden'){for(let i=0;i<network.towers.length-1;i++)buffer([i,i+1],60,true);return;}
   const back=document.createElement('button');back.textContent=mode==='mission'?'SOCC overview':'← '+(mode==='span'?groups[selected].id:'Mission');
@@ -106,11 +110,20 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
   groups.forEach((g,i)=>{sectorBox(g.indices);button(g.id,g.indices,()=>select(g.id));const label=labels.at(-1)!.button;label.setAttribute('aria-pressed',String(mode!=='mission'&&i===selected));});
   for(let i=0;i<network.towers.length-1;i++)buffer([i,i+1],60,true);
   if(mode==='socc')boundaryMarkers();
+  if(mode==='socc'||mode==='span'){
+   const ids=mode==='span'?[span]:groups[selected].indices.slice(0,-1),sources=crossingSources();crossingCount=sources.length;let count=0;
+   for(const i of ids)for(const crossing of spanCrossings(new THREE.Vector3(...network.towers[i].position),new THREE.Vector3(...network.towers[i+1].position),sources,i)){
+    const color=crossing.kind==='power'?0xd0a0ff:crossing.kind==='water'?0x65c5ed:crossing.kind==='rail'?0xe8b45b:0xc0c8c4;
+    const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(crossing.points),crossing.synthetic?new THREE.LineDashedMaterial({color,dashSize:10,gapSize:6}):new THREE.LineBasicMaterial({color}));line.computeLineDistances();line.layers.set(1);line.userData.sensorIgnore=true;group.add(line);
+    if(count++<8){button(crossing.synthetic?'Demo '+crossing.kind:crossing.kind+' crossing',[i,i+1],()=>frame(crossing.points));const label=labels.at(-1)!;label.position.copy(crossing.points[0]).lerp(crossing.points[1],.5);label.position.y+=10;label.button.title=crossing.id+' · context extends up to 3× the 60 m buffer; OSM extent retained';}
+   }
+  }
   if(mode==='span'){button(`T${span+1}`,[span],()=>{});button(`T${span+2}`,[span+1],()=>{});
-   const findings=relevant([span,span+1]);for(const e of findings){const b=document.createElement('button');b.textContent=e.label??e.id;b.style.color=reviewColors[e.risk==='high'||e.zone?'red':'yellow'];b.onclick=()=>showFinding(e.id);nav.append(b);}
+   const findings=relevant([span,span+1]);for(const e of findings){const b=document.createElement('button');b.textContent=e.label??e.id;b.style.color=reviewColors[e.risk==='high'||e.zone?'red':'yellow'];b.onclick=()=>selectAsset(e.id);nav.append(b);const target=assetTarget(scene,network,e);if(target){button('◆ '+(e.label??e.id),[span,span+1],()=>selectAsset(e.id));const marker=labels.at(-1)!;marker.position.copy(target.bounds.getCenter(new THREE.Vector3()));marker.position.y+=4;marker.button.classList.add('asset-flag');}}
    if(!findings.length){const text=document.createElement('span');text.textContent=health([span,span+1])==='green'?'Imagery complete · no findings':'Review pending · no findings yet';nav.append(text);}
   }
  }
+ function selectAsset(id:string){const event=events().find(e=>e.id===id)??(id.startsWith('TREE-')?{id,seconds:NaN,risk:'low' as const,zone:false}:undefined);if(!event)return;const target=assetTarget(scene,network,event);if(!target)return;assetId=id;span=Math.max(0,Math.min(network.towers.length-2,eventStructures(event,network.towers.length)[0]??0));selected=Math.max(0,groups.findIndex(g=>g.core.includes(span)));mode='asset';render();profilePanel?.classList.remove('collapsed');const collapse=profilePanel?.querySelector('.timeline-collapse');if(collapse)collapse.textContent='Hide profile';const bounds=target.bounds.clone().expandByScalar(2);frame([bounds.min,bounds.max],new THREE.Vector3(1,.25,1).normalize());evidence.show(event,target,()=>selectSpan(span));}
  function select(id:string){const i=groups.findIndex(g=>g.id===id);if(i<0)return;selected=i;mode='socc';render();frame(bounds(groups[i].indices,120));}
  function selectSpan(i:number){span=i;mode='span';render();
  const a=new THREE.Vector3(...network.towers[i].position),b=new THREE.Vector3(...network.towers[i+1].position),axis=b.clone().sub(a);axis.y=0;axis.normalize();
@@ -121,27 +134,27 @@ export function reviewNavigation(scene:THREE.Scene,host:HTMLElement,toolbar:HTML
  function mission(fit=false){mode='mission';render();if(fit)frame(bounds(network.towers.map((_,i)=>i),150));}
  let lastCamera:THREE.Camera|undefined,down=[0,0];
  const pointerDown=(e:PointerEvent)=>{down=[e.clientX,e.clientY];};
- const pointerUp=(e:PointerEvent)=>{if(!lastCamera||(e.target as Element).closest('button,details,input,select')||Math.hypot(e.clientX-down[0],e.clientY-down[1])>4)return;const r=host.getBoundingClientRect(),w=host.classList.contains('camera-split')?r.width/2:r.width,x=e.clientX-r.left,y=e.clientY-r.top;if(x>w)return;const ray=new THREE.Raycaster();ray.layers.set(1);ray.setFromCamera(new THREE.Vector2(x/w*2-1,1-y/r.height*2),lastCamera);const hits=ray.intersectObjects(floors.filter(f=>mode!=='hidden'||scanned(f.span)).map(f=>f.mesh));if(hits.length){const f=floors.find(f=>f.mesh===hits[0].object)!;selected=Math.max(0,groups.findIndex(g=>g.core.includes(f.span)));selectSpan(f.span);}};
- host.addEventListener('pointerdown',pointerDown);host.addEventListener('pointerup',pointerUp);
+ const pointerUp=(e:PointerEvent)=>{if(!lastCamera||(e.target as Element).closest('button,details,input,select')||Math.hypot(e.clientX-down[0],e.clientY-down[1])>4)return;const r=host.getBoundingClientRect(),w=host.classList.contains('camera-split')?r.width/2:r.width,x=e.clientX-r.left,y=e.clientY-r.top;if(x>w)return;const ray=new THREE.Raycaster();ray.layers.set(1);ray.setFromCamera(new THREE.Vector2(x/w*2-1,1-y/r.height*2),lastCamera);if(mode==='span'||mode==='asset'){const candidates=relevant([span,span+1]).flatMap(event=>{const target=assetTarget(scene,network,event);return target?target.meshes.map(mesh=>({mesh,id:event.id})):[];});ray.layers.enable(0);const hit=ray.intersectObjects(candidates.map(c=>c.mesh),false)[0];if(hit){e.stopPropagation();selectAsset(candidates.find(c=>c.mesh===hit.object)!.id);return;}ray.layers.set(1);}ray.layers.enable(0);const trees:THREE.Mesh[]=[];scene.traverse(o=>{const m=o as THREE.Mesh;if(m.isMesh&&m.userData.treeId&&m.visible&&!m.userData.sensorIgnore)trees.push(m);});const treeHit=ray.intersectObjects(trees,false)[0];if(treeHit){e.stopPropagation();selectAsset(treeHit.object.userData.treeId);return;}ray.layers.set(1);const hits=ray.intersectObjects(floors.filter(f=>mode!=='hidden'||scanned(f.span)).map(f=>f.mesh));if(hits.length){const f=floors.find(f=>f.mesh===hits[0].object)!;selected=Math.max(0,groups.findIndex(g=>g.core.includes(f.span)));selectSpan(f.span);}};
+ host.addEventListener('pointerdown',pointerDown);host.addEventListener('pointerup',pointerUp,true);
  mission();openDock('tasks');
- return {select,mission,eventPosition(e:VegetationEvent){const ids=eventStructures(e,network.towers.length);const i=Math.max(0,Math.min(network.towers.length-2,ids[0]??0));return {span:i,at:(fraction(i)+fraction(i+1))/2};},profileLevel(level:string){if(level==='Mission')mission(true);else if(level==='SOCC')select(groups[selected].id);else selectSpan(span);},profileOpen(id:string){if(id.startsWith('edge:')){const i=Number(id.slice(5));selected=Math.max(0,groups.findIndex(g=>g.core.includes(i)));mode='socc';render();frame(bounds([i],150));}else if(id.startsWith('span:')){const i=Number(id.slice(5));selected=Math.max(0,groups.findIndex(g=>g.core.includes(i)));selectSpan(i);}else select(id);},profileScope():ProfileScope{
- const level=mode==='span'?'Span':mode==='socc'?'SOCC':'Mission';
+ return {select,mission,openAsset:selectAsset,eventPosition(e:VegetationEvent){const ids=eventStructures(e,network.towers.length);const i=Math.max(0,Math.min(network.towers.length-2,ids[0]??0));return {span:i,at:(fraction(i)+fraction(i+1))/2};},profileLevel(level:string){if(level==='Mission')mission(true);else if(level==='SOCC')select(groups[selected].id);else if(level==='Asset'){const event=events().find(e=>e.id===assetId)??relevant([span,span+1])[0];if(event)selectAsset(event.id);}else selectSpan(span);},profileOpen(id:string){if(id.startsWith('asset:')){selectAsset(id.slice(6));}else if(id.startsWith('edge:')){const i=Number(id.slice(5));selected=Math.max(0,groups.findIndex(g=>g.core.includes(i)));mode='socc';render();frame(bounds([i],150));}else if(id.startsWith('span:')){const i=Number(id.slice(5));selected=Math.max(0,groups.findIndex(g=>g.core.includes(i)));selectSpan(i);}else select(id);},profileScope():ProfileScope{
+ const level=mode==='asset'?'Asset':mode==='span'?'Span':mode==='socc'?'SOCC':'Mission';
  const interval=(i:number)=>{const a=fraction(i),b=fraction(i+1);return {start:Math.min(a,b),end:Math.max(a,b)};};
- const range=level==='Span'?interval(span):level==='SOCC'?sectorTimes[selected]:{start:0,end:1};
- const ids=level==='Mission'?[]:level==='Span'?[span]:groups[selected].indices.slice(0,-1);
+ const range=(level==='Span'||level==='Asset')?interval(span):level==='SOCC'?sectorTimes[selected]:{start:0,end:1};
+ const ids=level==='Mission'?[]:(level==='Span'||level==='Asset')?[span]:groups[selected].indices.slice(0,-1);
  const items=level==='Mission'?groups.map((g,i)=>({id:g.id,label:g.id,...sectorTimes[i],color:reviewColors[health(g.indices)]})):ids.map(i=>({id:'span:'+i,label:'T'+(i+1)+'–T'+(i+2),...interval(i),color:scanned(i)?reviewColors[health([i,i+1])]:'#456052'}));
  const features=(level==='Mission'?groups: [groups[selected]]).flatMap(g=>g.boundaryFeatures);const edges=[...new Map(features.map(f=>[f.id,f])).values()].map(f=>({id:'edge:'+f.index,label:({CB:'⊠',XMFR:'◎',ANGLE:'∠',EXT:'↗'} as Record<string,string>)[f.kind]+' '+f.kind+' · T'+(f.index+1),at:fraction(f.index),description:f.label+' · '+f.reason+' · '+f.provenance}));
- return {edges,level,label:level==='Span'?'T'+(span+1)+'–T'+(span+2):level==='SOCC'?groups[selected].id:'Full mission',...range,items};
+ return {edges,level,label:level==='Asset'?assetId:level==='Span'?'T'+(span+1)+'–T'+(span+2):level==='SOCC'?groups[selected].id:'Full mission',...range,items};
  },hide(){mode='hidden';host.classList.remove('asset-review');render();},sectors(){return groups.map((g,i)=>({id:g.id,color:reviewColors[health(g.indices)],start:sectorTimes[i].start,end:sectorTimes[i].end,label:health(g.indices)==='green'?'Imagery complete; no findings':health(g.indices)==='red'?'Detected issues':'Pending / intermediate'}));},
  update(camera:THREE.Camera,now:number){lastCamera=camera;tasks.update(events());
  if(now-last>1500&&mode!=='hidden'){
- const indices=mode==='span'?[span]:mode==='socc'?groups[selected].indices.slice(0,-1):network.towers.slice(0,-1).map((_,i)=>i);
+ const indices=(mode==='span'||mode==='asset')?[span]:mode==='socc'?groups[selected].indices.slice(0,-1):network.towers.slice(0,-1).map((_,i)=>i);
  if(indices.length){const kv=Number(network.pack.electricLines.features[0]?.properties.nominalKv)||0;
  const assessed=indices.filter(scanned).length,done=indices.filter(i=>complete(i)&&complete(i+1)).length,issues=relevant([...new Set(indices.flatMap(i=>[i,i+1]))]).length;
- rating.innerHTML=ratingGraphic(indices,kv,now/1000,mode==='span'?'Span T'+(span+1)+'–T'+(span+2):mode==='socc'?groups[selected].id:'Mission',assessed,done,issues);
+ rating.innerHTML=ratingGraphic(indices,kv,now/1000,(mode==='span'||mode==='asset')?'Span T'+(span+1)+'–T'+(span+2):mode==='socc'?groups[selected].id:'Mission',assessed,done,issues);
  }}for(const f of floors){const m=f.mesh.material as THREE.MeshBasicMaterial;m.color.set(reviewColors[health(f.indices)]);m.opacity=scanned(f.span)?.24:0;}const w=host.classList.contains('camera-split')?host.clientWidth/2:host.clientWidth,h=host.clientHeight;
   const placed:{x:number;y:number}[]=[];
   for(const l of labels){const p=l.position.clone().project(camera);l.button.hidden=Math.abs(p.x)>1||Math.abs(p.y)>1||Math.abs(p.z)>1;const x=(p.x+1)*w/2,y=(1-p.y)*h/2;if(mode==='socc'&&!l.button.classList.contains('socc-boundary')&&placed.some(q=>Math.abs(x-q.x)<62&&Math.abs(y-q.y)<24))l.button.hidden=true;if(!l.button.hidden)placed.push({x,y});l.button.style.left=x+'px';l.button.style.top=y+'px';}
-  if(now-last>1500){last=now;for(const o of outlines)(o.line.material as THREE.LineBasicMaterial).color.set(reviewColors[health(o.indices)]);for(const l of labels)if(!l.button.classList.contains('socc-boundary'))l.button.style.borderColor=reviewColors[health(l.indices)];const next=events().map(e=>e.id+e.risk+e.zone).join('|')+health([span,Math.min(span+1,network.towers.length-1)]);if(mode==='span'&&next!==signature){signature=next;render();}}
- },dispose(){tasks.dispose();detail.dispose();taskToggle.remove();spanToggle.remove();modeTools.remove();toolbar.classList.remove('span-toolbar-mode');workspace.removeEventListener('keydown',escape);workspace.before(host);workspace.remove();host.removeEventListener('pointerdown',pointerDown);host.removeEventListener('pointerup',pointerUp);clear();scene.remove(group);overlay.remove();nav.remove();rating.remove();}};
+  if(now-last>1500){if((mode==='span'||mode==='socc')&&crossingSources().length!==crossingCount)render();last=now;for(const o of outlines)(o.line.material as THREE.LineBasicMaterial).color.set(reviewColors[health(o.indices)]);for(const l of labels)if(!l.button.classList.contains('socc-boundary'))l.button.style.borderColor=reviewColors[health(l.indices)];const next=events().map(e=>e.id+e.risk+e.zone).join('|')+health([span,Math.min(span+1,network.towers.length-1)]);if(mode==='span'&&next!==signature){signature=next;render();}}
+ },dispose(){tasks.dispose();detail.dispose();evidence.dispose();taskToggle.remove();spanToggle.remove();modeTools.remove();toolbar.classList.remove('span-toolbar-mode');workspace.removeEventListener('keydown',escape);workspace.before(host);workspace.remove();host.removeEventListener('pointerdown',pointerDown);host.removeEventListener('pointerup',pointerUp,true);clear();scene.remove(group);overlay.remove();nav.remove();rating.remove();}};
 }
