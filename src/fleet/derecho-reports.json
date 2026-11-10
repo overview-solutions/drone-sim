@@ -1,0 +1,745 @@
+{
+  "type": "FeatureCollection",
+  "source": "https://www.weather.gov/cle/event_20120629_derecho",
+  "bulletin": "Preliminary local storm report summary, NWS Cleveland, June 29 2012, 9:49 PM EDT",
+  "coverage": "Reports reproduced on the Cleveland event page; not statewide coverage.",
+  "sourceSha256": "b27e038a0f94c999c13fa924d17a7d5b007a5f2fde965f0863303df00d61b30f",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "derecho-2012-1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.79,
+          41.11
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "MCCOMB",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:10:00+00:00",
+        "localTime": "0410 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "8-10 INCH TREE DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.73,
+          40.9
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "JENERA",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:15:00+00:00",
+        "localTime": "0415 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "PUBLIC",
+        "remarks": "TREES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          41.04
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:15:00+00:00",
+        "localTime": "0415 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "NUMEROUS TREES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-4",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          41.04
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:15:00+00:00",
+        "localTime": "0415 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "EMERGENCY MNGR",
+        "remarks": "STURCTURES DAMAGED IN FINDLAY WITH ROOFS BLOWN OFF."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-5",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          41.04
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:15:00+00:00",
+        "localTime": "0415 PM EDT",
+        "magnitude": 70.0,
+        "unit": "MPH",
+        "qualifier": "unknown method",
+        "observer": "BROADCAST MEDIA",
+        "remarks": "PENNY HAIL."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-6",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          40.94
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "7 S FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:15:00+00:00",
+        "localTime": "0415 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "TREES DOWN. BARN BLOWN OVER."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          41.04
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:20:00+00:00",
+        "localTime": "0420 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "BROADCAST MEDIA",
+        "remarks": "4 OR 5 SEMI TRUCKS BLOWN OVER ON I-75 BETWEEN FINDLAY AND BLUFFTON. TREES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-8",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.64,
+          41.04
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "FINDLAY",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:25:00+00:00",
+        "localTime": "0425 PM EDT",
+        "magnitude": 84.0,
+        "unit": "MPH",
+        "qualifier": "measured",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-9",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.45,
+          40.79
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "2 SW KIRBY",
+        "county": "WYANDOT",
+        "observedAt": "2012-06-29T20:25:00+00:00",
+        "localTime": "0425 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "DAMAGE OCCURRED ACROSS MUCH OF JACKSON TOWNSHIP IN SOUTHWEST WYANDOT COUNTY. THE ROOF WAS BLOWN OFF OF A COUPLE OF BARNS. ROOF SHINGLES AND SHEET METAL WAS BLOWN OFF SEVERAL BARNS AND HOUSES. NUMEROUS TREES WERE DOWNED. POWER LINES AND UTILITY POLES WERE DOWNED AS WERE SOME FENCES AND SIGNS."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-10",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.23,
+          40.62
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "6 WNW MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:35:00+00:00",
+        "localTime": "0435 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "SEVERAL TREES AND LIMBS DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-11",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.48,
+          40.98
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "VANLUE",
+        "county": "HANCOCK",
+        "observedAt": "2012-06-29T20:37:00+00:00",
+        "localTime": "0437 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "TREES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-12",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.13,
+          40.64
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "4 N MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:40:00+00:00",
+        "localTime": "0440 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "SEMI TRUCK ROLLED OVER."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-13",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.15,
+          40.56
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "2 SW MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:42:00+00:00",
+        "localTime": "0442 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "TREES DOWNED. SHEET METAL STRIPPED OFF BARNS AND BARN ROOF."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-14",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.36,
+          41.02
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "3 SW NEW RIEGEL",
+        "county": "SENECA",
+        "observedAt": "2012-06-29T20:44:00+00:00",
+        "localTime": "0444 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "NUMEROUS TREES DOWN, NO POWER."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-15",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.08,
+          40.57
+        ]
+      },
+      "properties": {
+        "event": "HAIL",
+        "location": "3 ESE MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:45:00+00:00",
+        "localTime": "0445 PM EDT",
+        "magnitude": 1.0,
+        "unit": "INCH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-16",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.11,
+          40.58
+        ]
+      },
+      "properties": {
+        "event": "HAIL",
+        "location": "1 E MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:47:00+00:00",
+        "localTime": "0447 PM EDT",
+        "magnitude": 1.75,
+        "unit": "INCH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-17",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.05,
+          40.65
+        ]
+      },
+      "properties": {
+        "event": "HAIL",
+        "location": "6 NE MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:49:00+00:00",
+        "localTime": "0449 PM EDT",
+        "magnitude": 0.88,
+        "unit": "INCH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-18",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.13,
+          40.58
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "MARION",
+        "county": "MARION",
+        "observedAt": "2012-06-29T20:54:00+00:00",
+        "localTime": "0454 PM EDT",
+        "magnitude": 62.0,
+        "unit": "MPH",
+        "qualifier": "measured",
+        "observer": "DEPT OF HIGHWAYS",
+        "remarks": "ODOT GARAGE SENSOR."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-19",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.84,
+          40.55
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "MOUNT GILEAD",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T20:56:00+00:00",
+        "localTime": "0456 PM EDT",
+        "magnitude": 70.0,
+        "unit": "MPH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-20",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.89,
+          40.57
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "3 WNW MOUNT GILEAD",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T21:00:00+00:00",
+        "localTime": "0500 PM EDT",
+        "magnitude": 80.0,
+        "unit": "MPH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": "70-80 MPH ESTIMATED GUST IN EDISON."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-21",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.79,
+          40.73
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "GALION",
+        "county": "CRAWFORD",
+        "observedAt": "2012-06-29T21:02:00+00:00",
+        "localTime": "0502 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "EMERGENCY MNGR",
+        "remarks": "WALL OF ATTACHED GARAGE BLOWN OUT/DAMAGED."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-22",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.81,
+          40.5
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "4 SSE MOUNT GILEAD",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T21:02:00+00:00",
+        "localTime": "0502 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "UTILITY POLES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-23",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.73,
+          40.63
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "8 NE MOUNT GILEAD",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T21:05:00+00:00",
+        "localTime": "0505 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "SIDING OFF OF TWO HOMES."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-24",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.64,
+          40.69
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "3 WNW LEXINGTON",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T21:10:00+00:00",
+        "localTime": "0510 PM EDT",
+        "magnitude": 60.0,
+        "unit": "MPH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": "AT MID OHIO RACE TRACK."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-25",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.64,
+          40.69
+        ]
+      },
+      "properties": {
+        "event": "HAIL",
+        "location": "3 WNW LEXINGTON",
+        "county": "MORROW",
+        "observedAt": "2012-06-29T21:10:00+00:00",
+        "localTime": "0510 PM EDT",
+        "magnitude": 1.75,
+        "unit": "INCH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": "GOLF BALL HAIL AT MID OHIO RACE TRACK."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-26",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.59,
+          40.68
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "LEXINGTON",
+        "county": "RICHLAND",
+        "observedAt": "2012-06-29T21:17:00+00:00",
+        "localTime": "0517 PM EDT",
+        "magnitude": 65.0,
+        "unit": "MPH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-27",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.59,
+          40.68
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND GST",
+        "location": "LEXINGTON",
+        "county": "RICHLAND",
+        "observedAt": "2012-06-29T21:18:00+00:00",
+        "localTime": "0518 PM EDT",
+        "magnitude": 60.0,
+        "unit": "MPH",
+        "qualifier": "estimated",
+        "observer": "TRAINED SPOTTER",
+        "remarks": "LARGE BRANCHES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-28",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.48,
+          40.39
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "MOUNT VERNON",
+        "county": "KNOX",
+        "observedAt": "2012-06-29T21:20:00+00:00",
+        "localTime": "0520 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "TREES DOWN ON MAIN STREET AND A UTILITY POLE DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-29",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.4,
+          40.59
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "1 E BUTLER",
+        "county": "RICHLAND",
+        "observedAt": "2012-06-29T21:20:00+00:00",
+        "localTime": "0520 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "10-12 INCH DIAMETER TREE LIMBS DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-30",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.51,
+          40.62
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "BELLVILLE",
+        "county": "RICHLAND",
+        "observedAt": "2012-06-29T21:23:00+00:00",
+        "localTime": "0523 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "TREES DOWN."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-31",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.92,
+          40.45
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "7 S MILLERSBURG",
+        "county": "HOLMES",
+        "observedAt": "2012-06-29T21:47:00+00:00",
+        "localTime": "0547 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "SEVERAL TREES AND LIMBS DOWN IN CLARK."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "derecho-2012-32",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.25,
+          40.63
+        ]
+      },
+      "properties": {
+        "event": "TSTM WND DMG",
+        "location": "1 W LOUDONVILLE",
+        "county": "ASHLAND",
+        "observedAt": "2012-06-29T21:47:00+00:00",
+        "localTime": "0547 PM EDT",
+        "magnitude": null,
+        "unit": null,
+        "qualifier": null,
+        "observer": "TRAINED SPOTTER",
+        "remarks": "MULTIPLE TREES DOWN IN MOHICAN STATE PARK."
+      }
+    }
+  ]
+}

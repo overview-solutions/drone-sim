@@ -1,3 +1,7 @@
+import {rayKingStructures} from './ray-king-structures';
+import {missionNotams} from './mission-notams';
+import {rayKingCloud} from './ray-king';
+import {disasters} from './disasters';
 import {inspectionIndex,extraCapturePriority} from './inspection-index';
 import {assetPassages} from './history-backfill';
 import {SpanCoverage} from './span-coverage';
@@ -41,6 +45,9 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  try{renderer=new THREE.WebGLRenderer({antialias:true,logarithmicDepthBuffer:true});}catch{canvasHost.innerHTML='<p>WebGL is unavailable. The Ohio map and UN export remain available.</p>';return {dispose(){},pack:network.pack};}
  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0x102330);renderer.autoClear=false;canvasHost.prepend(renderer.domElement);
  const scene=new THREE.Scene();scene.add(new THREE.HemisphereLight(0xc9eaff,0x152922,2));const sun=new THREE.DirectionalLight(0xffedcd,2);sun.position.set(300,800,400);scene.add(sun);
+ const recordedLidar=rayKingCloud(scene,banner,line);
+ if(line.id===179559746)rayKingStructures(scene,banner,network);
+ if(line.id===179559746)(host.querySelector('#show-lidar') as HTMLInputElement).checked=false;
  const camera=new THREE.PerspectiveCamera(55,1,1,2000000),gimbal=new THREE.PerspectiveCamera(14,1,.1,12000);
  camera.layers.enable(1);
  const mapSurface=document.createElement('div');mapSurface.className='map-interaction';canvasHost.append(mapSurface);
@@ -78,14 +85,14 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  const panel=world&&worldData?fleetPanel(canvasHost,worldData,world.project,id=>{if(id&&id!==worldData?.activeVehicle){worldData?.selectVehicle?.(id);return;}followedVehicle=id;followFlight=false;transition=undefined;if(id)startTracking();else stopTracking();},points=>{selectedRoute.geometry.dispose();selectedRoute.geometry=new THREE.BufferGeometry().setFromPoints(points.map(p=>world.project(p,110)));if(points.length)fitMission();else missionBox.visible=false;}):undefined;
  const steel=new THREE.MeshStandardMaterial({color:0x9eafb7,metalness:.5,roughness:.55});const black=new THREE.MeshStandardMaterial({color:0x112b34});
  function beam(a:V3,b:V3,width=.35,mat=steel){const av=new THREE.Vector3(...a),bv=new THREE.Vector3(...b),mesh=new THREE.Mesh(new THREE.CylinderGeometry(width,width,av.distanceTo(bv),5),mat);mesh.position.copy(av).add(bv).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),bv.sub(av).normalize());scene.add(mesh);return mesh;}
- for(const t of network.towers){const [x,,z]=t.position,h=t.height;for(const dx of [-1,1])for(const dz of [-1,1])beam([x+dx*5,0,z+dz*5],[x+dx*1.3,h,z+dz*1.3]);
+ for(const t of network.towers){if(line.id===179559746)continue;const [x,,z]=t.position,h=t.height;for(const dx of [-1,1])for(const dz of [-1,1])beam([x+dx*5,0,z+dz*5],[x+dx*1.3,h,z+dz*1.3]);
  for(let y=0;y<h-6;y+=7){const w=5-3.7*y/h,w2=5-3.7*(y+7)/h;for(const sign of [-1,1]){beam([x-w,y,z+sign*w],[x+w2,y+7,z+sign*w2],.14);beam([x+w,y,z+sign*w],[x-w2,y+7,z+sign*w2],.14);beam([x+sign*w,y,z-w],[x+sign*w2,y+7,z+w2],.14);}}
  const towerIndex=network.towers.indexOf(t);
  const tag=(mesh:THREE.Mesh,phase:number)=>{mesh.userData.equipmentTower=towerIndex;mesh.userData.equipmentPhase=phase;return mesh;};
  const a=t.attachments[0].position,c=t.attachments[2].position;tag(beam([a[0],h,a[2]],[c[0],h,c[2]],.45,network.towers.indexOf(t)%4===1?new THREE.MeshStandardMaterial({color:0x9c5636,roughness:1}):steel),-1);
  for(const a of t.attachments){const p=a.position;tag(beam([p[0],h,p[2]],p,.45,black),t.attachments.indexOf(a));for(let k=0;k<6;k++){if(defectFor(network.towers.indexOf(t)).phase===0&&a.phase==='A'&&k===2)continue;const ins=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.22,10),new THREE.MeshStandardMaterial({color:0xb8d9ce}));ins.position.set(p[0],p[1]+.4+k*.4,p[2]);tag(ins,t.attachments.indexOf(a));scene.add(ins);}const marker=new THREE.Mesh(new THREE.SphereGeometry(.6,8,6),new THREE.MeshBasicMaterial({color:a.phase==='A'?0xffb563:a.phase==='B'?0x8be0fa:0xcb9dff}));marker.position.set(...p);tag(marker,t.attachments.indexOf(a));scene.add(marker);}
  }
- for(const s of network.spans){const geometry=new THREE.BufferGeometry().setFromPoints(s.points.map(p=>new THREE.Vector3(...p)));scene.add(new THREE.Line(geometry,new THREE.LineBasicMaterial({color:s.phase==='A'?0xd4af76:s.phase==='B'?0x8eafb8:0xb1a0c5})));}
+ for(const s of network.spans){if(line.id===179559746)continue;const geometry=new THREE.BufferGeometry().setFromPoints(s.points.map(p=>new THREE.Vector3(...p)));scene.add(new THREE.Line(geometry,new THREE.LineBasicMaterial({color:s.phase==='A'?0xd4af76:s.phase==='B'?0x8eafb8:0xb1a0c5})));}
  for(const splice of network.splices){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.35,.35,2,10),steel);mesh.position.set(...splice.position);const a=network.towers[splice.fromTower].attachments[1].position,b=network.towers[splice.toTower].attachments[1].position;mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(b[0]-a[0],b[1]-a[1],b[2]-a[2]).normalize());mesh.userData.equipmentTower=splice.fromTower;mesh.userData.equipmentPhase=3;mesh.userData.componentId=splice.id;scene.add(mesh);}
  const bound=new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p)));const center=bound.getCenter(new THREE.Vector3());const ground=new THREE.Mesh(new THREE.PlaneGeometry(2000000,2000000),new THREE.MeshStandardMaterial({color:0x213d38,roughness:1}));ground.renderOrder=-20;ground.rotation.x=-Math.PI/2;ground.position.set(center.x,-.2,center.z);scene.add(ground);
  const baseLayer=basemap(scene,canvasHost,network.origin);
@@ -129,7 +136,9 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  transition={target,position:target.clone().addScaledVector(side,distance)};return;
  }
  const aspect=Math.max(.1,canvasHost.clientWidth/Math.max(1,canvasHost.clientHeight)),half=THREE.MathUtils.degToRad(camera.fov/2),angle=Math.min(half,Math.atan(Math.tan(half)*aspect)),distance=Math.max(180,size.length()/2/Math.sin(angle)*1.1);transition={target,position:target.clone().add(new THREE.Vector3(0,1,.45).normalize().multiplyScalar(distance))};}
- review=reviewNavigation(scene,canvasHost,droneBar,network,frameReview,()=>[...(canopy?.events()??[]),...(faults?.events()??[])],i=>[-1,0,1,2].every(j=>captured.has(`${i}:${j}`))&&(!network.splices.some(s=>s.fromTower===i)||captured.has(`${i}:3`)),id=>id.startsWith('EQUIP-')?faults?.select(id):canopy?.select(id),worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle)?.route??[],i=>scannedSpans.has(i),()=>[...osmLayer.crossings(),...(worldData?.lines.filter(l=>l.id!==line.id).map(l=>({id:'OSM way/'+l.id,kind:'power',points:l.coords.map(p=>world!.project(p,0))}))??[])]);
+ const notices=missionNotams(scene,banner,network.origin,worldData,line,frameReview);
+ const hazards=disasters(scene,canvasHost,network.origin,frameReview,worldData?.lines??[]);
+ review=reviewNavigation(scene,canvasHost,droneBar,network,frameReview,()=>[...(canopy?.events()??[]),...(faults?.events()??[])],i=>[-1,0,1,2].every(j=>captured.has(`${i}:${j}`))&&(!network.splices.some(s=>s.fromTower===i)||captured.has(`${i}:3`)),id=>id.startsWith('EQUIP-')?faults?.select(id):canopy?.select(id),worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle)?.route??[],i=>line.id===179559746||scannedSpans.has(i),()=>[...osmLayer.crossings(),...(worldData?.lines.filter(l=>l.id!==line.id).map(l=>({id:'OSM way/'+l.id,kind:'power',points:l.coords.map(p=>world!.project(p,0))}))??[])]);
  if(timeline){const rating=droneBar.querySelector('.line-rating');if(rating)timeline.ratingHost.append(rating);const navigation=droneBar.querySelector('.review-navigation') as HTMLElement|null;if(navigation)navigation.style.display='none';}
 
  const desiredGimbal=new THREE.PerspectiveCamera();
@@ -148,8 +157,8 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  }}
 
  if(worldData?.activeVehicle&&world){const v=worldData.fleet?.().find(v=>v.id===worldData.activeVehicle);if(v){for(const end of [0,v.route.length-1]){const a=world.project(v.route[end]),b=world.project(v.route[end===0?1:end-1]);const strip=new THREE.Mesh(new THREE.BoxGeometry(400,.2,25),new THREE.MeshStandardMaterial({color:0x535e63}));strip.position.copy(a).setY(.1);strip.rotation.y=-Math.atan2(b.z-a.z,b.x-a.x);scene.add(strip);}}}
- faults=equipment(scene,canvasHost,network);
- canopy=vegetation(scene,canvasHost,mapSurface,camera,network,id=>review?.openAsset(id));
+ if(line.id!==179559746)faults=equipment(scene,canvasHost,network);
+ if(line.id!==179559746)canopy=vegetation(scene,canvasHost,mapSurface,camera,network,id=>review?.openAsset(id));
  const initialVehicle=worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle);
  if(initialVehicle&&!initialVehicle.returning&&initialVehicle.distanceKm>0){
  capturePass=initialVehicle.inspectionPass;
@@ -292,7 +301,8 @@ EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
  const attribute=aim.geometry.getAttribute('position') as THREE.BufferAttribute;attribute.setXYZ(0,p.x,p.y,p.z);attribute.setXYZ(1,target.x,target.y,target.z);attribute.needsUpdate=true;aim.geometry.computeBoundingSphere();
  gimbal.aspect=16/9;gimbal.updateProjectionMatrix();scene.updateMatrixWorld(true);
  shield.update(p,!!vehicle?.turning,!!vehicle&&!vehicle.done,performance.now());
- traffic.update(performance.now(),vehicle?p:undefined);contingency?.update(dt);
+ recordedLidar?.update(worldData?.fleet?.().find(v=>v.osmWay===179559746));
+ notices.update();traffic.update(performance.now(),vehicle?p:undefined);contingency?.update(dt);
  faults?.update(vehicle?.timeline.seconds??0,performance.now());
  canopy?.update(vehicle,p,tangent,performance.now());
  sensors.update(gimbal,p,tangent,range,plane.visible&&p.y>5,running&&flightStage==='INSPECTING',elapsed,(host.querySelector('#show-camera-fov') as HTMLInputElement).checked,(host.querySelector('#show-lidar') as HTMLInputElement).checked);
@@ -305,5 +315,5 @@ EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
  }
  view('ohio');if(transition){camera.position.copy(transition.position);controls.target.copy(transition.target);transition=undefined;}
  if(worldData?.activeVehicle)fitMission();
- tick();return {pack:network.pack,view,dispose(){disposed=true;cancelAnimationFrame(frame);shield.dispose();review?.dispose();contingency?.dispose();traffic.dispose();faults?.dispose();canopy?.dispose();timeline?.dispose();panel?.dispose();baseLayer.dispose();osmLayer.dispose();controls.dispose();scene.traverse(obj=>{const o=obj as THREE.Mesh;if(o.geometry)o.geometry.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();host.innerHTML='';}};
+ tick();return {pack:network.pack,view,dispose(){disposed=true;cancelAnimationFrame(frame);hazards.dispose();notices.dispose();shield.dispose();review?.dispose();contingency?.dispose();traffic.dispose();faults?.dispose();canopy?.dispose();timeline?.dispose();panel?.dispose();baseLayer.dispose();osmLayer.dispose();controls.dispose();scene.traverse(obj=>{const o=obj as THREE.Mesh;if(o.geometry)o.geometry.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();host.innerHTML='';}};
 }

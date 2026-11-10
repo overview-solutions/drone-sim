@@ -1,3 +1,5 @@
+import {rayKingFlight} from './ray-king-flight';
+import {rayKingLine} from './ray-king';
 import {downtownLine,downtownBase} from './flight-path';
 import './style.css';
 import {applyContingency,previewMission,missionCycle,createFlight,startOnInspection,seekFlight,advanceFlight,recallFlight,flightSnapshot,type Flight} from './operations';
@@ -70,7 +72,9 @@ function status(){const initial=Number($<HTMLInputElement>('aircraft-count').val
 function startFleet(){if(flights.length){fleetRunning=!fleetRunning;$('fly').textContent=fleetRunning?'Ⅱ Pause fleet':'▶ Resume fleet';return;}
  const used=new Set<number>();for(const a of bases){let best:Sortie|undefined;for(const l of targets.filter(l=>lineLength(l.coords)>1).sort((a,b)=>lineLength(b.coords)-lineLength(a.coords))){if(used.has(l.id))continue;for(const b of (relocate?bases.filter(b=>b.id!==a.id):[a])){const candidate=sortie(a,b,l,maxKm());if(candidate.feasible&&(!best||candidate.inspectionKm>best.inspectionKm||candidate.inspectionKm===best.inspectionKm&&candidate.length<best.length))best=candidate;}if(best)break;}if(best){used.add(best.line.id);flights.push(createFlight(best,flights.length,flights.length%2===0));}}
  if(flights.length){const trip=sortie(downtownBase,downtownBase,downtownLine,maxKm());const f=createFlight(trip,flights.length-1);f.events.push('Downtown Columbus · hypothetical urban transmission ring and river/industrial spurs · 700 ft turns · simulated local staging strip, not an FAA airport');flights[flights.length-1]=f;}
- flights=flights.filter(f=>f.sortie.feasible&&f.sortie.line.coords.length>=2&&f.sortie.inspectionKm>.1);flights.forEach((f,i)=>startOnInspection(f,f.sortie.line.id===-1001?.45:.15+(i%5)*.08));
+ flights.push(rayKingFlight(rayKingLine,flights.length));
+ flights=flights.filter(f=>f.sortie.feasible&&f.sortie.line.coords.length>=2&&f.sortie.inspectionKm>.1);flights.forEach((f,i)=>startOnInspection(f,f.loop?0:f.sortie.line.id===-1001?.45:.15+(i%5)*.08));
+ for(const f of flights)if(f.loop)f.traveled=0;
  fleetRunning=flights.length>0;$('fly').textContent=fleetRunning?'Ⅱ Pause fleet':'No eligible sorties';status();}
 function zoom(factor:number){const cx=view[0]+view[2]/2,cy=view[1]+view[3]/2;view=[cx-view[2]*factor/2,cy-view[3]*factor/2,view[2]*factor,view[3]*factor];$('map').setAttribute('viewBox',view.join(' '));}
 $('zoom-in').onclick=()=>zoom(.8);$('zoom-out').onclick=()=>zoom(1.25);$('fit-ohio').onclick=()=>{view=[-245,-245,490,510];draw();};
@@ -87,6 +91,7 @@ $('unknown').onchange=()=>{showUnknown=$<HTMLInputElement>('unknown').checked;dr
 let activeVehicle:string|undefined;
 $('open-3d').onclick=()=>{$('network-view').hidden=true;$('inspection-view').hidden=false;inspectionView?.dispose();inspectionView=inspection($('inspection-host'),selected,{lines:targets,airports:eligible,bases,boundary:raw.boundary.coordinates[0],radiusKm:radiusKm(),mission,inspectionAge,activeVehicle,selectVehicle:(id:string)=>{activeVehicle=id;const f=flights.find(f=>f.id===id);if(f){selected=f.sortie.line;$('open-3d').click();}},previewMission:(id:string,seconds:number|null)=>{const f=flights.find(f=>f.id===id);if(f){previewMission(f,seconds);fleetRunning=seconds===null;}},seek:(id:string,fraction:number|null)=>{const f=flights.find(f=>f.id===id);if(f){seekFlight(f,fraction);fleetRunning=true;}},fleet:()=>flights.map(flightSnapshot),fleetState:()=>({running:fleetRunning,rate:fleetRate}),toggleFleet:()=>{if(!flights.length)startFleet();else fleetRunning=!fleetRunning;},setFleetRate:(value:number)=>fleetRate=value,capturePace:(id,mph)=>{const f=flights.find(f=>f.id===id);if(f){f.captureLimit=Math.max(30,Math.min(40,mph));f.captureTTL=2;}},contingency:(id,route,altitudes,returning,label,connectionKm)=>{const f=flights.find(f=>f.id===id);return !!f&&applyContingency(f,route,altitudes,returning,label,connectionKm);},recall:(id:string)=>{const f=flights.find(f=>f.id===id);if(f)recallFlight(f);}});};$('close-3d').textContent='Zoom out to Ohio';$('close-3d').onclick=()=>inspectionView?.view?.('ohio');
 $('show-3d').onclick=()=>$('open-3d').click();
+const rayButton=document.createElement('button');rayButton.textContent='Ray–King · OGRIP';document.querySelector('header .row')!.prepend(rayButton);rayButton.onclick=()=>{if(!flights.length)startFleet();const flight=flights.find(f=>f.sortie.line.id===rayKingLine.id);selected=rayKingLine;activeVehicle=flight?.id;update();$('open-3d').click();};
 $('toggle-sidebar').onclick=()=>{const hidden=document.body.classList.toggle('sidebar-hidden');$('toggle-sidebar').textContent=hidden?'Plan network':'Close planning';};
 $('toggle-data').onclick=()=>{const hidden=document.body.classList.toggle('data-hidden');$('toggle-data').textContent=hidden?'Data objects':'Close objects';};
 $('export-plan').onclick=()=>{const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify({simulationOnly:true,assumptions:{radiusMi,nominalKm,usableKm:maxKm(),minimumReserve:.2,cruiseMph:40},bases:bases.map(a=>a.id),targetOsmWay:selected.id,sortie:mission,provenance:raw.meta},null,2)],{type:'application/json'}));a.href=url;a.download='ohio-fleet-scenario.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
@@ -97,6 +102,8 @@ if(examples.length){selected=examples[0].l;$<HTMLSelectElement>('line-select').v
 requestAnimationFrame(tick);
 
 document.body.classList.add('sidebar-hidden','data-hidden');
-$('open-3d').click();if(location.hash==='#network')inspectionView?.view?.('ohio');
-
 startFleet();
+if(location.hash==='#ray-king'){selected=rayKingLine;activeVehicle=flights.find(f=>f.sortie.line.id===rayKingLine.id)?.id;}
+$('open-3d').click();if(location.hash==='#ray-king')inspectionView?.view?.('corridor');if(location.hash==='#network')inspectionView?.view?.('ohio');
+
+

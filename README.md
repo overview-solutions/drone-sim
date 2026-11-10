@@ -1,5 +1,7 @@
 # drone-sim — Flightline fixed-wing mission sandbox
 
+**Proprietary — all rights reserved.** Original project software and documentation are not offered under an open-source license. Use requires authorization from the applicable rights holder; see [LICENSE](LICENSE). Third-party software and data retain their own licenses, including ODbL for OSM-derived data. This change does not revoke previously granted GPL rights or establish ownership.
+
 **Simulation only. Not flight-ready, not a safety system, and not an aircraft controller.** A route marked “Geometry checks passed” passed only the planar checks described below.
 
 ## Where the displayed data comes from
@@ -13,6 +15,9 @@
 | Ohio airports and runways | Airport locations, identifiers, tower status and runway attributes come from the [FAA NASR airport and runway files, October 1, 2026 cycle](https://nfdc.faa.gov/webContent/28DaySub/extra/01_Oct_2026_APT_CSV.zip). Suggested drone stations, taxi operations, parking, charging and airport arrangements are hypothetical. |
 | State boundary and rural airport filter | The Ohio outline comes from [U.S. Census Bureau TIGERweb state boundaries](https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer). The rural filter compares each airport location with [2020 Census urban-area polygons](https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Urban/MapServer). |
 | Map background | Ohio streams historical aerial imagery from [USGS The National Map imagery service](https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer) (display credit USGS / USDA) and topography from [USGS Topo](https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer). Austin embeds 20 tiles from that topo service. The offline grid and dark styling are drawn by the application. |
+| Flood focus and terrain | Clicking a flood alert requests public [USGS WBD HUC12 boundaries](https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer/6), [NHD river flowlines](https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6), and [3DEP elevation samples](https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer). A 25 × 25 grid at 125 m spacing covers approximately 3 km around the alert bounding-box center. Blue cells show a connected, constant-water-elevation scenario seeded from mapped waterways. The initial level is lowest sampled river-cell elevation +2 m, an assumption adjustable by the user. This is coarse terrain screening, not a flood forecast. It omits flow, rainfall, channel bathymetry, levees, drainage structures and calibrated river stages. Elevations are used numerically while the result is drawn on the simulator’s flat map. Service failures are shown explicitly. |
+| Historical disaster examples | Includes the [1974 Xenia tornado](https://www.weather.gov/iln/19740403) and [2009 Shawnee Complex wildfire](https://www.nifc.gov/sites/default/files/NICC/1-Incident%20Information/IMSR/2009/April/20090430IMSR.pdf). Xenia uses an approximate city locator; Shawnee uses an approximate locator derived from the report description. Neither is a surveyed damage/burn boundary. Fire acreage and containment reflect the April 30, 2009 report; local weather measurements are unspecified.  Curated public NWS reports for the [June 29, 2012 derecho](https://www.weather.gov/cle/event_20120629_derecho) and [March 14, 2024 Auglaize–Logan tornado](https://www.weather.gov/iln/20240314_auglaize_logan). The Ohio weather history selector shows event dates, measurement/estimate distinctions, and original source links. The Indian Lake event uses the NWS polygon imported from the supplied KMZ. The derecho uses all 32 reports parsed from the Cleveland summary, with UTC timestamps, original EDT labels, measured/estimated qualifiers, observer types and remarks. Crosses locate those reports; they do not define a continuous damage footprint. The report selector focuses individual locations. Historical examples are separate from active NWS alerts. |
+| Natural hazards | Active Ohio alerts from the [National Weather Service API](https://api.weather.gov/alerts/active?area=OH), refreshed every two minutes. Published alert polygons or forecast/county zone boundaries define outlines. Notifications preserve issue time. Flood and storm incidents labeled DEMO are fictional, shown immediately and after 60 seconds of wall-clock time. Demo incidents can be hidden. Feed failures are reported and retained alerts expire on their supplied validity times. |
 | Air traffic, Remote ID and airspace notices | The default examples are simulated. If explicitly configured, the optional Rust service displays aircraft observations from [OpenSky Network](https://openskynetwork.github.io/opensky-api/rest.html), Remote ID observations from a user-supplied receiver file, and notices from a user-supplied NOTAM/TFR file. Those inputs are separate from the distributed demo. See the [feed configuration and limits](ingestion/README.md). |
 
 **What the simulator generates.** The Austin transmission loops and OH-08 downtown inspection corridor are fictional. For Ohio missions based on OSM lines, the simulator builds its own towers, spans, conductors, phase attachments, insulators, splices and SOCC boundaries. The Utility Network-style GeoJSON describes those modeled objects. The [schema references and aircraft and camera specifications](OHIO_SHOWCASE.md) inform the model.
@@ -20,6 +25,10 @@
 Aircraft positions, mission timelines, communications, camera views, LiDAR points, trees and obstacles in the detailed scan, and derived geometry are simulated. Inspection recency, asset service dates, condition trends, storm and maintenance events, faults, risk colors, clearance and rating scenarios, and initial follow-up tasks are generated examples. Operator-entered task notes, comments, assignees and imported missions are user inputs and can appear in the corresponding exports.
 
 For the original download links, query filters and steps to reproduce the Ohio snapshot, see [Ohio data sources](OHIO_DATA_SOURCES.md). The repository also carries source metadata in the [fleet snapshot](src/fleet/ohio-data.json) and [Columbus building extract](src/fleet/urban-buildings.json).
+
+## Planned wildfire integration
+
+See the [Earth Fire Alliance / FireSat integration plan](docs/EARTH_FIRE_ALLIANCE.md) for verified access information, potential utility workflows, proposed Rust ingestion, and licensing questions. This integration is proposed and has no connected FireSat feed.
 
 ## Open on Mac without installing anything
 
@@ -145,3 +154,93 @@ Ohio Fleet includes simulated aircraft/helicopters, Remote ID detections and NOT
 Select a live aircraft, then use the controls above the timeline. **Return home** evaluates curved connections to the flown route. The encounter selector and **Test avoidance** offer a crossing airplane, oncoming helicopter, and deliberately blocked escape case. It evaluates forward refuges and backtrack/return candidates, applies a passing connection to the selected flight, and displays why other candidates failed. A no-route result leaves the aircraft moving on its current route and requests operator intervention; this is not a safe fallback guarantee.
 
 Connection checks use a 700 ft turn radius, 700 ft lateral envelope, 20 m modeled-conductor clearance, 20 m synthetic flat-ground floor, 2 m/s descent limit, and illustrative 120 m horizontal / 35 m vertical traffic proximity. These are demonstration parameters, not certified DAA thresholds. Traffic prediction assumes constant velocity. The checks cover the connection, not the subsequent mission or airport approach. No actual terrain, buildings, vegetation, exclusion volumes, wind, aircraft performance or live surveillance are validated. Live service observations do not trigger automatic maneuvers. The demonstration's on-demand traffic and response are synthetic.
+
+## Disaster response airspace demonstration
+
+Select an incident, then **Response airspace** to view an illustrative TFR cylinder and three assigned sectors for inspection UAS, rescue/suppression helicopters, and fixed-wing mapping. The 5 km radius, 3,000 ft AGL ceiling and tier heights are invented scenario parameters referenced to flat simulated ground. These outlines do not represent an issued FAA restriction or historical TFR.
+
+A priority helicopter transit reserves the shared corridor for ten seconds while the other scenario tracks freeze, then resumes their animations. This demonstrates sequencing only. These extra demonstration markers are separate from the Ohio fleet and its route planner. Freezing is a schematic hold, not fixed-wing flight dynamics. Actual fleet avoidance, admission authorization, terrain-referenced altitudes and operational separation enforcement remain unimplemented here.
+
+FAA disaster-response TFR and UAS access guidance is available at [FAA Temporary Flight Restrictions](https://www.faa.gov/uas/getting_started/temporary_flight_restrictions). Real operations require applicable authorization and incident coordination. NWS hazard geometry alone does not establish a TFR.
+
+## NOTAM request preparation
+
+Incident details include **Prepare NOTAM request** to export an editable local review packet with UTC validity and coordination fields. See [FAA / Leidos integration status](docs/NOTAM_INTEGRATION.md). Live origination requires a verified provider interface and authorized account; submission is currently unconnected.
+
+Historical geometry is bundled in src/fleet/indian-lake-track.json and src/fleet/derecho-reports.json, with source URLs and input hashes. Reproduce conversion using scripts/import_storm_history.py with the NWS KMZ and downloaded event HTML. The Cleveland report set is partial regional coverage.
+
+
+### Ray–King 345 kV: actual OGRIP LiDAR preview
+
+Use **Ray–King · OGRIP** in the top banner, or open `ohio.html#ray-king`.
+This joins the existing public OSM snapshot ways **179559746 → 953747816 → 953747815** at their shared endpoints, retaining the covered interior portion. The OSM operator field is blank; the corridor is **not asserted to be AEP-owned**. Ray–King is the user-supplied dataset label, not a verified OSM circuit name.
+
+Source LAS remains in `../Data/lidar/Ray_King_345/`. Five `S*.las` tiles have metadata acquisition dates March–May **2006**; `BS19050726.las` belongs to the March–April **2021** block (published 2022). These are historical, overlapping surveys, not a simultaneous/current scan. `src/fleet/ray-king-data.json` contains 130,068 deterministic sampled real returns within 150 m of the OSM centerline and source tile metadata. It contains no private utility GIS records. Original LAS classification is retained; unclassified points are not inferred to be vegetation or conductors. Display thinning does not imply a measured point density.
+
+The newer LAS explicitly identifies EPSG:6551 (NAD83(2011) Ohio South US survey feet) and NAVD88/Geoid18 feet. Older LAS lacks embedded CRS; its XML inconsistently names CORS and HARN. EPSG:3735 is used as an **approximate horizontal display transformation** for those tiles; precision registration is unverified. Elevation feet are converted to metres and a constant 321.725933 m subtracted for the local scene. Terrain relief remains; the existing synthetic towers/flight routes are **not terrain-conformed or extracted from these scans**. Do not interpret their intersection with the points as a surveyed clearance result.
+
+Reproduce with Python dependencies `laspy`, `numpy`, `pyproj`:
+
+```sh
+python3 scripts/import_ray_king.py ../Data/lidar/Ray_King_345
+```
+
+The source panel exports a GeoJSON corridor and tile footprints, with OSM way IDs and provenance. The point preview is embedded in the standalone build for offline use; original multi-million-point LAS stays outside the repository.
+
+### Simulated mission NOTAMs
+
+The top-banner **Mission NOTAMs** list generates one fictional UAS activity advisory per fleet mission, plus a planned advisory for an unassigned selected corridor (including Ray–King). Click a mission to frame its route and dashed bounding rectangle; close the list to remove the highlight. Export produces `flightline.simulated-mission-notams.v1` JSON with `simulation: true`, `submitted: false`, and no issued identifier.
+
+The illustrative window includes 15 minutes before/after simulated flight. Status follows the simulation (including replay), not real-time FAA validity. The rectangle includes the whole route with 700 ft padding; it is not a precise corridor buffer. SFC–400 ft AGL is an assumed notice envelope, not a measured aircraft altitude or terrain-validated operational limit. These notices do not reserve airspace, establish a TFR, provide clearance or get transmitted to any authority.
+
+Ray–King is also an auto-loaded fleet mission (normally **OH-09 · Ray–King · OGRIP**). Select that aircraft, its map marker, or the Ray–King banner shortcut to load the recorded point cloud and mission outline; **Follow aircraft** follows the corridor flight. The mission remains available in the aircraft picker after inspection. Its simulated staging strips are 400 m beyond the covered corridor endpoints, not actual airports. Recorded LiDAR stays visible during playback; the synthetic sensor trail defaults off for this mission. Historical survey returns are not newly captured by the simulated aircraft.
+
+Ray–King now runs continuous back-and-forth inspection passes with explicit 700 ft-radius Dubins endpoint turnarounds. This replaces its previous staging/landing demonstration. It begins at the corridor start; the recorded cloud starts hidden and reveals in along-corridor order as the aircraft passes. Completed coverage remains visible on subsequent loops. Replay shows the coverage up to the replay position. This is a historical-data reveal animation across the 150 m display swath, not simulated ray tracing, guaranteed sensor coverage, terrain avoidance, or an endurance-feasible perpetual flight. Return commands interrupt looping.
+
+### Ray–King LiDAR-derived span candidates
+
+OH-09 uses 14 OSM-seeded elevated-return clusters and 13 adjoining span candidates, replacing uniform synthetic support spacing. Click the amber span buffers or select spans through Profile to open the recorded returns (including 30 m beyond each end) and derived envelope. Span review intentionally reveals the selected historical scan independently of the animated capture progress.
+
+`scripts/derive_ray_king_spans.py` processes the actual sampled returns in `ray-king-data.json`: ground median within 60 m; elevated returns 25–80 m above ground within 22 m of each OSM vertex; robust median XY and 95th-percentile top. Each candidate requires at least five elevated returns. Adjacent supported seeds define boundaries; unsupported seeds are not bridged. Across each span, eight bins of elevated returns within 18 m of the axis support a quadratic envelope only if at least five bins have three returns. Twelve spans pass this screening; one has adjacency geometry only. These are **unverified candidates**, not certified tower detections, phase-resolved wires or mechanical sag measurements. Trees can contaminate the fit; mixed survey dates and approximate older CRS remain limitations.
+
+The existing UI has internal phase placeholders for compatibility, but Ray–King displays one envelope, exports no invented attachments/splices, and disables synthetic defect generation and rating claims. Its UN-style export provides candidate support/span IDs, evidence counts, unresolved phase status and vertical reference. Rebuild candidates with `python3 scripts/derive_ray_king_spans.py` (NumPy required). Raw LAS remains untouched.
+
+Ray–King display refinement: the flight scene now shows a monochrome RAW-preview trail only, extending approximately one local OSM span behind the aircraft in its current direction. Older trail points leave the display; endpoint turns outside the 150 m corridor hide the trail. Derived support/envelope graphics appear only in selected Span review. Span review loads recorded classified returns and offers **Classified / Elevation**; elevation colors span the selected returns' measured NAVD88 range, with a metres legend. The rolling raw preview is hidden while inspecting a span. “RAW” describes unclassified presentation of the existing thinned historical preview, not the full-resolution original LAS.
+
+### On-demand full-resolution tower processing
+
+In a Ray–King **Span** view, click either amber tower box (or its `RK-T… · Process` button). A local service reads the original associated LAS tiles, reports progress, and adds a candidate 3D structure envelope. **Export 3D GeoJSON** downloads the fitted polygons in longitude/latitude/NAVD88 metres.
+
+Start the service separately from the web preview (Python with `laspy`, `numpy`, `pyproj`):
+
+```sh
+python3 scripts/tower_lidar_service.py --data ../Data/lidar/Ray_King_345
+```
+
+It listens only on `127.0.0.1:8790`. Jobs are limited to the known 14 candidate IDs, run one at a time, and are cached in memory until restart. No LAS is uploaded or modified. Static/standalone pages need this local service running; they show an unavailable message otherwise.
+
+The processor streams original LAS chunks, crops an 18 m radius around the candidate above local ground, excludes LAS noise class 7, and prefers the 2021 survey when it supplies enough returns; otherwise it uses older tiles without mixing epochs. Each 3 m vertical band needs six returns and a nondegenerate XY convex hull. A prism uses that hull and the observed minimum/maximum elevations. Sparse bands remain absent. This creates an **unverified structure envelope**, not steel-member identification, a watertight engineering model, a vegetation-free segmentation, or clearance certification. Wires/trees can contaminate the shape. Older datum uncertainty remains. Click another span to dismiss the result; no external submission occurs.
+
+Tower labels and wire boxes now enter **Profile → Asset**, zoom to the structure, and initiate full-resolution processing. Processing status and the **Open UN** object live in the bottom Profile, not a map popup. The exported `flightline-open-un/1.0` packet contains a candidate `StructureJunction` point, 3D polygon surfaces and explicit `surfaceOf` links. Electrical connectivity and phase attachments remain empty because the extraction cannot establish them. This is an open UN-style exchange convention, not a native Esri Utility Network import or verified topology.
+
+Tower extraction now uses the neighboring support alignment to define a **36 m across-corridor × 10 m along-corridor** window, instead of the earlier circular crop. The selection box follows that orientation, with its long axis perpendicular to the corridor. This reduces longitudinal conductor contamination without rotating source points. The crop dimensions are modeling assumptions, not surveyed tower dimensions; they may omit components of unusually deep or rotated structures. Restart the processor after changing this method to discard cached envelopes.
+
+Additional high-resolution tiles now supply RK-T05 (`BS19030727`), RK-T06 (`BS19050727`), and RK-T08 (`BS19060725`), alongside RK-T07 (`BS19050726`). `BS19060726` is also available but does not cover a current candidate tower crop. The original-resolution processor discovers extracted LAS recursively on each request. Identical files are excluded by SHA-256 when file sizes match, and identical XYZ returns are removed before fitting. Changes in source paths, sizes or modification times invalidate completed in-memory jobs automatically on the next tower request. ZIP files must be extracted; originals remain outside the repository.
+
+### Prebuilt OH-09 structure estimates
+
+OH-09 now automatically loads 14 estimated tower frames. Their locations and heights use the OSM-seeded LiDAR candidates. Upper full-resolution envelopes inform crossarm width where available; frame members, crossarm elevation and body proportions remain explicitly inferred. Crossarms run across the local corridor. Ten candidates have fitted full-resolution envelopes; RK-T03, RK-T04, RK-T09 and RK-T14 lack sufficient 3D evidence and use amber inferred frames. Even the other frames are not surveyed steelwork. Click a frame to enter its Asset view, or use **Export structures** for 3D GeoJSON with provenance and inference flags. **Estimated structures** toggles the layer.
+
+Reproduce from the original LAS without modifying it:
+
+```sh
+python3 scripts/build_ray_king_structures.py ../Data/lidar/Ray_King_345
+```
+
+Prebuilt frames are embedded for offline display; on-demand reprocessing still requires the local tower service. No additional structures between the existing OSM-seeded candidates have been asserted.
+
+### Estimated three-phase completion
+
+OH-09 now includes 42 modeled attachment/insulator targets (A/B/C on 14 structures) and 39 conductor curves across 13 spans. Attachment positions follow the estimated frame crossarm widths, perpendicular to the local corridor, with 2.5 m illustrative insulator strings. Conductors connect matching phase endpoints with a parabolic sag assumption capped at 7 m; this is not a tension/temperature calculation or an extracted wire survey. These same attachment coordinates drive gimbal acquisition. Capture targets reset for each direction of the repeating mission.
+
+**Export structures** now exports the UN-style network plus estimated frames, including structure/attachment associations and phase connectivity. This supersedes the earlier empty phase/connectivity export: the new electrical layout is explicitly marked estimated/synthetic with unresolved real-world phase identity. Measured candidate supports and modeled electrical components remain distinguished.

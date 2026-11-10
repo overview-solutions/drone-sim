@@ -1,12 +1,17 @@
+import {towerProcessing} from './tower-processing';
+import rayPoints from './ray-king-data.json';
+import raySpans from './ray-king-spans.json';
 import {obstacleCloud,scanClasses} from './span-obstacles';
 import {demoClearanceMeters,scenarioVoltages,nearestVoltageIndex} from './clearance-envelope';
 import * as THREE from 'three';
 import type {generateUN} from './un';
 /** On-demand synthetic surface sampling; never presented as acquired survey data. */
-export function spanDetail(scene:THREE.Scene,host:HTMLElement,network:ReturnType<typeof generateUN>){
+export function spanDetail(scene:THREE.Scene,host:HTMLElement,network:ReturnType<typeof generateUN>,onTower:(index:number)=>void=()=>{}){
  const root=new THREE.Group(),cloud=new THREE.Group(),derived=new THREE.Group(),clearance=new THREE.Group(),motion=new THREE.Group(),ground=new THREE.Group();root.add(cloud,derived,clearance,motion,ground);scene.add(root);
  const ui=document.createElement('div');ui.className='span-detail';ui.hidden=true;ui.innerHTML='<b>Span inspection</b><span class="span-load" role="status"></span><div><label><input type="checkbox" data-cloud checked> Points</label><label><input type="checkbox" data-derived checked> Geometry</label></div><div class="span-voltage"><label>kV <input data-voltage type="range" min="0" max="12" step="1" aria-label="Scenario voltage in kilovolts"></label><output data-clearance></output><label><input type="checkbox" data-zones checked> Zones</label></div><small>Illustrative zones · not MAD / MVCD / arc-flash limits</small><small>Synthetic surface samples · cyan wires / amber supports · not acquired LiDAR</small>';host.append(ui);
+ const processor=network.pack.provenance.osmWay===179559746?towerProcessing(scene,host,ui,onTower):undefined;
  const vision=document.createElement('select');vision.setAttribute('aria-label','Span vision mode');vision.innerHTML='<option value="contrast">Ghost</option><option value="scene">Scene</option><option value="elevation">Elevation</option>';ui.prepend(vision);
+ if(network.pack.provenance.osmWay===179559746)vision.innerHTML='<option value="scene">Classified</option><option value="elevation">Elevation</option>';
  const legend=document.createElement('div');legend.className='span-height-legend';legend.hidden=true;legend.innerHTML='<div style="height:7px;background:linear-gradient(90deg,#254cc9,#24c7bf,#ead94c,#ed6a42);border-radius:4px"></div><small>0 m · 20 m · 40 m · 60+ m<br>Height above synthetic ground</small>';ui.append(legend);
  const heightColor=(y:number)=>{const stops=[new THREE.Color('#254cc9'),new THREE.Color('#24c7bf'),new THREE.Color('#ead94c'),new THREE.Color('#ed6a42')],v=THREE.MathUtils.clamp(y/60,0,1)*3,i=Math.min(2,Math.floor(v));return stops[i].clone().lerp(stops[i+1],v-i);};
  const originals=new Map<THREE.Mesh,THREE.Material|THREE.Material[]>();
@@ -17,7 +22,7 @@ export function spanDetail(scene:THREE.Scene,host:HTMLElement,network:ReturnType
  for(const o of cloud.children){const pts=o as THREE.Points,mat=pts.material as THREE.PointsMaterial,g=pts.geometry;
  if(!pts.userData.originalAppearance)pts.userData.originalAppearance={color:mat.color.clone(),vertexColors:mat.vertexColors,attribute:g.getAttribute('color')};
  const original=pts.userData.originalAppearance;
- if(active){if(!pts.userData.heightColors){const pos=g.getAttribute('position'),values:number[]=[];for(let i=0;i<pos.count;i++){const c=heightColor(pos.getY(i));values.push(c.r,c.g,c.b);}pts.userData.heightColors=new THREE.Float32BufferAttribute(values,3);}g.setAttribute('color',pts.userData.heightColors);mat.color.set(0xffffff);mat.vertexColors=true;}
+ if(active){if(!pts.userData.heightColors){const pos=g.getAttribute('position'),values:number[]=[];for(let i=0;i<pos.count;i++){const c=heightColor(pts.userData.elevationRange?60*(pos.getY(i)-pts.userData.elevationRange[0])/Math.max(.01,pts.userData.elevationRange[1]-pts.userData.elevationRange[0]):pos.getY(i));values.push(c.r,c.g,c.b);}pts.userData.heightColors=new THREE.Float32BufferAttribute(values,3);}g.setAttribute('color',pts.userData.heightColors);mat.color.set(0xffffff);mat.vertexColors=true;}
  else{if(original.attribute)g.setAttribute('color',original.attribute);else g.deleteAttribute('color');mat.color.copy(original.color);mat.vertexColors=original.vertexColors;}mat.needsUpdate=true;
  }}
  vision.onchange=()=>{ghost(surfaces);elevation();};
@@ -48,6 +53,22 @@ export function spanDetail(scene:THREE.Scene,host:HTMLElement,network:ReturnType
  async function show(index:number){if(index<0||index+1>=network.towers.length)return;ui.hidden=false;root.visible=true;if(index===current)return;restore();surfaces=[];current=index;updateMotion();const token=++generation;clear(cloud);clear(derived);clear(ground);elevation();
  const status=ui.querySelector<HTMLElement>('.span-load')!;status.textContent='Loading surfaces…';
  const a=new THREE.Vector3(...network.towers[index].position),b=new THREE.Vector3(...network.towers[index+1].position),axis=b.clone().sub(a);axis.y=0;const length=axis.length();axis.normalize();const normal=new THREE.Vector3(-axis.z,0,axis.x);
+ if(network.pack.provenance.osmWay===179559746){
+  processor?.show(index);
+  const selected=rayPoints.points.filter(p=>{const q=new THREE.Vector3(p[0],p[1],p[2]).sub(a),t=q.dot(axis);return t>=-30&&t<=length+30&&Math.abs(q.dot(normal))<=150;});
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(selected.flatMap(p=>p.slice(0,3)),3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(selected.flatMap(p=>{const c=new THREE.Color(p[3]===2?0xc3b493:p[3]===5?0x65d9b0:0xa9d9ff);return [c.r,c.g,c.b];}),3));
+  const pts=new THREE.Points(geometry,new THREE.PointsMaterial({size:2,vertexColors:true,sizeAttenuation:false}));pts.userData.sensorIgnore=true;cloud.add(pts);
+  for(const cable of network.spans.slice(index*3,index*3+3))addOutline(cable.points.map(p=>new THREE.Vector3(...p)),0x65d9b0);
+  const record=raySpans.spans[index];if(record.envelope.length)addOutline(record.envelope.map(p=>new THREE.Vector3(...p)),0xe8b45b);
+  for(const i of [index,index+1]){const t=raySpans.supports[i];addOutline([new THREE.Vector3(...t.position),new THREE.Vector3(t.position[0],t.top,t.position[2])],0xe8b45b);}
+  status.textContent=`${record.id} · ${record.lengthMeters.toFixed(0)} m · ${selected.length.toLocaleString()} recorded returns · ${record.supportedBins}/8 envelope bins · unverified`;
+  ui.querySelectorAll('small').forEach(el=>el.hidden=true);vision.hidden=false;adjustments.hidden=true;(ui.querySelector('.span-voltage') as HTMLElement).hidden=true;clear(clearance);clear(motion);
+  const min=Math.min(...selected.map(p=>p[1])),max=Math.max(...selected.map(p=>p[1]));
+  pts.userData.elevationRange=[min,max];
+  legend.innerHTML='<div style="height:7px;background:linear-gradient(90deg,#254cc9,#24c7bf,#ead94c,#ed6a42)"></div><small>'+ (min+rayPoints.verticalOffsetMeters).toFixed(1)+'–'+(max+rayPoints.verticalOffsetMeters).toFixed(1)+' m NAVD88 · recorded elevation</small>';
+  elevation();
+  return;
+ }
  // The demo has flat ground; preserve its datum rather than invent terrain relief.
  const corners=[a.clone().addScaledVector(axis,-60).addScaledVector(normal,-65),b.clone().addScaledVector(axis,60).addScaledVector(normal,-65),b.clone().addScaledVector(axis,60).addScaledVector(normal,65),a.clone().addScaledVector(axis,-60).addScaledVector(normal,65)];corners.forEach(p=>p.y=.04);
  const floor=new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([corners[0],corners[1],corners[2],corners[0],corners[2],corners[3]]),new THREE.MeshBasicMaterial({color:heightColor(0),side:THREE.DoubleSide}));floor.layers.set(1);floor.userData.sensorIgnore=true;ground.add(floor);
@@ -75,5 +96,5 @@ export function spanDetail(scene:THREE.Scene,host:HTMLElement,network:ReturnType
  for(const [key,coords] of Object.entries(extra)){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(coords,3));const pts=new THREE.Points(g,new THREE.PointsMaterial({size:1.3,sizeAttenuation:false,color:scanClasses[key as keyof typeof scanClasses],transparent:true,opacity:.85}));pts.layers.set(1);pts.userData.sensorIgnore=true;pts.userData.scanClass=key;pts.visible=true;cloud.add(pts);}
  if(disposed||token!==generation)return;const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));const points=new THREE.Points(geometry,new THREE.PointsMaterial({size:1.5,sizeAttenuation:false,vertexColors:true,transparent:true,opacity:.8}));points.layers.set(1);points.userData.sensorIgnore=true;cloud.add(points);status.textContent=(positions.length/3+limit*2).toLocaleString()+' points · Detailed · T'+(index+1)+'–T'+(index+2);elevation();
  }
- return {show,hide(){restore();surfaces=[];legend.hidden=true;generation++;current=-1;root.visible=false;ui.hidden=true;clear(cloud);clear(derived);clear(clearance);clear(motion);clear(ground);},dispose(){restore();legend.remove();disposed=true;generation++;clear(cloud);clear(derived);clear(clearance);clear(motion);clear(ground);scene.remove(root);ui.remove();}};
+ return {show,processTower(index:number){void processor?.process(index);},assetHost(parent?:HTMLElement){processor?.move(parent??ui);},updateCamera(camera:THREE.Camera){processor?.camera(camera);},hide(){processor?.hide();restore();surfaces=[];legend.hidden=true;generation++;current=-1;root.visible=false;ui.hidden=true;clear(cloud);clear(derived);clear(clearance);clear(motion);clear(ground);},dispose(){processor?.dispose();restore();legend.remove();disposed=true;generation++;clear(cloud);clear(derived);clear(clearance);clear(motion);clear(ground);scene.remove(root);ui.remove();}};
 }

@@ -163,3 +163,37 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .asset-history-metrics{display:flex;gap:18px;margin:8px 0}.asset-history-metrics>div{flex:1;min-width:0}.asset-history-metrics b{display:block;color:#e5f0e9;font-size:17px}.asset-history-metrics span{display:block;font-size:9px;color:#9ebbb0}.asset-history-metrics svg{width:100%;height:26px}.asset-history-metrics progress{width:100%;height:5px;accent-color:#65d9b0}
 .asset-history-events{display:flex;gap:12px;overflow-x:auto;padding:8px 0;margin:0 0 5px;border-top:1px solid #245746;list-style:none}.asset-history-events li{flex:0 0 112px;border-left:2px solid #65d9b0;padding-left:6px;font-size:10px}.asset-history-events li[data-kind=weather]{border-color:#e8b45b}.asset-history-events time{display:block;color:#9ebbb0;font-size:9px;margin-bottom:3px}.asset-history>small{font-size:8px}
 @media(max-width:1050px){.mission-timeline>.asset-evidence{grid-template-columns:1fr 1fr}.asset-history{grid-column:1 / -1;border-left:0;padding-left:0}}
+
+/* Notifications occupy their own row so the scene and controls remain unobscured. */
+.disaster-strip{display:flex;align-items:center;gap:8px;min-height:32px;max-width:100%;padding:3px 8px;background:#091b17;border-bottom:1px solid #245746}
+.disaster-strip small{font-size:10px;flex:0 0 auto;max-width:220px}
+.disaster-events{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;align-items:center;font-size:11px}
+.disaster-strip button{font-size:11px;padding:4px 8px;white-space:nowrap}
+.disaster-strip .hazard-live{border-color:#ff6977}
+.disaster-strip .hazard-demo{border-color:#e8b45b}
+
+.flood-scenario{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 10px;background:#14352b;font-size:11px;border-bottom:1px solid #245746}
+.flood-scenario[hidden]{display:none}
+.flood-scenario span{max-width:450px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flood-scenario label{display:flex;align-items:center;gap:6px}
+.flood-scenario small{color:#a4bec0}
+
+.storm-weather{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 10px;background:#14352b;font-size:11px;border-bottom:1px solid #245746}
+.storm-weather[hidden]{display:none}
+.storm-weather>span{border-left:2px solid #e8b45b;padding-left:7px}
+.storm-weather details{max-width:100%}
+.storm-weather details p{white-space:pre-wrap;max-height:130px;overflow:auto}
+.storm-weather a{color:#65d9b0}
+.disaster-strip select{max-width:190px;font-size:11px}
+
+.flood-progress{display:flex;flex-wrap:wrap;gap:5px;width:100%;font-size:10px}
+.flood-progress span{padding:3px 7px;border:1px solid #245746;border-radius:4px}
+.flood-progress [data-state=done]{color:#65d9b0}
+.flood-progress [data-state=error]{color:#ff9298}
+.flood-scenario>span{max-width:none;white-space:normal;overflow:visible}
+
+.response-tiers{display:flex;flex-wrap:wrap;gap:12px;width:100%}.response-tiers span{padding-left:6px}
+
+.notam-draft{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0}.notam-draft label{display:flex;gap:5px;align-items:center}.notam-draft input{max-width:185px}
+
+.mission-notams[open]{flex-basis:100%;padding:8px;border:1px solid #245746}.notice-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px;max-height:220px;overflow:auto}.notice-cards>div{padding:6px;background:#14352b;border-radius:5px}.notice-cards small{display:block;margin-top:4px}
