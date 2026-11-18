@@ -1,0 +1,10 @@
+export const GIS_SPEC:{version:string;metersPerDegree:number;coordinateOrder:string;axes:string;tileSize:number;maxTileZoom:number;tileRadius:number;transitionMs:number;colors:{dock:string;fixedWing:string};camera:{fov:number;minDistance:number;maxDistance:number;maxPolarAngle:number;zoomSpeed:number;pixelRatioCap:number}};
+export function localFrame(origin:number[]):{project(point:number[],height?:number):[number,number,number];geographic(point:number[]):[number,number,number]};
+export function configureControls(controls:object):void;
+export function cameraOptics(wideHFov?:number,zoom?:number,aspect?:number):{halfWidth:number;halfHeight:number;hfov:number;vfov:number};
+export function frustumCorners(origin:number[],heading:number,pitch:number,depth:number,hfov?:number,zoom?:number,aspect?:number):number[][];
+export function easeCamera(t:number):number;
+export function mercatorY(lat:number):number;
+export function latitude(y:number):number;
+export function tileUrl(mode:string,z:number,x:number,y:number):string;
+export function geodesicCircle(center:number[],radiusM:number,segments?:number):number[][];

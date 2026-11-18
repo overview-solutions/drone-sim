@@ -1,0 +1,5120 @@
+{
+  "displayName": "DRAFT_OH001_osm_way_104228360",
+  "actions": [
+    {
+      "actionUuid": "34e21e5d-837a-409f-a9eb-89a266ff7dd1",
+      "actionKey": "Sequence",
+      "args": {
+        "sequence": {
+          "actions": [
+            {
+              "actionUuid": "a3f0cb86-e771-474c-8a43-e1b24c2ea666",
+              "actionKey": "SetObstacleAvoidance",
+              "args": {
+                "setObstacleAvoidance": {
+                  "oaSetting": "DEFAULT",
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "fca9441d-d290-4e56-b901-118cacee2f79",
+              "actionKey": "StopVideo",
+              "args": {
+                "stopVideo": {
+                  "noArgs": false
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8da79ff6-40d1-420b-97d6-dc8beffc6072",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.1264388090441,
+                      "y": -83.5122758025429,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.4054590392738994,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8ebd893a-60f0-4491-a0bd-84a3e4162059",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8998949c-22fe-4e73-a83c-b4d83f94418d",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.127048798249156,
+                      "y": -83.51038883593996,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.40538286811850593,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "44293b17-4e74-4943-9667-72ae6f7fbcad",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "6da090c6-dbfa-490f-86e3-33e759f35a8a",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12762378680342,
+                      "y": -83.50860937135812,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.4053020900034362,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "3c4144b3-a225-41ef-b0ee-f52ede0fc4ea",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "27ffdfb0-5319-4262-9259-88efa2a35324",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.128193171968206,
+                      "y": -83.50684829822578,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3636370076684431,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "d6012753-ab62-4022-9eef-d1cb6a9d700d",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "6c54c0f2-9a60-44cb-bc4c-be1c03725bb0",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12862793619488,
+                      "y": -83.50510583350366,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3201743160896136,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "90839b7a-0036-425c-89ad-1f85f94fd2cf",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "1d6ff797-c495-4e7c-a7f9-96e0f641ecc3",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12906773553676,
+                      "y": -83.50334463944735,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3183952343646321,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "78fc1416-76aa-472f-8e92-1be434d1e679",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "c96db58e-602e-46df-8c3d-98f228843957",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.129504036514064,
+                      "y": -83.50157644361337,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3166211159432071,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8771bcdb-1e04-42fb-94e2-5469eea264f8",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "a9393ffb-0a0a-4e1a-ae8b-f6bcdb25bd6c",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12994074537945,
+                      "y": -83.49980659980169,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31848272579365206,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "cfe4c21e-a7ed-4166-98e7-fcbfb2b2f330",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "fd2c42e2-01e5-4855-b83d-d37645dbbd64",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13041893924383,
+                      "y": -83.49789182129454,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3202012751574367,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b85b9766-de4c-4441-87d6-97ebcd2d90d1",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "d93db5dc-5eb6-4580-af5e-3157b95dcb17",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.130896712228044,
+                      "y": -83.49597873337979,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3181879510323147,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "da476ae1-ede5-4637-8af0-57fbfbe52ba3",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "38ece066-7aa7-41b2-bcb8-ad24161cf889",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.131359982403886,
+                      "y": -83.49409816308477,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31613710642923787,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "67039f99-be4a-4dda-973d-380076a55e69",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "ec150edc-3d37-46e8-a778-6e8460795f97",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13182344377516,
+                      "y": -83.49221681998341,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31579113822942767,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "29dfcccb-e3bf-47c9-83f4-92966bc29458",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "411b0acf-b22d-46a8-8dbd-104488d128f3",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13230390662909,
+                      "y": -83.49026197103355,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3154581031434429,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "6b5d67c9-f9ff-40e9-8ef3-d95a1c86a862",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "30ee3d5c-0dbc-4253-b707-c5262c2ab4f9",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.132784517734635,
+                      "y": -83.48830651974222,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31645321711474833,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "add79974-3c93-4f4a-b3fd-4b0850c45c24",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b9e7595a-413f-4083-9266-079e4f016128",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13334061457475,
+                      "y": -83.48605812762969,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3173181029885641,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "61203636-09f3-4313-ba5f-e8eeedd8d5c5",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "434a99de-e3f2-4db7-bb2a-c437fa519708",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13389661200377,
+                      "y": -83.483810138025,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31729517078870123,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "735681ce-e811-4545-a5d4-8ef9eba05a6a",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "45be02e6-6a16-4249-90e6-d092f851957c",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13438710909011,
+                      "y": -83.48182664980682,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31726918015925826,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "0e0db2f5-fffb-4d7c-92cc-6502f03bab81",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "2cb02a7b-d453-4231-b710-4a1b8b696cd3",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13487770581041,
+                      "y": -83.47984275925387,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3181308564605875,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "9b989543-7652-48db-b9f6-bd22875c51cc",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "0d1aa80c-1584-4bfa-a2c7-315708e30530",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.135352806488974,
+                      "y": -83.4779328539174,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.31902540828199877,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "ccc66690-b384-497f-8199-61e881949b0a",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "5560362a-ec27-4f50-ac9d-792e541a5584",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13582762956996,
+                      "y": -83.47602406701527,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3174518226472997,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "17877df4-9b8b-4533-86d0-92befa489b81",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "7dc34850-79eb-4b97-8e2d-65a4276dee31",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.136380479612306,
+                      "y": -83.47377967441722,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.3161121165845089,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "4c1bb928-9b4e-4f4b-aaa1-9ba12977b772",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "79350f4e-fdfd-4405-aada-27a11a61374d",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.1369411660227,
+                      "y": -83.47150649756699,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.378932784220381,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8f18e382-0983-4098-b291-0d5b1558703a",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "f941fe9b-9308-4ef8-a6f4-5d23eb7c6b6d",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13764378922721,
+                      "y": -83.46956740223662,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.4489874139573452,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b8e9ba5c-a547-40b7-b4bd-9c7feb04e9ff",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "abd11049-49c1-4e39-95c0-9eec8a5bcbb2",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13833653426343,
+                      "y": -83.46765822827963,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.450555948269663,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "9a6d081e-98c0-444f-9ee1-05e303942be0",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "dfda4c85-2cc6-43ea-ad32-892742a8bd15",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13892832419589,
+                      "y": -83.46604143430682,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.4524053300994142,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "fcd058bf-9768-40dc-bf5c-ac6023c7879a",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "22f04e1b-e260-4e91-b681-e597b1d0aea9",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13951950634523,
+                      "y": -83.4644263049308,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.45037749423036927,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b32919b5-f9a6-4e08-b4a9-60e95bf33e75",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "d2e85d9e-5cfb-4935-86fa-01101253d482",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.14040329587955,
+                      "y": -83.46199088390405,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": -0.449030064590342,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "14403351-6c4e-4a96-bc77-ec31a6ed9cfa",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "61dc4d5d-a42d-4bb4-90aa-77425c00f175",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.141050704120445,
+                      "y": -83.46240511609595,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.6925625889994502,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "2bf7b0e9-3b47-4c73-acfe-137d817f604e",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "aac4e7c5-6dca-4bb8-a005-31ed968c7eda",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.14016649365477,
+                      "y": -83.46484169506921,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.691215159359424,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "14bb3774-eeaa-4f1d-8b00-d901885ec074",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "ed54a896-f378-4713-9e97-8478e8439cdb",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13957467580411,
+                      "y": -83.46645856569319,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.689187323490379,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "4bfe704d-c24b-42cc-8f0a-714ecfcabb73",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "011ba1b7-10a6-47d6-94f7-bc70904da3f5",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13898346573657,
+                      "y": -83.46807377172037,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.6910367053201303,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "abedd643-9eb5-4ad9-8379-df2b6ac67ed3",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "97bd0b2a-928b-4f38-9559-de02ba59fcf4",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13829121077279,
+                      "y": -83.46998159776338,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.692605239632448,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "da42a7e6-360c-4a9e-a76d-b1e2bd4b9594",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "2c2d3510-54dc-4053-ae62-53bcba03f487",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.1376088339773,
+                      "y": -83.471859502433,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.762659869369412,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "cd984f85-6cb8-4498-a6ef-a99373599fd7",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "de654686-f753-4e9e-8c92-23b76444b7e1",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.137063520387706,
+                      "y": -83.47407632558279,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8254805370052845,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "8c3ff886-27e6-478f-aaab-031abe565253",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "092e0e9f-a9be-485e-8a84-d017cd63eb57",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.136510370430045,
+                      "y": -83.47632193298473,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8241408309424934,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b4d47afa-720f-452f-9d2d-8cd5ef58f848",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "3f425bdc-10cf-4444-b4c0-57c061c4e37b",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13603519351103,
+                      "y": -83.4782321460826,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8225672453077943,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "a39aa867-4ee3-4966-a87c-c2eaef7abf15",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b933b238-7e36-4ccd-a588-ccd51b2e31bd",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13556029418959,
+                      "y": -83.48014124074612,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8234617971292058,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "3782b3d1-6fea-4715-8abb-ea052f9ee2df",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "92b3b32e-ebd0-4a45-98a9-27b98c6548fc",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13506989090989,
+                      "y": -83.48212435019316,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.824323473430535,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "28ebc557-532d-4ee1-b7e7-cb0522a547bd",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "15630852-fa6d-4079-984d-36891f448273",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13457938799624,
+                      "y": -83.48410786197499,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.824297482801092,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "e2302684-0ded-4291-a863-36c3bbfd28dd",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "da793b3d-53dd-4e67-a715-c33d166520e2",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13402338542525,
+                      "y": -83.4863558723703,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.824274550601229,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "3886bddc-338e-40f0-9881-bd6788c68536",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "39a62862-ecf9-4d7f-a217-1a049edfe1da",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13346748226536,
+                      "y": -83.48860348025778,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.825139436475045,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "9b12acdc-90f7-400e-aa8c-8195c27fcf95",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "45d0f33e-92ee-465b-b3d1-070868a5df7e",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.132987093370915,
+                      "y": -83.49055802896645,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8261345504463504,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "e0854c91-7df3-46ff-94a3-ede276342b6a",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "ce5222f8-9c94-4263-9723-3cc3b37fcd28",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13250655622484,
+                      "y": -83.4925131800166,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8258015153603657,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "e219ed00-be38-4157-b2fa-85c95703a671",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "7e3dfd37-557c-4b86-9174-eae7117175ca",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.132043017596125,
+                      "y": -83.49439483691523,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8254555471605554,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "c6aa711e-df22-4ea7-b861-e0bc3ad49e38",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "e7fdd1aa-445b-4926-9483-cb61d3698027",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13157928777196,
+                      "y": -83.49627726662021,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8234047025574784,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "c54349a3-77d4-4540-ae4b-71d96aaa113c",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "c98a558d-1288-4f41-bdea-14f7f8e429a9",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13110106075617,
+                      "y": -83.49819217870545,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8213913784323568,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "bb5f0688-0fa5-4c06-930a-a5f007df2be9",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b53ae755-4f11-42fd-ac2b-b0cb4d615aff",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13062325462055,
+                      "y": -83.50010540019831,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.8231099277961413,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "614c2a39-22ac-435d-8915-54953e64eead",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "1f820aae-b96a-4727-baf6-91ad52731a18",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.13018696348594,
+                      "y": -83.50187355638661,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.824971537646586,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b6ea6967-89b4-4bf8-a4ff-1ae0d03b441d",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "6d165ce9-4974-413a-b463-bcebbb8fe97e",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12975026446325,
+                      "y": -83.50364336055266,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.823197419225161,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "4e8873b0-987d-4f10-a25d-e0f9b9c709ca",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "e9cdf4d2-8584-4742-91b0-9e123d148c2f",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.129310063805114,
+                      "y": -83.50540616649634,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.82141833750018,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "85a63947-ba86-4704-99e3-43e49107b66b",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "5be775fd-3d34-4136-827e-699ac9146c63",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.128864828031794,
+                      "y": -83.50718770177423,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.77795564592135,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "fc01ea9e-e337-4234-aa51-bcc589a6bf7b",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "c73d67a9-9378-4ecc-8bac-3856d48cb470",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12828421319659,
+                      "y": -83.50898562864188,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.736290563586357,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "f7b861af-c451-4135-9a19-56e71b52f453",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "7032aae6-4aab-48d8-8af8-8aa1be087716",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12770920175084,
+                      "y": -83.51076516406003,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.7362097854712872,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "a8c19e55-b291-4f15-863e-7d1d10b2c4e8",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "b06b9293-0140-4b90-91e6-cb135f8a9bbe",
+              "actionKey": "GotoWaypoint",
+              "args": {
+                "gotoWaypoint": {
+                  "waypoint": {
+                    "xy": {
+                      "x": 41.12709919095589,
+                      "y": -83.51265219745709,
+                      "frame": "GPS"
+                    },
+                    "z": {
+                      "value": 65,
+                      "frame": "WORLD_TAKEOFF"
+                    },
+                    "heading": {
+                      "value": 2.736133614315894,
+                      "frame": "GPS"
+                    },
+                    "gimbalPitch": {
+                      "value": -0.3490658503988659
+                    }
+                  },
+                  "motionArgs": {
+                    "traversalArgs": {
+                      "speed": 3,
+                      "heightMode": "GRADUAL",
+                      "ascendSpeed": 0,
+                      "descendSpeed": 0,
+                      "ignoreWaypointZ": false,
+                      "usePathfinder": false,
+                      "useGlobalPathfinder": false
+                    },
+                    "lookAtArgs": {
+                      "headingMode": "GRADUAL",
+                      "gimbalPitchMode": "GRADUAL",
+                      "ignoreTargetHeading": false,
+                      "ignoreTargetGimbalPitch": false
+                    }
+                  },
+                  "situationalAwarenessArgs": {
+                    "situationalAwarenessActions": {
+                      "zoomOut": true
+                    },
+                    "minWaypointTaskTime": 2
+                  },
+                  "preserveArScene": false,
+                  "freeLookMode": "UNKNOWN"
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            },
+            {
+              "actionUuid": "aa61ea6b-c76a-4b58-a648-dcae7d858c46",
+              "actionKey": "TakePhoto",
+              "args": {
+                "takePhoto": {
+                  "cameraSettings": {
+                    "zoomLevel": 1,
+                    "recordingMode": "PHOTO_HDR",
+                    "isoMode": "ISO_MODE_AUTO",
+                    "exposureMode": "EXP_MODE_AUTO",
+                    "awbMode": "AWB_MODE_AUTO",
+                    "eoSensor": "UNKNOWN",
+                    "compensationMode": "COMP_MODE_0"
+                  },
+                  "photoSettings": {
+                    "photoType": {
+                      "eoPhoto": true,
+                      "irPhoto": true
+                    },
+                    "photoFormat": {
+                      "format": "JPEG"
+                    },
+                    "photoFormatSettings": {
+                      "eoPhotoFormats": [
+                        "JPEG"
+                      ],
+                      "irPhotoFormats": [
+                        "JPEG"
+                      ]
+                    },
+                    "photoQuality": "0",
+                    "publishThumbnail": false,
+                    "thumbnailWidth": 0
+                  },
+                  "waitForFocusToConverge": true
+                },
+                "photoOnCompletion": false,
+                "isSkippable": false
+              }
+            }
+          ],
+          "name": "Structure inspection draft",
+          "hideReverseUi": false
+        },
+        "photoOnCompletion": false,
+        "isSkippable": false
+      }
+    }
+  ],
+  "postMissionAction": "DEFAULT_RETURN",
+  "lostConnectionAction": "RETURN_TO_HOME",
+  "postFailureAction": "DEFAULT_RETURN",
+  "dockMission": true,
+  "autoStart": false,
+  "showSkipUi": true,
+  "expectedGpsOrigin": {
+    "lat": 41.1400564,
+    "lon": -83.4609262,
+    "gpsAltitude": 241.9390811920166,
+    "gpsHeading": 1.5742025757816176
+  },
+  "recordingMode": "VIDEO_1080P_30FPS",
+  "autonomousAbortMissionOnFailedAction": true,
+  "useRtxSettings": true,
+  "rtxSettings": {
+    "faceForward": true,
+    "minimumHeight": 91.44,
+    "waitTime": 60,
+    "speed": 11.623021,
+    "globalPathfinderReturnHeightAgl": 0,
+    "ascendFromCurrentHeight": false,
+    "landOnceReturned": false,
+    "waitTimeBeforeLand": 0,
+    "dontReturnOnLostComms": false,
+    "useBacktrack": false,
+    "useGlobalPathfinder": false,
+    "lowBatteryAutoRth": false,
+    "dontDescend": false,
+    "dontReturnOnLostCommsInAtti": false,
+    "attiReturnAltAgl": 0,
+    "cancelAttiReturnWithTimer": false,
+    "cancelAttiReturnWaitTime": 0
+  },
+  "useRecordingMode": true,
+  "missionRunnerSkill": "MISSION_RUNNER",
+  "needsGpsInitializationMove": false,
+  "returnToPathOnResume": false,
+  "useIsoMode": false,
+  "isoMode": "ISO_MODE_AUTO",
+  "useExposureMode": false,
+  "exposureMode": "EXP_MODE_AUTO",
+  "useAwbMode": false,
+  "awbMode": "AWB_MODE_AUTO",
+  "useCompensationMode": false,
+  "compensationMode": "COMP_MODE_0",
+  "enableFaultBasedDirectRtd": false,
+  "needsNcpgInitialization": false,
+  "videoBitrateOverride": 0,
+  "navigationModeOverrideEnabled": false,
+  "navigationModeOverride": "UNKNOWN",
+  "needsGlobalGraph": false,
+  "disableStrobeLights": false,
+  "skipUpload": false,
+  "skipPausedState": false,
+  "uuid": "1f1e1450-5ee2-4fcf-94e6-b9281555acc8"
+}

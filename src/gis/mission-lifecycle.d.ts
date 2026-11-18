@@ -1,0 +1,1 @@
+export function missionAppearance(mission:{start?:string;end?:string;status?:string;result?:string}|undefined,stage?:string,now?:number):{state:string;opacity:number;visible:boolean;ageDays:number|null};

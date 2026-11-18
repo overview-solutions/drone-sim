@@ -197,3 +197,117 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .notam-draft{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0}.notam-draft label{display:flex;gap:5px;align-items:center}.notam-draft input{max-width:185px}
 
 .mission-notams[open]{flex-basis:100%;padding:8px;border:1px solid #245746}.notice-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px;max-height:220px;overflow:auto}.notice-cards>div{padding:6px;background:#14352b;border-radius:5px}.notice-cards small{display:block;margin-top:4px}
+
+
+
+.vehicle-marker {color:var(--fixed-wing);border-color:var(--fixed-wing)} .vehicle-marker.selected {background:var(--fixed-wing);color:#102024;border-color:white}
+
+/* The workspace shell supplies the single Flightline header. */
+body.flightline-embedded #app>header {display:none!important}
+body.flightline-embedded #app>main {height:100dvh;min-height:0}
+
+.workspace-dock .fleet-overlay,.workspace-dock .recency-legend,.workspace-dock .drone-toolbar,.workspace-dock .review-panel {display:none!important}
+
+.workspace-dock .review-dock,.workspace-dock .mission-timeline,.workspace-dock .disaster-strip {display:none!important}
+.workspace-dock .inspection-head>:not(.workspace-navigation):not(.basemap-control) {display:none!important}
+.workspace-dock .inspection-workspace {flex:1;min-height:0}
+.workspace-dock .inspection-canvas {height:100%;min-height:0!important}
+
+.dock-map-buttons{position:absolute;inset:0;pointer-events:none;z-index:5}
+.dock-map-button{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;border:1px solid #7adaca;border-radius:20px;background:#143535ee;color:#a6f0df;font-size:11px;padding:5px 9px;white-space:nowrap;box-shadow:0 0 0 4px #7adaca15}
+.dock-map-button:hover,.dock-map-button:focus-visible{background:#7adaca;color:#102024;outline:2px solid white}
+[data-stage=planning] .mission-timeline,[data-stage=planning] .fleet-overlay{display:none!important}
+
+/* The shared profile uses dock draft data while a dock mission is open. */
+.workspace-dock[data-stage=planning] .mission-timeline.dock-mission-profile{display:block!important}
+.mission-timeline.dock-mission-profile>.profile-workspace,.mission-timeline.dock-mission-profile .profile-levels,.mission-timeline.dock-mission-profile .profile-scope,.mission-timeline.dock-mission-profile>.asset-evidence{display:none!important}
+.mission-timeline.collapsed .dock-profile-body{display:none}
+.dock-profile-body .timeline-options input{flex:1;min-width:80px;accent-color:#7adaca}
+.dock-profile-summary{margin:7px 0;color:#7adaca;font-size:12px}
+
+body.flightline-embedded #inspection-host:not([data-stage=simulations]) .fleet-overlay,body.flightline-embedded #inspection-host:not([data-stage=simulations]) .fleet-live,body.flightline-embedded #inspection-host:not([data-stage=simulations]) .disaster-strip,body.flightline-embedded #inspection-host:not([data-stage=simulations]) .recency-legend,body.flightline-embedded #inspection-host:not([data-stage=simulations]) .drone-toolbar{display:none!important}
+
+body.flightline-embedded .basemap-control,body.flightline-embedded .aep-network-control,body.flightline-embedded .osm-tools{display:none!important}
+
+/* Tasks is the shared home for findings and awareness controls in every mode. */
+body.flightline-embedded #inspection-host .drone-toolbar{display:flex!important}
+body.flightline-embedded #inspection-host:not([data-stage=simulations]) .drone-toolbar>:not(.tasks-toggle){display:none!important}
+.workspace-dock .review-dock:not([hidden]){display:flex!important}
+.task-findings{border-top:1px solid #345b50;margin-top:16px;padding-top:10px}
+.task-findings h3{font-size:12px;color:#b0cec3;margin:4px 0 10px}
+.task-findings .equipment-panel,.task-findings .vegetation-panel,.task-findings .airspace-panel{position:static!important;width:auto!important;max-width:none;box-shadow:none;margin:8px 0}
+
+.task-findings-content{display:flex;flex-direction:column;gap:8px;min-width:0}
+.review-dock .task-menu-content:not([hidden]){display:flex;flex-direction:column;overflow:auto;gap:12px}
+.review-dock .task-menu-content .followup-tasks{flex:0 0 auto;min-height:180px}
+.task-menu-content .task-findings{flex:0 0 auto}
+body.flightline-embedded .equipment-panel:not(.task-findings .equipment-panel),body.flightline-embedded .vegetation-panel:not(.task-findings .vegetation-panel){display:none!important}
+
+body.flightline-embedded #inspection-host[data-stage=operations] #world-ohio{display:none!important}
+.simulation-playback{position:absolute;bottom:12px;left:12px;z-index:8;display:flex;gap:12px;align-items:center;background:#102c29e8;border:1px solid #365b50;border-radius:8px;padding:6px 9px;font-size:11px}
+.simulation-playback button,.simulation-playback select{padding:5px 8px;font-size:11px}.simulation-playback label{display:flex;align-items:center;gap:6px}
+body.flightline-embedded #inspection-host:not([data-stage=simulations]) .simulation-playback{display:none}
+body.flightline-embedded #inspection-host:not([data-stage=review]) .disaster-strip{display:none!important}
+body.flightline-embedded #inspection-host[data-stage=review] .disaster-strip{display:flex!important}
+
+/* State navigation uses the map itself in every Flightline workflow. */
+body.flightline-embedded #world-ohio{display:none!important}
+body.flightline-embedded .inspection-head{min-height:0;padding:0;gap:0}
+body.flightline-embedded .inspection-head:has(>.fleet-live:not([hidden])){gap:6px}
+
+/* Hazard UI floats within the canvas; it never participates in map sizing. */
+.disaster-overlay{position:absolute;top:12px;left:64px;right:12px;z-index:12;pointer-events:none;max-height:calc(100% - 24px);overflow:auto}
+.disaster-overlay>*{pointer-events:auto}
+.disaster-overlay .disaster-strip{box-sizing:border-box;min-height:36px;flex-wrap:wrap;justify-content:flex-start;width:fit-content;max-width:100%;background:#102c29ed;border:1px solid #365b50;border-radius:8px;box-shadow:0 3px 12px #0004;padding:6px 9px}
+.disaster-overlay .storm-weather{box-sizing:border-box;margin-top:8px;max-width:100%;max-height:40vh;overflow:auto;border:1px solid #365b50;border-radius:8px;background:#14352bf2}
+body.flightline-embedded #inspection-host:not([data-stage=review]) .disaster-overlay{display:none}
+
+/* One compact map toolbar for simulation playback and navigation. */
+body.flightline-embedded #inspection-host[data-stage=simulations] #vehicle-picker,body.flightline-embedded #inspection-host[data-stage=simulations] .tasks-toggle{display:none!important}
+body.flightline-embedded #inspection-host[data-stage=simulations] .drone-toolbar:has(>.tasks-toggle){display:none!important}
+.simulation-playback{left:50%;transform:translateX(-50%);bottom:12px;padding:5px;gap:4px;border-radius:10px;flex-wrap:nowrap;white-space:nowrap}
+.simulation-playback button{width:36px;height:34px;padding:0;font-size:22px;line-height:1;border:0;background:transparent;color:#9ae6d4}
+.simulation-playback button:hover{background:#36574f}
+.simulation-playback label{font-size:19px;padding:0 5px;border-left:1px solid #395b51;border-right:1px solid #395b51;gap:3px}
+.simulation-playback select{width:auto;min-width:54px;margin:0;font-size:12px;border:0;background:transparent}
+
+.disaster-details{min-width:0;overflow:auto}
+.disaster-details .storm-weather,.disaster-details .flood-scenario{position:static!important;display:flex;flex-direction:column;align-items:stretch;gap:12px;width:auto;max-width:100%;max-height:none;margin:0 0 12px;padding:8px;border:0;background:transparent;box-shadow:none}
+.disaster-details [hidden]{display:none!important}
+.disaster-details select,.disaster-details input{max-width:100%;box-sizing:border-box}
+.disaster-details .storm-weather>span{padding:6px 8px;line-height:1.5}
+.disaster-details p{white-space:pre-wrap;line-height:1.5}
+
+/* Traffic is represented directly on the simulation map, without a header widget. */
+body.flightline-embedded .airspace-panel{display:none!important}
+
+/* Edge-to-edge canvas with a floating, collapsible inspector. */
+body.flightline-embedded #inspection-view{padding:0!important}
+body.flightline-embedded .inspection-workspace{position:relative;display:block;gap:0;min-height:0;flex:1}
+body.flightline-embedded .inspection-workspace>.inspection-canvas{position:absolute;inset:0;width:100%!important;height:100%!important;min-height:0!important;border:0;border-radius:0}
+body.flightline-embedded .inspection-workspace>.review-dock{position:absolute;top:10px;right:10px;bottom:10px;width:340px;max-width:calc(100% - 68px);height:auto;z-index:18;background:#091b17f2;box-shadow:0 8px 28px #0005;flex:none}
+body.flightline-embedded .inspection-workspace>.tasks-toggle{position:absolute;right:12px;top:12px;z-index:17;padding:9px 12px;box-shadow:0 3px 12px #0004}
+body.flightline-embedded #inspection-host[data-stage=simulations] .tasks-toggle{display:none!important}
+body.flightline-embedded .inspection-workspace>.review-dock[hidden]{display:none!important}
+body.flightline-embedded .mission-timeline{margin:0;border-radius:0;border-left:0;border-right:0}
+
+/* Mission profile is a bottom drawer over the unchanged map viewport. */
+body.flightline-embedded #inspection-host{position:relative}
+body.flightline-embedded #inspection-host .mission-timeline{display:block!important;position:absolute;left:0;right:0;bottom:0;z-index:22;height:min(350px,45vh);max-height:min(350px,45vh);padding:12px;background:#102c29f5;border:1px solid #42675b;border-radius:0;overflow:auto}
+body.flightline-embedded #inspection-host .mission-timeline.collapsed{display:none!important}
+body.flightline-embedded .profile-tab{display:block;position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:23;border-radius:9px 9px 0 0;background:#163a31f5;border:1px solid #527c6c;border-bottom:0;padding:9px 22px;font-size:12px;box-shadow:0 -3px 12px #0003}
+body.flightline-embedded #inspection-host:has(.mission-timeline:not(.collapsed))>.profile-tab{bottom:min(350px,45vh)}
+body.flightline-embedded .mission-timeline .timeline-title>.timeline-collapse{display:none}
+body.flightline-embedded .simulation-playback{bottom:48px}
+body.flightline-embedded .drone-toolbar{position:absolute!important;left:12px;bottom:48px;z-index:15;padding:0;background:transparent;pointer-events:none}
+body.flightline-embedded .drone-toolbar>*{pointer-events:auto}
+body.flightline-embedded .drone-toolbar .inspection-tools{position:static!important;bottom:auto;padding:0;margin:0}
+body.flightline-embedded .drone-toolbar #inspect-play{box-shadow:0 3px 12px #0004}
+
+body.flightline-embedded .profile-tab{left:auto;right:16px;transform:none}
+body.flightline-embedded .drone-toolbar{bottom:112px}
+
+/* Legacy scene controls must not reserve a strip above the map. */
+body.flightline-embedded .inspection-head{position:absolute;top:0;left:0;right:0;z-index:16;height:0;min-height:0;margin:0;padding:0;border:0;pointer-events:none;overflow:visible}
+body.flightline-embedded .inspection-head>*{pointer-events:auto}
+body.flightline-embedded #inspection-host,.flightline-embedded #inspection-view{margin:0;border:0;gap:0}

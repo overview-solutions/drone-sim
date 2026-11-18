@@ -13,6 +13,7 @@ export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  const cos=Math.cos(origin[1]*Math.PI/180),project=(lon:number,lat:number)=>new THREE.Vector3((lon-origin[0])*111320*cos,0,-(lat-origin[1])*111320);
  function clear(){group.traverse(o=>{const m=o as THREE.Mesh;m.geometry?.dispose();if(m.material)for(const material of Array.isArray(m.material)?m.material:[m.material])material.dispose();});group.clear();}
  toggle.onchange=()=>group.visible=toggle.checked;
+ const receive=(event:MessageEvent)=>{if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='flightline:layers'||typeof event.data.layers?.osm!=='boolean')return;toggle.checked=event.data.layers.osm;group.visible=toggle.checked;};window.addEventListener('message',receive);
  button.onclick=async()=>{
  const lon=origin[0]+center.x/(111320*cos),lat=origin[1]-center.z/111320,dy=Number(ui.querySelector('select')!.value)/111320,dx=dy/cos;
  const bbox=`${lat-dy},${lon-dx},${lat+dy},${lon+dx}`;
@@ -74,5 +75,5 @@ export function osmContext(scene:THREE.Scene,host:HTMLElement,origin:number[]){
  status.textContent=`${buildings} buildings · ${power} power · ${trees} trees · ${water} water · ${roads} roads · ${paths} paths · ${green} green areas · ${estimated} estimated heights · © OpenStreetMap contributors${fromCache?' · cached / imported':''}`;
  }catch{if(!disposed)status.textContent='OSM unavailable. Existing context retained; try again.';}finally{clearTimeout(timeout);if(!disposed)button.disabled=false;}
  };
- return {crossings:()=>crossings,shieldingAssets:()=>shieldingAssets,loadUrban(){imported=urbanBuildings;button.click();},update(target:THREE.Vector3){center.copy(target);},dispose(){disposed=true;controller?.abort();clear();scene.remove(group);ui.remove();}};
+ return {crossings:()=>crossings,shieldingAssets:()=>shieldingAssets,loadUrban(){imported=urbanBuildings;button.click();},update(target:THREE.Vector3){center.copy(target);},dispose(){window.removeEventListener('message',receive);disposed=true;controller?.abort();clear();scene.remove(group);ui.remove();}};
 }

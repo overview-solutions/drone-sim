@@ -1,0 +1,114 @@
+{
+  "schema": "flightline-ohio-mission-drafts/1.0",
+  "dock": "OH-001-X10Dock-xa63",
+  "generated": "2026-11-18T01:36:40.331Z",
+  "status": "LOCAL DRAFTS \u2014 not uploaded or scheduled",
+  "limitations": [
+    "OSM ways are candidate line segments, not confirmed circuit identities; overlapping candidates may describe the same circuit.",
+    "Structure heights, conductor elevations, terrain and actual obstacle clearance are unknown.",
+    "WORLD_TAKEOFF 65 m and 40 m stand-off are configurable planning assumptions.",
+    "OSM-only targets are corridor samples, not claimed pole locations.",
+    "Automatic return and lost-link behavior are inherited from the supplied reference; validate with Skydio before use."
+  ],
+  "missions": [
+    {
+      "circuitId": "osm/way/8773591",
+      "name": "osm/way/8773591",
+      "status": "draft",
+      "file": "osm_way_8773591.json",
+      "preview": "osm_way_8773591.geojson",
+      "photos": 32,
+      "targets": 16,
+      "targetKind": "corridor_sample",
+      "summary": "32 photos \u00b7 16 outbound / 16 return \u00b7 4.66 km \u00b7 \u22650.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/103812703",
+      "name": "osm/way/103812703",
+      "status": "draft",
+      "file": "osm_way_103812703.json",
+      "preview": "osm_way_103812703.geojson",
+      "photos": 30,
+      "targets": 15,
+      "targetKind": "corridor_sample",
+      "summary": "30 photos \u00b7 15 outbound / 15 return \u00b7 4.30 km \u00b7 \u22650.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/103812704",
+      "name": "osm/way/103812704",
+      "status": "draft",
+      "file": "osm_way_103812704.json",
+      "preview": "osm_way_103812704.geojson",
+      "photos": 62,
+      "targets": 31,
+      "targetKind": "corridor_sample",
+      "summary": "62 photos \u00b7 31 outbound / 31 return \u00b7 9.10 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/104228360",
+      "name": "osm/way/104228360",
+      "status": "draft",
+      "file": "osm_way_104228360.json",
+      "preview": "osm_way_104228360.geojson",
+      "photos": 54,
+      "targets": 27,
+      "targetKind": "corridor_sample",
+      "summary": "54 photos \u00b7 27 outbound / 27 return \u00b7 9.08 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/937343535",
+      "name": "osm/way/937343535",
+      "status": "draft",
+      "file": "osm_way_937343535.json",
+      "preview": "osm_way_937343535.geojson",
+      "photos": 4,
+      "targets": 2,
+      "targetKind": "corridor_sample",
+      "summary": "4 photos \u00b7 2 outbound / 2 return \u00b7 0.40 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/937453473",
+      "name": "osm/way/937453473",
+      "status": "draft",
+      "file": "osm_way_937453473.json",
+      "preview": "osm_way_937453473.geojson",
+      "photos": 4,
+      "targets": 2,
+      "targetKind": "corridor_sample",
+      "summary": "4 photos \u00b7 2 outbound / 2 return \u00b7 0.26 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/937453475",
+      "name": "osm/way/937453475",
+      "status": "draft",
+      "file": "osm_way_937453475.json",
+      "preview": "osm_way_937453475.geojson",
+      "photos": 4,
+      "targets": 2,
+      "targetKind": "corridor_sample",
+      "summary": "4 photos \u00b7 2 outbound / 2 return \u00b7 0.25 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/937469703",
+      "name": "osm/way/937469703",
+      "status": "draft",
+      "file": "osm_way_937469703.json",
+      "preview": "osm_way_937469703.geojson",
+      "photos": 4,
+      "targets": 2,
+      "targetKind": "corridor_sample",
+      "summary": "4 photos \u00b7 2 outbound / 2 return \u00b7 0.27 km \u00b7 \u22651.0 m from inferred spans along preview connections"
+    },
+    {
+      "circuitId": "osm/way/937473948",
+      "name": "osm/way/937473948",
+      "status": "draft",
+      "file": "osm_way_937473948.json",
+      "preview": "osm_way_937473948.geojson",
+      "photos": 4,
+      "targets": 2,
+      "targetKind": "corridor_sample",
+      "summary": "4 photos \u00b7 2 outbound / 2 return \u00b7 0.43 km \u00b7 \u22650.0 m from inferred spans along preview connections"
+    }
+  ]
+}

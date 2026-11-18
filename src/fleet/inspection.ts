@@ -1,8 +1,15 @@
+import {notamLayer} from './notam-layer';
+import {dockAssets} from './dock-assets';
+import {planningAirports} from './planning-airports';
+import {aepNetwork} from './aep-network';
+import {workspaceMap} from './workspace-map';
+import {GIS_SPEC,configureControls,easeCamera} from '../gis/core.js';
+import {captureFootprints} from './capture-footprints';
 import {rayKingStructures} from './ray-king-structures';
 import {missionNotams} from './mission-notams';
 import {rayKingCloud} from './ray-king';
 import {disasters} from './disasters';
-import {inspectionIndex,extraCapturePriority} from './inspection-index';
+import {inspectionIndex,extraCapturePriority,currentSpanIndex} from './inspection-index';
 import {assetPassages} from './history-backfill';
 import {SpanCoverage} from './span-coverage';
 import {reviewNavigation} from './review-navigation';
@@ -43,15 +50,15 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  (host.querySelector('#un-export') as HTMLButtonElement).onclick=download;
  let renderer:THREE.WebGLRenderer;
  try{renderer=new THREE.WebGLRenderer({antialias:true,logarithmicDepthBuffer:true});}catch{canvasHost.innerHTML='<p>WebGL is unavailable. The Ohio map and UN export remain available.</p>';return {dispose(){},pack:network.pack};}
- renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0x102330);renderer.autoClear=false;canvasHost.prepend(renderer.domElement);
+ renderer.setPixelRatio(Math.min(devicePixelRatio,GIS_SPEC.camera.pixelRatioCap));renderer.setClearColor(0x102330);renderer.autoClear=false;canvasHost.prepend(renderer.domElement);
  const scene=new THREE.Scene();scene.add(new THREE.HemisphereLight(0xc9eaff,0x152922,2));const sun=new THREE.DirectionalLight(0xffedcd,2);sun.position.set(300,800,400);scene.add(sun);
  const recordedLidar=rayKingCloud(scene,banner,line);
  if(line.id===179559746)rayKingStructures(scene,banner,network);
  if(line.id===179559746)(host.querySelector('#show-lidar') as HTMLInputElement).checked=false;
- const camera=new THREE.PerspectiveCamera(55,1,1,2000000),gimbal=new THREE.PerspectiveCamera(14,1,.1,12000);
+ const camera=new THREE.PerspectiveCamera(GIS_SPEC.camera.fov,1,1,2000000),gimbal=new THREE.PerspectiveCamera(14,1,.1,12000);
  camera.layers.enable(1);
  const mapSurface=document.createElement('div');mapSurface.className='map-interaction';canvasHost.append(mapSurface);
- const controls=new OrbitControls(camera,mapSurface);controls.enableDamping=true;controls.minDistance=5;controls.maxDistance=900000;controls.maxPolarAngle=Math.PI*.495;controls.zoomSpeed=1.7;
+ const controls=new OrbitControls(camera,mapSurface);controls.enableDamping=true;controls.minDistance=5;controls.maxDistance=900000;controls.maxPolarAngle=Math.PI*.495;controls.zoomSpeed=1.7;configureControls(controls);
 
  let followedVehicle:string|null=null;
  const followAnchor=new THREE.Vector3();let anchorReady=false,acquiring=false;
@@ -72,7 +79,7 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  const world=worldData?addWorld(scene,network.origin,worldData):undefined;
  let transition:{position:THREE.Vector3;target:THREE.Vector3}|undefined;
  controls.addEventListener('start',()=>transition=undefined);
- function view(mode:string){review?.hide();followedVehicle=null;followFlight=mode==='flight';if(mode==='flight'){transition=undefined;startTracking();return;}stopTracking();const target=mode==='ohio'&&world?world.center:new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p))).getCenter(new THREE.Vector3());const extent=mode==='ohio'?480000:Math.max(800,new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p))).getSize(new THREE.Vector3()).length());transition={target,position:target.clone().add(new THREE.Vector3(0,extent,extent*.55))};}
+ function view(mode:string){review?.hide();followedVehicle=null;followFlight=mode==='flight';if(mode==='flight'){transition=undefined;startTracking();return;}stopTracking();const target=mode==='ohio'&&world?world.center:new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p))).getCenter(new THREE.Vector3());const extent=mode==='ohio'?960000:Math.max(800,new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p))).getSize(new THREE.Vector3()).length());transition={target,position:target.clone().add(new THREE.Vector3(0,extent,extent*.55))};}
  (host.querySelector('#world-ohio') as HTMLButtonElement).onclick=()=>view('ohio');(host.querySelector('#world-corridor') as HTMLButtonElement).onclick=()=>view('corridor');(host.querySelector('#world-follow') as HTMLButtonElement).onclick=()=>view('flight');
  const selectedRoute=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0x9df3cf,depthTest:false}));scene.add(selectedRoute);
  const missionBox=new THREE.LineLoop(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0xffdc84,depthTest:false,transparent:true,opacity:.85}));missionBox.userData.sensorIgnore=true;missionBox.visible=false;missionBox.renderOrder=8;scene.add(missionBox);
@@ -96,6 +103,20 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  for(const splice of network.splices){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.35,.35,2,10),steel);mesh.position.set(...splice.position);const a=network.towers[splice.fromTower].attachments[1].position,b=network.towers[splice.toTower].attachments[1].position;mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(b[0]-a[0],b[1]-a[1],b[2]-a[2]).normalize());mesh.userData.equipmentTower=splice.fromTower;mesh.userData.equipmentPhase=3;mesh.userData.componentId=splice.id;scene.add(mesh);}
  const bound=new THREE.Box3().setFromPoints(network.locations.map(p=>new THREE.Vector3(...p)));const center=bound.getCenter(new THREE.Vector3());const ground=new THREE.Mesh(new THREE.PlaneGeometry(2000000,2000000),new THREE.MeshStandardMaterial({color:0x213d38,roughness:1}));ground.renderOrder=-20;ground.rotation.x=-Math.PI/2;ground.position.set(center.x,-.2,center.z);scene.add(ground);
  const baseLayer=basemap(scene,canvasHost,network.origin);
+ const aepLines=aepNetwork(scene,banner,network.origin);
+ const airportsLayer=planningAirports(scene,host,network.origin);
+ const faaNotams=notamLayer(scene,host,network.origin,points=>{if(!points.length)return;const box=new THREE.Box3().setFromPoints(points),target=box.getCenter(new THREE.Vector3()),distance=Math.max(600,box.getSize(new THREE.Vector3()).length()*1.8);stopTracking();transition={target,position:target.clone().add(new THREE.Vector3(0,1,.55).normalize().multiplyScalar(distance))};});
+ const dockCircuits=dockAssets(scene,host,network.origin,points=>{if(!points.length)return;const bounds=new THREE.Box3().setFromPoints(points);const target=bounds.getCenter(new THREE.Vector3()),distance=Math.max(200,bounds.getSize(new THREE.Vector3()).length()*1.8);stopTracking();transition={target,position:target.clone().add(new THREE.Vector3(0,1,.55).normalize().multiplyScalar(distance))};});
+ let workspaceFlight:{start:number;from:THREE.Vector3;target:THREE.Vector3;direction:THREE.Vector3;fromDistance:number;distance:number}|undefined;
+ controls.addEventListener('start',()=>{workspaceFlight=undefined;controls.enableDamping=true;});
+ const workspace=workspaceMap(scene,canvasHost,camera,controls,network.origin,(target,distance)=>{
+   stopTracking();review?.hide();transition=undefined;
+   const offset=camera.position.clone().sub(controls.target);
+   // Keep an aerial viewing angle during large geographic flights.
+   offset.y=Math.max(Math.abs(offset.y),Math.hypot(offset.x,offset.z)*1.25,1);
+   controls.enableDamping=false;
+   workspaceFlight={start:performance.now(),from:controls.target.clone(),target,direction:offset.normalize(),fromDistance:camera.position.distanceTo(controls.target),distance};
+ });
  const osmLayer=osmContext(scene,canvasHost,network.origin);if(line.id===-1001)osmLayer.loadUrban();
  const shield=shielding(scene,canvasHost,[...network.spans.map(s=>({id:s.id,kind:'Modeled transmission',points:s.points.map(p=>new THREE.Vector3(...p)),heightKnown:true})),...(worldData?.lines.filter(l=>l.id!==line.id).map(l=>({id:`OSM way/${l.id}`,kind:'Other power line',points:l.coords.map(p=>world!.project(p,0)),heightKnown:false}))??[])],()=>osmLayer.shieldingAssets());
  const grid=new THREE.GridHelper(10000,100,0x3b5e57,0x294b44);grid.position.copy(center);scene.add(grid);
@@ -136,6 +157,7 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  transition={target,position:target.clone().addScaledVector(side,distance)};return;
  }
  const aspect=Math.max(.1,canvasHost.clientWidth/Math.max(1,canvasHost.clientHeight)),half=THREE.MathUtils.degToRad(camera.fov/2),angle=Math.min(half,Math.atan(Math.tan(half)*aspect)),distance=Math.max(180,size.length()/2/Math.sin(angle)*1.1);transition={target,position:target.clone().add(new THREE.Vector3(0,1,.45).normalize().multiplyScalar(distance))};}
+ const exposures=captureFootprints(scene,droneBar,`${worldData?.activeVehicle??'demo'}:${line.id}`);
  const notices=missionNotams(scene,banner,network.origin,worldData,line,frameReview);
  const hazards=disasters(scene,canvasHost,network.origin,frameReview,worldData?.lines??[]);
  review=reviewNavigation(scene,canvasHost,droneBar,network,frameReview,()=>[...(canopy?.events()??[]),...(faults?.events()??[])],i=>[-1,0,1,2].every(j=>captured.has(`${i}:${j}`))&&(!network.splices.some(s=>s.fromTower===i)||captured.has(`${i}:3`)),id=>id.startsWith('EQUIP-')?faults?.select(id):canopy?.select(id),worldData?.fleet?.().find(v=>v.id===worldData.activeVehicle)?.route??[],i=>line.id===179559746||scannedSpans.has(i),()=>[...osmLayer.crossings(),...(worldData?.lines.filter(l=>l.id!==line.id).map(l=>({id:'OSM way/'+l.id,kind:'power',points:l.coords.map(p=>world!.project(p,0))}))??[])]);
@@ -172,10 +194,15 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  const flightTools=document.createElement('div');flightTools.className='flight-mode-tools';droneBar.append(flightTools);
  for(const selector of ['#camera-toggle','.mission-settings','.contingency-controls','.aircraft-details','#demo-return']){const control=host.querySelector(selector);if(control)flightTools.append(control);}
  droneBar.prepend(host.querySelector('#vehicle-picker')!);
- const layers=document.createElement('details');layers.className='operator-drawer';layers.innerHTML='<summary>Layers & findings</summary><div class="operator-drawer-content"></div>';banner.append(layers);
+ const layers=document.createElement('div');layers.className='task-findings';const findingsTitle=document.createElement('h3');findingsTitle.textContent='Findings & awareness';layers.append(findingsTitle);const findingsContent=document.createElement('div');findingsContent.className='task-findings-content';layers.append(findingsContent);(review?.taskHost??droneBar).append(layers);
  banner.append(canvasHost.querySelector('.basemap-control')!);
- const osmTools=document.createElement('details');osmTools.className='operator-drawer';osmTools.innerHTML='<summary>OSM layers</summary><div class="operator-drawer-content"></div>';osmTools.querySelector('.operator-drawer-content')!.append(canvasHost.querySelector('.osm-context')!);banner.append(osmTools);
- for(const tool of Array.from(canvasHost.querySelectorAll('.equipment-panel,.vegetation-panel,.airspace-panel')))layers.querySelector('.operator-drawer-content')!.append(tool);
+ const osmTools=document.createElement('details');osmTools.className='operator-drawer osm-tools';osmTools.innerHTML='<summary>OSM layers</summary><div class="operator-drawer-content"></div>';osmTools.querySelector('.operator-drawer-content')!.append(canvasHost.querySelector('.osm-context')!);banner.append(osmTools);
+ for(const tool of Array.from(canvasHost.querySelectorAll('.equipment-panel,.vegetation-panel,.airspace-panel')))findingsContent.append(tool);
+ const simulationToolbar=canvasHost.querySelector<HTMLElement>('.simulation-playback');
+ if(simulationToolbar){
+  simulationToolbar.setAttribute('role','toolbar');simulationToolbar.setAttribute('aria-label','Simulation controls');
+  for(const [id,label,icon]of [['world-follow','Follow aircraft','◎'],['mission-overview','Mission outline','◇']]){const button=host.querySelector<HTMLButtonElement>('#'+id);if(button){button.textContent=icon;button.title=label;button.setAttribute('aria-label',label);simulationToolbar.append(button);}}
+ }
  const sensors=sensorOverlay(scene,plane,id=>canopy?.observe(id));
  const targetMarker=new THREE.Mesh(new THREE.SphereGeometry(1.2,12,8),new THREE.MeshBasicMaterial({color:0xffde7c,wireframe:true}));scene.add(targetMarker);
  const aim=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:0xffd47b,transparent:true,opacity:.7}));scene.add(aim);
@@ -189,6 +216,7 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  (host.querySelector('#inspect-reset') as HTMLButtonElement).onclick=()=>{resetRoute();progress=0;elapsed=0;resetCapture();running=true;view('flight');host.querySelector('#inspect-play')!.textContent='Pause mission';};
  if(worldData){
  const play=host.querySelector('#inspect-play') as HTMLButtonElement;play.textContent='Follow aircraft';play.onclick=()=>{const id=worldData.activeVehicle||worldData.fleet?.().find(v=>v.stage==='Inspecting')?.id;if(id){if(id===worldData.activeVehicle){followedVehicle=id;startTracking();}else worldData.selectVehicle?.(id);}};
+ if(simulationToolbar){play.classList.remove('primary');play.textContent='◎';play.title='Follow aircraft';play.setAttribute('aria-label','Follow aircraft');simulationToolbar.insertBefore(play,simulationToolbar.querySelector('#mission-overview'));}
  (host.querySelector('#demo-return') as HTMLElement).hidden=true;
  (host.querySelector('#world-follow') as HTMLElement).hidden=true;
  (host.querySelector('#inspect-reset') as HTMLButtonElement).textContent='Replay selected from launch';
@@ -232,9 +260,11 @@ p.y=Math.max(1.5,p.y);plane.position.copy(p);const bank=THREE.MathUtils.lerp(pla
  if(aimingAllowed&&phase==='auto')for(const splice of network.splices){const i=splice.fromTower,key=`${i}:3`;if(captured.has(key))continue;const delta=new THREE.Vector3(...splice.position).sub(p),distance=delta.length();if(canPreposition(delta.dot(tangent),distance,acquisitionMode)&&(key===activeKey||distance<best)&&`${idx}:${attachmentIndex}`!==activeKey){idx=i;attachmentIndex=3;best=distance;}}
  let supplemental=false;
  const requiredSlack=idx>=0?Math.max(0,(best-650)/Math.max(1,mph*.44704)):60;
- if(running&&flightStage==='INSPECTING'&&requiredSlack>14&&elapsed-lastExtra>=10){
+ const currentSpan=currentSpanIndex(network.towers.map(t=>t.position),p.toArray());
+ if(running&&flightStage==='INSPECTING'&&requiredSlack>14){
   const direction=gimbal.getWorldDirection(new THREE.Vector3()),flagged=new Set((faults?.events()??[]).map(e=>Number(e.id.slice(6))));let score=-Infinity;
-  network.towers.forEach((tower,i)=>{for(const j of [-1,0,1,2]){const key=`${i}:${j}`,at=j<0?new THREE.Vector3(tower.position[0],tower.height/2,tower.position[2]):new THREE.Vector3(...tower.attachments[j].position),delta=at.sub(p),range=delta.length(),angle=THREE.MathUtils.radToDeg(direction.angleTo(delta));
+  network.towers.forEach((tower,i)=>{if(i!==currentSpan&&i!==currentSpan+1)return;for(const j of [-1,0,1,2]){const key=`${i}:${j}`,at=j<0?new THREE.Vector3(tower.position[0],tower.height/2,tower.position[2]):new THREE.Vector3(...tower.attachments[j].position),delta=at.sub(p),range=delta.length(),angle=THREE.MathUtils.radToDeg(direction.angleTo(delta));
+   if(range>=650)continue;
    const priority=extraCapturePriority({requiredCaptured:captured.has(key),extras:extraCounts.get(key)??0,flagged:flagged.has(i),forward:delta.dot(tangent),angle,range,slack:requiredSlack});
    const stablePriority=priority+(key===activeKey?20:0);if(stablePriority>score){score=stablePriority;idx=i;attachmentIndex=j;best=range;supplemental=true;}
   }});
@@ -250,9 +280,10 @@ p.y=Math.max(1.5,p.y);plane.position.copy(p);const bank=THREE.MathUtils.lerp(pla
  if(hasTarget)inspector.follow(idx);
  targetMarker.position.copy(target);
  if(followFlight)track(p,dt);
- if(transition){camera.position.lerp(transition.position,.09);controls.target.lerp(transition.target,.09);if(camera.position.distanceTo(transition.position)<1)transition=undefined;}
+ if(workspaceFlight){const flight=workspaceFlight,t=Math.min(1,(performance.now()-flight.start)/1400),e=easeCamera(t);controls.target.lerpVectors(flight.from,flight.target,e);const distance=Math.exp(Math.log(Math.max(5,flight.fromDistance))*(1-e)+Math.log(flight.distance)*e);camera.position.copy(controls.target).addScaledVector(flight.direction,distance);if(t===1){workspaceFlight=undefined;controls.enableDamping=true;}}
+ if(transition){const alpha=1-Math.exp(-dt*6);camera.position.lerp(transition.position,alpha);controls.target.lerp(transition.target,alpha);if(camera.position.distanceTo(transition.position)<1)transition=undefined;}
  if(followedVehicle&&world&&worldData){const vehicle=worldData.fleet?.().find(v=>v.id===followedVehicle);if(vehicle){const vp=world.project(vehicle.coord,vehicle.altitude);track(vp,dt);}}
- camera.near=Math.max(.1,camera.position.distanceTo(controls.target)/100000);controls.update();world?.update(camera);baseLayer.update(camera,controls.target);osmLayer.update(controls.target);
+ camera.far=Math.max(2000000,camera.position.distanceTo(controls.target)*12);camera.near=Math.max(.1,camera.position.distanceTo(controls.target)/100000);controls.update();world?.update(camera,host.dataset.airportsVisible==='true');workspace.update();dockCircuits.update(camera);baseLayer.update(camera,controls.target);osmLayer.update(controls.target);
  const simDt=running?dt*rate:0;
  // Rate-limited optics: overview frames the entire structure with margin, then zooms into attachments.
  const frameHalfHeight=profile?Math.max(network.towers[idx].height*.7,18):4;
@@ -283,10 +314,10 @@ p.y=Math.max(1.5,p.y);plane.position.copy(p);const bank=THREE.MathUtils.lerp(pla
  }
 
  cameraStage=hasTarget&&!exposureAllowed?'PREPOSITION · NEXT ASSET':!hasTarget?(acquisitionMode==='known'?'HOLD ZOOM · AWAIT NEXT COORDINATE':'WIDE SCAN'):reacquiring?'WIDE REACQUISITION':!repositioned||!aligned?'SLEW / ZOOM':!locked?'FOCUS / SETTLE':!detailOK?'INSUFFICIENT PIXELS':'EXPOSURE READY';
- if(running&&!supplemental&&exposureAllowed&&locked&&detailOK&&elapsed-lastShot>=4){captured.add(activeKey);if(vehicle)faults?.capture(idx,attachmentIndex,vehicle.timeline.seconds);shotCount++;lastShot=elapsed;lastCapture=`Tower ${idx+1} · ${shotLabel} · ${(elapsed-acquiredAt).toFixed(1)}s acquisition`;shotLog.unshift(`${lastCapture} (slew ${slewTime.toFixed(1)}s / zoom ${zoomTime.toFixed(1)}s / focus ${focusTime.toFixed(1)}s)`);settled=0;cameraStage='CAPTURED';}
- const opportunistic=supplemental&&requiredSlack>6&&elapsed-lastExtra>=10&&elapsed-lastShot>=4;
+ if(running&&!supplemental&&exposureAllowed&&locked&&detailOK&&elapsed-lastShot>=4){exposures.record({tower:idx,phase:attachmentIndex,seconds:vehicle?.timeline.seconds??elapsed,position:gimbal.position.toArray(),quaternion:gimbal.quaternion.toArray(),vfov:gimbal.fov,aspect:gimbal.aspect,target:target.toArray(),extra:false});captured.add(activeKey);if(vehicle)faults?.capture(idx,attachmentIndex,vehicle.timeline.seconds);shotCount++;lastShot=elapsed;lastCapture=`Tower ${idx+1} · ${shotLabel} · ${(elapsed-acquiredAt).toFixed(1)}s acquisition`;shotLog.unshift(`${lastCapture} (slew ${slewTime.toFixed(1)}s / zoom ${zoomTime.toFixed(1)}s / focus ${focusTime.toFixed(1)}s)`);settled=0;cameraStage='CAPTURED';}
+ const opportunistic=supplemental&&exposureAllowed&&detailOK&&requiredSlack>6&&elapsed-lastShot>=4;
  const distant=canSupplementalShot({locked,inspecting:flightStage==='INSPECTING',range,forwardMeters:target.clone().sub(p).dot(tangent),speedMps:mph*.44704,secondsSinceShot:elapsed-lastShot,secondsSinceExtra:elapsed-lastExtra});
- if(running&&hasTarget&&locked&&(opportunistic||distant)&&(extraCounts.get(activeKey)??0)<2){extraCounts.set(activeKey,(extraCounts.get(activeKey)??0)+1);shotCount++;lastExtra=lastShot=elapsed;cameraStage='EXTRA CAPTURE';lastCapture=`Extra · T${idx+1} ${shotLabel} · ${Math.round(range)} m · ${Math.round(sampling.pixels)} px/detail · supplemental`;shotLog.unshift(lastCapture);}
+ if(running&&hasTarget&&locked&&(opportunistic||distant)&&detailOK){exposures.record({tower:idx,phase:attachmentIndex,seconds:vehicle?.timeline.seconds??elapsed,position:gimbal.position.toArray(),quaternion:gimbal.quaternion.toArray(),vfov:gimbal.fov,aspect:gimbal.aspect,target:target.toArray(),extra:true});extraCounts.set(activeKey,(extraCounts.get(activeKey)??0)+1);shotCount++;lastExtra=lastShot=elapsed;cameraStage='EXTRA CAPTURE';lastCapture=`Extra · T${idx+1} ${shotLabel} · ${Math.round(range)} m · ${Math.round(sampling.pixels)} px/detail · supplemental`;shotLog.unshift(lastCapture);}
  const nextCoverage=`${capturePass}:${captured.size}:${shotCount}`;
  if(nextCoverage!==coverageSignature){coverageSignature=nextCoverage;scene.traverse(o=>{const tower=o.userData.equipmentTower,phase=o.userData.equipmentPhase;if(!Number.isInteger(tower)||!Number.isInteger(phase))return;const key=`${tower}:${phase}`,extras=extraCounts.get(key)??0;o.userData.inspectionSummary=`Inspection index ${inspectionIndex(captured.has(key),extras)}/100 · required ${captured.has(key)?'captured':'pending'} · ${extras} supplemental frames · simulated coverage only`;});}
  host.querySelector('.gimbal-caption')!.textContent=`${acquisitionMode==='known'?'KNOWN COORDINATES':'WIDE ACQUISITION'} · ${shotLabel} · ${cameraStage} · ${(hasTarget?elapsed-acquiredAt:0).toFixed(1)}s elapsed
@@ -302,7 +333,7 @@ EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
  gimbal.aspect=16/9;gimbal.updateProjectionMatrix();scene.updateMatrixWorld(true);
  shield.update(p,!!vehicle?.turning,!!vehicle&&!vehicle.done,performance.now());
  recordedLidar?.update(worldData?.fleet?.().find(v=>v.osmWay===179559746));
- notices.update();traffic.update(performance.now(),vehicle?p:undefined);contingency?.update(dt);
+ if(review)exposures.update(review.captureScope());notices.update();traffic.update(performance.now(),controls.target,camera);contingency?.update(dt);
  faults?.update(vehicle?.timeline.seconds??0,performance.now());
  canopy?.update(vehicle,p,tangent,performance.now());
  sensors.update(gimbal,p,tangent,range,plane.visible&&p.y>5,running&&flightStage==='INSPECTING',elapsed,(host.querySelector('#show-camera-fov') as HTMLInputElement).checked,(host.querySelector('#show-lidar') as HTMLInputElement).checked);
@@ -315,5 +346,5 @@ EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
  }
  view('ohio');if(transition){camera.position.copy(transition.position);controls.target.copy(transition.target);transition=undefined;}
  if(worldData?.activeVehicle)fitMission();
- tick();return {pack:network.pack,view,dispose(){disposed=true;cancelAnimationFrame(frame);hazards.dispose();notices.dispose();shield.dispose();review?.dispose();contingency?.dispose();traffic.dispose();faults?.dispose();canopy?.dispose();timeline?.dispose();panel?.dispose();baseLayer.dispose();osmLayer.dispose();controls.dispose();scene.traverse(obj=>{const o=obj as THREE.Mesh;if(o.geometry)o.geometry.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();host.innerHTML='';}};
+ tick();return {pack:network.pack,view,dispose(){disposed=true;cancelAnimationFrame(frame);workspace.dispose();aepLines.dispose();airportsLayer.dispose();faaNotams.dispose();dockCircuits.dispose();exposures.dispose();hazards.dispose();notices.dispose();shield.dispose();review?.dispose();contingency?.dispose();traffic.dispose();faults?.dispose();canopy?.dispose();timeline?.dispose();panel?.dispose();baseLayer.dispose();world?.dispose();osmLayer.dispose();controls.dispose();scene.traverse(obj=>{const o=obj as THREE.Mesh;if(o.geometry)o.geometry.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();host.innerHTML='';}};
 }

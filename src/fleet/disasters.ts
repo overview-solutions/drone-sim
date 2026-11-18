@@ -59,7 +59,7 @@ export function disasters(scene: THREE.Scene, host: HTMLElement, origin: number[
  historySelect.innerHTML='<option value="">Ohio disaster history…</option>';
  for(const event of history){const option=document.createElement('option');option.value=event.id;option.textContent=event.title;historySelect.append(option);}
  strip.append(status,list,historySelect,demos);
- host.before(strip);
+ const overlay=document.createElement('div');overlay.className='disaster-overlay';overlay.append(strip);host.append(overlay);
  const group = new THREE.Group();
  scene.add(group);
  let live: Hazard[] = [], disposed = false, showDemo = true, checked = 0, failure = false;
@@ -123,8 +123,9 @@ export function disasters(scene: THREE.Scene, host: HTMLElement, origin: number[
   summary.textContent='Event details';body.textContent=hazard.detail;details.append(summary,body);weatherPanel.append(details);
   if(hazard.url){const link=document.createElement('a');link.href=hazard.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Official source';weatherPanel.append(link);}
   const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close weather details');
-  close.onclick=()=>{response.close();weatherPanel.hidden=true;selectedHistory=undefined;historySelect.value='';render();};weatherPanel.append(close);
+  close.onclick=()=>{response.close();flood.close();weatherPanel.hidden=true;selectedHistory=undefined;historySelect.value='';host.dispatchEvent(new CustomEvent('flightline:disaster-details',{detail:null}));render();};weatherPanel.append(close);
   if(/flood/i.test(hazard.title))void flood.open(hazard.rings);else flood.close();
+  host.dispatchEvent(new CustomEvent('flightline:disaster-details',{detail:{panels:[...new Set([...Array.from(overlay.querySelectorAll<HTMLElement>('.storm-weather,.flood-scenario')),...Array.from(host.parentElement!.querySelectorAll<HTMLElement>('.disaster-details>.storm-weather,.disaster-details>.flood-scenario'))])]}}));
  }
  historySelect.onchange=()=>{
   selectedHistory=history.find(h=>h.id===historySelect.value);
@@ -207,10 +208,13 @@ export function disasters(scene: THREE.Scene, host: HTMLElement, origin: number[
   render();
  }
  demos.onclick = () => {showDemo=!showDemo;demos.textContent='Demo incidents '+(showDemo?'on':'off');render();};
+ const closeEvent=()=>{response.close();flood.close();weatherPanel.hidden=true;};host.addEventListener('flightline:close-disaster',closeEvent);
+ const stageChange=(event:MessageEvent)=>{if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='flightline:stage')return;const review=event.data.stage==='review';group.visible=review;if(!review){response.close();flood.close();weatherPanel.hidden=true;}};
+ window.addEventListener('message',stageChange);if(window.parent!==window)group.visible=false;
  render();
  void refresh();
  const reveal = window.setTimeout(render,Math.max(0,60000-(Date.now()-openedAt)));
  const poll = window.setInterval(()=>void refresh(),120000);
  const expiry = window.setInterval(render,60000);
- return {dispose() {disposed=true;response.dispose();flood.dispose();weatherPanel.remove();controller.abort();clearTimeout(reveal);clearInterval(poll);clearInterval(expiry);clearGeometry();group.removeFromParent();strip.remove();}};
+ return {dispose() {host.removeEventListener('flightline:close-disaster',closeEvent);window.removeEventListener('message',stageChange);disposed=true;response.dispose();flood.dispose();weatherPanel.remove();controller.abort();clearTimeout(reveal);clearInterval(poll);clearInterval(expiry);clearGeometry();group.removeFromParent();overlay.remove();}};
 }

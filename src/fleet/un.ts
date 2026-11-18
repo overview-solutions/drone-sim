@@ -1,3 +1,4 @@
+import {localFrame} from '../gis/core.js';
 import rayFrames from './ray-king-structures.json';
 import raySpans from './ray-king-spans.json';
 import {type PowerLine} from './model';
@@ -5,9 +6,9 @@ export type V3=[number,number,number]; // east, height, south in meters
 export type UNFeature={type:'Feature';id:string;geometry:{type:'Point'|'LineString';coordinates:number[]|number[][]};properties:Record<string,unknown>};
 export type Structure={id:string;position:V3;height:number;heading:number;attachments:{id:string;phase:string;position:V3}[]};
 export function generateUN(line:PowerLine){
- const origin=line.coords[0],cos=Math.cos(origin[1]*Math.PI/180);
- const local=(p:number[]):V3=>[(p[0]-origin[0])*111320*cos,0,-(p[1]-origin[1])*111320];
- const geographic=(p:V3)=>[origin[0]+p[0]/(111320*cos),origin[1]-p[2]/111320,p[1]+(line.id===179559746?raySpans.verticalOffsetMeters:0)];
+ const origin=line.coords[0],frame=localFrame(origin);
+ const local=(p:number[]):V3=>frame.project(p);
+ const geographic=(p:V3)=>{const result=frame.geographic(p);result[2]+=line.id===179559746?raySpans.verticalOffsetMeters:0;return result;};
  // OSM vertices describe alignment, not surveyed support locations.
  // Simplify small alignment deviations, retaining substantial angle structures.
  function simplify(points:V3[]):V3[]{

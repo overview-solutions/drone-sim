@@ -244,3 +244,11 @@ Prebuilt frames are embedded for offline display; on-demand reprocessing still r
 OH-09 now includes 42 modeled attachment/insulator targets (A/B/C on 14 structures) and 39 conductor curves across 13 spans. Attachment positions follow the estimated frame crossarm widths, perpendicular to the local corridor, with 2.5 m illustrative insulator strings. Conductors connect matching phase endpoints with a parabolic sag assumption capped at 7 m; this is not a tension/temperature calculation or an extracted wire survey. These same attachment coordinates drive gimbal acquisition. Capture targets reset for each direction of the repeating mission.
 
 **Export structures** now exports the UN-style network plus estimated frames, including structure/attachment associations and phase connectivity. This supersedes the earlier empty phase/connectivity export: the new electrical layout is explicitly marked estimated/synthetic with unresolved real-world phase identity. Measured candidate supports and modeled electrical components remain distinguished.
+
+## Shared Flightline / Skydio workspace
+
+The local [Flightline workspace](http://127.0.0.1:8765/flightline) combines this generic fixed-wing concept with `Workbench/projects/skydio-dark`. Build with `npm run build:fleet`, then run that project's `node server.mjs`. It serves this `dist-fleet` build locally. Shared fleet shows orange simulated aircraft alongside teal Skydio dock locations; selecting an aircraft opens the existing corridor → span → structure explorer. Operating modes retain their own state. The same-origin bridge sends simulation snapshots once per second and accepts aircraft selection only from its parent workspace. No CensysTech-specific integration or external publication is involved.
+
+## Shared GIS foundation
+
+The fixed-wing and Skydio Dock operating modes share the [Flightline GIS v1 specification](docs/GIS_SPEC.md), coordinate/optics helpers, and raster renderer in `src/gis/`. The shared fleet now uses the Flightline scene: National → State → Dock or Aircraft. Teal marks configured Skydio docks; orange marks simulated fixed-wings. State boundaries remain available offline.

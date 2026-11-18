@@ -6,6 +6,7 @@ import {applyContingency,previewMission,missionCycle,createFlight,startOnInspect
 import raw from './ohio-data.json';
 import {MI,distance,lineLength,candidates,samples,suggestedBases,budget,bestSortie,sortie,pointAlong,type Airport,type PowerLine,type Sortie} from './model';
 import {inspection} from './inspection';
+if(window.parent!==window)document.body.classList.add('flightline-embedded');
 const airports:Airport[]=raw.airports,lines:PowerLine[]=raw.lines;
 const targets=lines.filter(l=>l.aep&&l.voltage>=69000);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -23,7 +24,7 @@ function inspectionAge(id:number){const time=inspectedAt.get(id);return time!==u
 let flights:Flight[]=[];let fleetRate=5;
 let inspectionView:ReturnType<typeof inspection>|undefined;
 const maxKm=()=>budget(radiusMi,nominalKm),radiusKm=()=>maxKm()/2;
-document.querySelector('#app')!.innerHTML=`<header><div><strong>↗ FLIGHTLINE / OHIO</strong><small>OHIO · AUTONOMOUS INSPECTION · SIMULATION</small></div><span class="badge">CONCEPT SIMULATION · NO FLIGHT AUTHORITY</span><div class="row"><button id="toggle-sidebar">Plan network</button><button id="toggle-data">Data objects</button><a href="documentation.html" target="_blank" rel="noopener">Help ↗</a><button id="show-3d" hidden>3D mission</button><button id="export-plan">Export scenario</button><a href="Flightline.html">Mission sandbox ↗</a></div></header><main><aside>
+document.querySelector('#app')!.innerHTML=`<header><div><strong>↗ FLIGHTLINE / OHIO</strong><small>OHIO · AUTONOMOUS INSPECTION · SIMULATION</small></div><span class="badge">CONCEPT SIMULATION · NO FLIGHT AUTHORITY</span><div class="row"><a href="http://127.0.0.1:8765/flightline" target="_top">Shared fleet / Skydio Dock ↗</a><button id="toggle-sidebar">Plan network</button><button id="toggle-data">Data objects</button><a href="documentation.html" target="_blank" rel="noopener">Help ↗</a><button id="show-3d" hidden>3D mission</button><button id="export-plan">Export scenario</button><a href="Flightline.html">Mission sandbox ↗</a></div></header><main><aside>
 <section><div class="eyebrow">01 / NETWORK DESIGN</div><h1>A fleet that can<br>land somewhere new.</h1><p>Stage Albatross aircraft at rural airports. Inspect an OSM-tagged AEP corridor, then return—or reposition to the next staffed base.</p><div class="fields"><label>Return radius · miles<input id="radius" type="number" min="10" max="70" value="45"></label><label>Nominal range · km<input id="range" type="number" min="80" max="400" value="200"></label><label>Suggested bases<input id="base-count" type="number" min="1" max="25" value="8"></label><label>Aircraft / base<input id="aircraft-count" type="number" min="1" max="10" value="1"></label></div><label class="check"><input id="rural" type="checkbox" checked> Outside Census urban areas</label><button id="suggest" class="primary">Suggest station network</button><p id="assumption" class="note"></p><div id="data-note" class="note"></div></section>
 <section><div class="eyebrow">02 / SORTIE COMPARISON</div><h2>Return versus relocation</h2><label>OSM inspection segment<select id="line-select"></select></label><label class="check"><input id="relocate" type="checkbox"> Land at a different staffed base</label><div id="comparison"></div><div class="row" style="margin-top:12px"><button id="fly" class="primary">▶ Simulate fleet</button><button id="reset-fleet">Reset</button></div><p class="note">One illustrative sortie per base · 40 mph · adjustable fleet playback. Aircraft relocate on arrival; no automatic recharge or relaunch.</p><div id="fleet-status" class="status"></div><button id="open-3d">Open selected corridor in 3D →</button></section>
 <section><h2>Stations & aircraft</h2><p class="note">Click any airport on the map to inspect and add/remove it. Selection is a geographic shortlist, not permission to operate.</p><div id="airport-detail"></div><div id="base-list"></div></section>
@@ -89,7 +90,7 @@ $('suggest').onclick=()=>{radiusMi=Math.max(10,Math.min(70,Number($<HTMLInputEle
 $('aircraft-count').onchange=()=>{const el=$<HTMLInputElement>('aircraft-count');el.value=String(Math.max(1,Math.min(10,Number(el.value)||1)));resetFleet();update();};
 $('unknown').onchange=()=>{showUnknown=$<HTMLInputElement>('unknown').checked;draw();};$('links').onchange=()=>{showLinks=$<HTMLInputElement>('links').checked;draw();};$('relocate').onchange=()=>{relocate=$<HTMLInputElement>('relocate').checked;resetFleet();update();};$('fly').onclick=startFleet;$('reset-fleet').onclick=()=>{resetFleet();update();};
 let activeVehicle:string|undefined;
-$('open-3d').onclick=()=>{$('network-view').hidden=true;$('inspection-view').hidden=false;inspectionView?.dispose();inspectionView=inspection($('inspection-host'),selected,{lines:targets,airports:eligible,bases,boundary:raw.boundary.coordinates[0],radiusKm:radiusKm(),mission,inspectionAge,activeVehicle,selectVehicle:(id:string)=>{activeVehicle=id;const f=flights.find(f=>f.id===id);if(f){selected=f.sortie.line;$('open-3d').click();}},previewMission:(id:string,seconds:number|null)=>{const f=flights.find(f=>f.id===id);if(f){previewMission(f,seconds);fleetRunning=seconds===null;}},seek:(id:string,fraction:number|null)=>{const f=flights.find(f=>f.id===id);if(f){seekFlight(f,fraction);fleetRunning=true;}},fleet:()=>flights.map(flightSnapshot),fleetState:()=>({running:fleetRunning,rate:fleetRate}),toggleFleet:()=>{if(!flights.length)startFleet();else fleetRunning=!fleetRunning;},setFleetRate:(value:number)=>fleetRate=value,capturePace:(id,mph)=>{const f=flights.find(f=>f.id===id);if(f){f.captureLimit=Math.max(30,Math.min(40,mph));f.captureTTL=2;}},contingency:(id,route,altitudes,returning,label,connectionKm)=>{const f=flights.find(f=>f.id===id);return !!f&&applyContingency(f,route,altitudes,returning,label,connectionKm);},recall:(id:string)=>{const f=flights.find(f=>f.id===id);if(f)recallFlight(f);}});};$('close-3d').textContent='Zoom out to Ohio';$('close-3d').onclick=()=>inspectionView?.view?.('ohio');
+$('open-3d').onclick=()=>{$('network-view').hidden=true;$('inspection-view').hidden=false;inspectionView?.dispose();inspectionView=inspection($('inspection-host'),selected,{lines:targets,airports:eligible,bases,boundary:raw.boundary.coordinates[0],radiusKm:radiusKm(),mission,inspectionAge,activeVehicle,selectVehicle:(id:string)=>{if(window.parent!==window)window.parent.postMessage({type:'flightline:mission-open'},location.origin);activeVehicle=id;const f=flights.find(f=>f.id===id);if(f){selected=f.sortie.line;$('open-3d').click();}},previewMission:(id:string,seconds:number|null)=>{const f=flights.find(f=>f.id===id);if(f){previewMission(f,seconds);fleetRunning=seconds===null;}},seek:(id:string,fraction:number|null)=>{const f=flights.find(f=>f.id===id);if(f){seekFlight(f,fraction);fleetRunning=true;}},fleet:()=>flights.map(flightSnapshot),fleetState:()=>({running:fleetRunning,rate:fleetRate}),toggleFleet:()=>{if(!flights.length)startFleet();else fleetRunning=!fleetRunning;},setFleetRate:(value:number)=>fleetRate=value,capturePace:(id,mph)=>{const f=flights.find(f=>f.id===id);if(f){f.captureLimit=Math.max(30,Math.min(40,mph));f.captureTTL=2;}},contingency:(id,route,altitudes,returning,label,connectionKm)=>{const f=flights.find(f=>f.id===id);return !!f&&applyContingency(f,route,altitudes,returning,label,connectionKm);},recall:(id:string)=>{const f=flights.find(f=>f.id===id);if(f)recallFlight(f);}});};$('close-3d').textContent='Zoom out to Ohio';$('close-3d').onclick=()=>inspectionView?.view?.('ohio');
 $('show-3d').onclick=()=>$('open-3d').click();
 const rayButton=document.createElement('button');rayButton.textContent='Ray–King · OGRIP';document.querySelector('header .row')!.prepend(rayButton);rayButton.onclick=()=>{if(!flights.length)startFleet();const flight=flights.find(f=>f.sortie.line.id===rayKingLine.id);selected=rayKingLine;activeVehicle=flight?.id;update();$('open-3d').click();};
 $('toggle-sidebar').onclick=()=>{const hidden=document.body.classList.toggle('sidebar-hidden');$('toggle-sidebar').textContent=hidden?'Plan network':'Close planning';};
@@ -107,3 +108,24 @@ if(location.hash==='#ray-king'){selected=rayKingLine;activeVehicle=flights.find(
 $('open-3d').click();if(location.hash==='#ray-king')inspectionView?.view?.('corridor');if(location.hash==='#network')inspectionView?.view?.('ohio');
 
 
+
+// Embedded Flightline workspace bridge: local concept positions, never live aircraft telemetry.
+const simulationCompletions=new Map<string,string>();
+function publishWorkspaceFleet(){
+  if(window.parent===window)return;
+  window.parent.postMessage({type:'flightline:aircraft',assets:flights.map(f=>{
+    const v=flightSnapshot(f);if(v.done&&!simulationCompletions.has(v.id))simulationCompletions.set(v.id,new Date().toISOString());
+    return {status:v.done?'completed':'active',end:v.done?simulationCompletions.get(v.id):undefined,id:v.id,kind:'fixedWing',name:v.id,coordinates:v.coord,heightAboveGround:v.altitude,
+      source:'Flightline fixed-wing simulation · '+v.stage};
+  })},location.origin);
+}
+setInterval(publishWorkspaceFleet,1000);publishWorkspaceFleet();
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==window.parent)return;
+  if(event.data?.type==='flightline:exit-mission'){activeVehicle=undefined;inspectionView?.view?.('ohio');return;}
+  if(event.data?.type!=='flightline:focus-aircraft')return;
+  const flight=flights.find(f=>f.id===event.data.id);
+  if(!flight)return;
+  selected=flight.sortie.line;activeVehicle=flight.id;update();$('open-3d').click();
+  inspectionView?.view?.('corridor');
+});
