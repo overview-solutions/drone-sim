@@ -107,10 +107,18 @@ export function inspection(host:HTMLElement,line:PowerLine,worldData?:WorldData)
  const airportsLayer=planningAirports(scene,host,network.origin);
  const faaNotams=notamLayer(scene,host,network.origin,points=>{if(!points.length)return;const box=new THREE.Box3().setFromPoints(points),target=box.getCenter(new THREE.Vector3()),distance=Math.max(600,box.getSize(new THREE.Vector3()).length()*1.8);stopTracking();transition={target,position:target.clone().add(new THREE.Vector3(0,1,.55).normalize().multiplyScalar(distance))};});
  const dockCircuits=dockAssets(scene,host,network.origin,points=>{if(!points.length)return;const bounds=new THREE.Box3().setFromPoints(points);const target=bounds.getCenter(new THREE.Vector3()),distance=Math.max(200,bounds.getSize(new THREE.Vector3()).length()*1.8);stopTracking();transition={target,position:target.clone().add(new THREE.Vector3(0,1,.55).normalize().multiplyScalar(distance))};});
+ let workspaceInitialized=false;
  let workspaceFlight:{start:number;from:THREE.Vector3;target:THREE.Vector3;direction:THREE.Vector3;fromDistance:number;distance:number}|undefined;
  controls.addEventListener('start',()=>{workspaceFlight=undefined;controls.enableDamping=true;});
  const workspace=workspaceMap(scene,canvasHost,camera,controls,network.origin,(target,distance)=>{
    stopTracking();review?.hide();transition=undefined;
+   controls.maxDistance=Math.max(controls.maxDistance,distance*1.5);
+   if(!workspaceInitialized&&window.parent!==window){
+     workspaceInitialized=true;workspaceFlight=undefined;controls.enableDamping=false;
+     controls.target.copy(target);camera.position.copy(target).add(new THREE.Vector3(0,distance,distance*.0001));camera.lookAt(target);controls.update();camera.updateMatrixWorld();controls.enableDamping=true;return;
+   }
+   workspaceInitialized=true;
+   if(camera.position.distanceTo(controls.target)>0&&controls.target.distanceTo(target)<.1&&Math.abs(camera.position.distanceTo(target)-distance)<1)return;
    const offset=camera.position.clone().sub(controls.target);
    // Keep an aerial viewing angle during large geographic flights.
    offset.y=Math.max(Math.abs(offset.y),Math.hypot(offset.x,offset.z)*1.25,1);
@@ -344,7 +352,7 @@ EO profile provisional · timing assumptions · simulation seconds (${rate}×)`;
 
  if(elapsed-lastText>.15||!running){lastText=elapsed;host.querySelector('#inspect-readout')!.textContent=running?` ${flightStage} · ${hasTarget?`Tower ${idx+1} · ${cameraStage}`:'Forward scan'} · ${shotCount} shots · ${mph.toFixed(0)} mph${vehicle?.capturePassRequired?' · additional pass needed':vehicle?.captureLimited?' · camera catch-up':''} · ${Math.round((vehicle?.progress??progress/pathLength)*100)}% · ${rate}×`:vehicle?(vehicle.done?`${vehicle.stage} · ${vehicle.timeline.battery.toFixed(0)}% battery · ${vehicle.timeline.uploadedGB.toFixed(1)} GB uploaded`:`${vehicle.replaying?'HISTORY':'LIVE'} · ${vehicle.stage} · simulation paused`):progress>=pathLength?(returning?'LANDED AT LAUNCH · Return complete':'LANDED · Mission complete'):progress?'MISSION PAUSED · Camera preview off':'Fleet telemetry · simulated positions · click an aircraft';}
  }
- view('ohio');if(transition){camera.position.copy(transition.position);controls.target.copy(transition.target);transition=undefined;}
+ if(window.parent===window)view('ohio');if(transition){camera.position.copy(transition.position);controls.target.copy(transition.target);transition=undefined;}
  if(worldData?.activeVehicle)fitMission();
  tick();return {pack:network.pack,view,dispose(){disposed=true;cancelAnimationFrame(frame);workspace.dispose();aepLines.dispose();airportsLayer.dispose();faaNotams.dispose();dockCircuits.dispose();exposures.dispose();hazards.dispose();notices.dispose();shield.dispose();review?.dispose();contingency?.dispose();traffic.dispose();faults?.dispose();canopy?.dispose();timeline?.dispose();panel?.dispose();baseLayer.dispose();world?.dispose();osmLayer.dispose();controls.dispose();scene.traverse(obj=>{const o=obj as THREE.Mesh;if(o.geometry)o.geometry.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();host.innerHTML='';}};
 }

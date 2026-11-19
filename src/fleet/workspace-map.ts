@@ -1,6 +1,6 @@
 import {missionAppearance} from '../gis/mission-lifecycle.js';
 import * as THREE from 'three';
-import {GIS_SPEC,localFrame,geodesicCircle} from '../gis/core.js';
+import {GIS_SPEC,localFrame,geodesicCircle,frustumCorners} from '../gis/core.js';
 import type {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 type Dock={id:string;name:string;coordinates:number[];kind:string};
 type State={properties:{name:string};geometry:{type:string;coordinates:any}};
@@ -15,6 +15,25 @@ export function workspaceMap(scene:THREE.Scene,host:HTMLElement,camera:THREE.Per
  const dockButtons=document.createElement('div');dockButtons.className='dock-map-buttons';host.append(dockButtons);
  const markerButtons=new Map<string,HTMLButtonElement>();
  const inspectionLayer=new THREE.Group(),recordedLayer=new THREE.Group();scene.add(inspectionLayer,recordedLayer);
+ const previewDrone=new THREE.Group();scene.add(previewDrone);previewDrone.visible=false;
+ previewDrone.visible=false;
+ const droneMaterial=new THREE.MeshBasicMaterial({color:0xffcf60,depthTest:false});
+ previewDrone.add(new THREE.Mesh(new THREE.SphereGeometry(1.5,12,8),droneMaterial));
+ for(const angle of [Math.PI/4,-Math.PI/4]){const arm=new THREE.Mesh(new THREE.BoxGeometry(7,.5,.5),droneMaterial);arm.rotation.y=angle;previewDrone.add(arm);}previewDrone.renderOrder=12;
+ const animatedFov=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0xffcf60,transparent:true,opacity:.8,depthTest:false,depthWrite:false}));scene.add(animatedFov);animatedFov.visible=false;animatedFov.renderOrder=11;
+ let previewMotion:{start:number;from:THREE.Vector3;to:THREE.Vector3;fromQ:THREE.Quaternion;toQ:THREE.Quaternion;fromFov:THREE.Vector3[];toFov:THREE.Vector3[]}|undefined,previewKey='',fovPoints:THREE.Vector3[]=[];
+ function movePreview(feature:any,fovs:any[]=[]){
+  const props=feature.properties??{},coord=feature.geometry.coordinates,height=coord[2]??props.height_above_takeoff_m??35;
+  const key=JSON.stringify([coord,height,props.heading_radians,fovs]);if(key===previewKey)return;previewKey=key;
+  const target=project(coord,height),q=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,-(props.heading_radians??0),0));
+  if(!fovs.length&&props.heading_radians!==undefined){const origin=[...coord.slice(0,2),height],corners=frustumCorners(origin,props.heading_radians,(props.pitch_degrees??-20)*Math.PI/180,80,60,props.zoom??1,1.5);fovs=corners.map((c:number[])=>({geometry:{coordinates:[origin,c]}}));fovs.push({geometry:{coordinates:[...corners,corners[0]]}});}
+  const targetFov:THREE.Vector3[]=[];
+  for(const feature of fovs){const coords=feature.geometry.coordinates;for(let i=1;i<coords.length;i++)targetFov.push(project(coords[i-1],coords[i-1][2]??height),project(coords[i],coords[i][2]??height));}
+  if(!previewDrone.visible){previewDrone.position.copy(target);previewDrone.quaternion.copy(q);}
+  const fromFov=targetFov.map((p,i)=>fovPoints[i]?.clone()??previewDrone.position.clone());
+  previewMotion={start:performance.now(),from:previewDrone.position.clone(),to:target,fromQ:previewDrone.quaternion.clone(),toQ:q,fromFov,toFov:targetFov};
+  previewDrone.visible=mode==='dock'&&stage==='planning';
+ }
  let inspectionBounds=new THREE.Box3(),routeBounds=new THREE.Box3(),routeRelative=false,routeOrigin=0;
  const routeMarker=new THREE.Mesh(new THREE.SphereGeometry(3,12,8),new THREE.MeshBasicMaterial({color:0xffd268,depthTest:false}));routeMarker.visible=false;routeMarker.renderOrder=8;recordedLayer.add(routeMarker);
  const clearLayer=(layer:THREE.Group)=>{layer.traverse(o=>{const mesh=o as THREE.Mesh;mesh.geometry?.dispose();if(mesh.material&&!Array.isArray(mesh.material))mesh.material.dispose();});layer.clear();};
@@ -130,18 +149,26 @@ export function workspaceMap(scene:THREE.Scene,host:HTMLElement,camera:THREE.Per
   }
   if(event.data?.type==='flightline:inspection'&&Array.isArray(event.data.features)){
     clearLayer(inspectionLayer);inspectionBounds=new THREE.Box3();
+    const selectedPhoto=event.data.features.find((f:any)=>f.properties?.layer==='photo'&&f.properties?.selected);
+    if(selectedPhoto)movePreview(selectedPhoto,event.data.features.filter((f:any)=>f.properties?.layer==='fov'));
+    else{previewDrone.visible=false;animatedFov.visible=false;previewMotion=undefined;previewKey='';}
+    const predicted=new Map<string,THREE.Vector3[]>();
     for(const feature of event.data.features){
+      if(feature.properties?.layer==='predicted_network'&&feature.geometry?.type==='LineString'){const props=feature.properties,key=props.assetType==='PhaseConductor'?'phase-'+String(feature.id).split('/').at(-1):props.assetType;const points=predicted.get(key)??[];for(let i=1;i<feature.geometry.coordinates.length;i++)points.push(project(feature.geometry.coordinates[i-1],feature.geometry.coordinates[i-1][2]),project(feature.geometry.coordinates[i],feature.geometry.coordinates[i][2]));predicted.set(key,points);continue;}
+      if(feature.properties?.layer==='fov'&&selectedPhoto)continue;
       if(!feature.geometry||!['Point','LineString'].includes(feature.geometry.type))continue;
       const props=feature.properties??{},height=props.height_above_takeoff_m??1;
       const coords=feature.geometry.type==='Point'?[feature.geometry.coordinates]:feature.geometry.coordinates;
       const points=coords.filter((p:number[])=>Array.isArray(p)&&p.slice(0,2).every(Number.isFinite)).map((p:number[])=>project(p,p[2]??height));
       if(!points.length)continue;points.forEach((p:THREE.Vector3)=>inspectionBounds.expandByPoint(p));
-      const color=props.selected?0xffcf60:props.pass==='return'?0xeaa4e9:({structure:0xf5f5f5,orientation:0x83b8ff,inferred_span:0xb2bfc3} as Record<string,number>)[props.layer]??0x75e8d4;
+      const color=props.selected&&props.layer!=='photo'?0xffcf60:props.pass==='return'?0xeaa4e9:({structure:0xf5f5f5,orientation:0x83b8ff,inferred_span:0xb2bfc3} as Record<string,number>)[props.layer]??0x75e8d4;
       const geometry=new THREE.BufferGeometry().setFromPoints(points);
       const object=feature.geometry.type==='Point'?new THREE.Points(geometry,new THREE.PointsMaterial({color,size:props.selected?11:6,sizeAttenuation:false,depthTest:false})):new THREE.Line(geometry,new THREE.LineBasicMaterial({color,depthTest:false,depthWrite:false}));object.renderOrder=7;inspectionLayer.add(object);
     }
+    const networkColors:Record<string,number>={StructureMember:0xaebbb9,Crossarm:0xcbd4d1,Insulator:0xc99566,ShieldSupport:0x9eaaa7,ShieldWire:0xa4afbc,'phase-0':0xe8b45b,'phase-1':0x82cbb6,'phase-2':0x90b8e4};
+    for(const [kind,points]of predicted){const lines=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:networkColors[kind]??0xaebbb9,transparent:true,opacity:kind.startsWith('phase-')?.9:.85,depthTest:true,depthWrite:false}));lines.userData.predicted=true;inspectionLayer.add(lines);}
   }
-  if(event.data?.type==='flightline:inspection-focus'&&Array.isArray(event.data.coordinates))focus(project(event.data.coordinates,event.data.height??35),180);
+  if(event.data?.type==='flightline:inspection-focus'&&Array.isArray(event.data.coordinates)){if(event.data.waypoint)movePreview(event.data.waypoint);focus(project(event.data.coordinates,event.data.height??35),180);}
   if(event.data?.type==='flightline:recorded-route'&&Array.isArray(event.data.points)){
     for(const child of [...recordedLayer.children])if(child!==routeMarker){recordedLayer.remove(child);const line=child as THREE.Line;line.geometry.dispose();(line.material as THREE.Material).dispose();}
     const points=event.data.points as number[][];routeRelative=points.some(p=>Number.isFinite(p[4]));routeOrigin=points.find(p=>Number.isFinite(p[3]))?.[3]??0;routeBounds=new THREE.Box3();const segments:THREE.Vector3[]=[];let previous:THREE.Vector3|undefined;
@@ -189,11 +216,13 @@ export function workspaceMap(scene:THREE.Scene,host:HTMLElement,camera:THREE.Per
  inspectionLayer.visible=recordedLayer.visible=false;
  window.parent.postMessage({type:'flightline:map-ready'},location.origin);
  return {update(){
+   if(previewMotion){const m=previewMotion,t=Math.min(1,(performance.now()-m.start)/900),ease=t*t*(3-2*t);previewDrone.position.lerpVectors(m.from,m.to,ease);previewDrone.quaternion.slerpQuaternions(m.fromQ,m.toQ,ease);fovPoints=m.toFov.map((p,i)=>m.fromFov[i].clone().lerp(p,ease));animatedFov.geometry.dispose();animatedFov.geometry=new THREE.BufferGeometry().setFromPoints(fovPoints);if(t===1)previewMotion=undefined;}
+   const showPreview=mode==='dock'&&stage==='planning';previewDrone.visible=showPreview&&!!previewKey;animatedFov.visible=previewDrone.visible&&fovPoints.length>0;
    const width=host.clientWidth,height=host.clientHeight;host.dataset.workspaceDetail=String(camera.position.distanceTo(controls.target)<1200000);
    for(const object of group.children){if(!object.userData.dock)continue;const dock=object.userData.dock as Dock,button=markerButtons.get(dock.id);if(!button)continue;
      const point=object.position.clone().project(camera),detail=mode==='dock'||host.dataset.workspaceDetail==='true';
      button.hidden=!active||!detail||point.z< -1||point.z>1||Math.abs(point.x)>1||Math.abs(point.y)>1;
      button.style.left=(point.x+1)*width/2+'px';button.style.top=(1-point.y)*height/2+'px';
    }
-   for(const object of group.children)if(object instanceof THREE.Sprite){const size=camera.position.distanceTo(object.position)*(object.userData.quadrantLabel?.035:.012);object.scale.set(size*(object.userData.quadrantLabel?4:1),size,1);}},dispose(){clearHover();scene.remove(hoverLayer);host.removeEventListener('pointermove',hover);host.removeEventListener('pointerleave',clearHover);disposed=true;window.removeEventListener('message',receive);host.removeEventListener('pointerdown',pointerdown,true);host.removeEventListener('click',click,true);panel.remove();clearLayer(inspectionLayer);clearLayer(recordedLayer);scene.remove(inspectionLayer,recordedLayer);host.classList.remove('workspace-national');group.traverse(o=>{const sprite=o as THREE.Sprite;if(sprite.material instanceof THREE.SpriteMaterial)sprite.material.map?.dispose();const m=o as THREE.Mesh;m.geometry?.dispose();if(m.material&&!Array.isArray(m.material))m.material.dispose();});scene.remove(group);}};
+   for(const object of group.children)if(object instanceof THREE.Sprite){const size=camera.position.distanceTo(object.position)*(object.userData.quadrantLabel?.035:.012);object.scale.set(size*(object.userData.quadrantLabel?4:1),size,1);}},dispose(){clearLayer(previewDrone);animatedFov.geometry.dispose();(animatedFov.material as THREE.Material).dispose();scene.remove(previewDrone,animatedFov);clearHover();scene.remove(hoverLayer);host.removeEventListener('pointermove',hover);host.removeEventListener('pointerleave',clearHover);disposed=true;window.removeEventListener('message',receive);host.removeEventListener('pointerdown',pointerdown,true);host.removeEventListener('click',click,true);panel.remove();clearLayer(inspectionLayer);clearLayer(recordedLayer);scene.remove(inspectionLayer,recordedLayer);host.classList.remove('workspace-national');group.traverse(o=>{const sprite=o as THREE.Sprite;if(sprite.material instanceof THREE.SpriteMaterial)sprite.material.map?.dispose();const m=o as THREE.Mesh;m.geometry?.dispose();if(m.material&&!Array.isArray(m.material))m.material.dispose();});scene.remove(group);}};
 }
